@@ -52,7 +52,7 @@
   .field textarea{resize:vertical;min-height:80px}
   .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .field-row.three{grid-template-columns:1fr 1fr 1fr}
-  @media(max-width:600px){.field-row,.field-row.three{grid-template-columns:1fr}}
+  @media(max-width:600px){.field-row,.field-row.three{grid-template-columns:1fr}.row-num-wrap{align-items:flex-start}}
   .radio-group,.check-group{display:flex;flex-wrap:wrap;gap:8px}
   .radio-group label,.check-group label{display:flex;align-items:center;gap:7px;padding:7px 13px;border:1.5px solid var(--gray-200);border-radius:7px;cursor:pointer;font-size:13px;color:var(--gray-800);background:var(--white);transition:all .15s;user-select:none}
   .radio-group label:hover,.check-group label:hover{border-color:var(--navy);background:var(--gray-50)}
@@ -76,6 +76,9 @@
   .kondisi3-group input[type=radio]:checked + .k3-label.k3-buruk{background:#FEF2F2;border-color:#EF4444;color:#7F1D1D;font-weight:700}
   .subsection{background:var(--gray-50);border:1px solid var(--gray-200);border-radius:8px;padding:14px 16px;display:grid;gap:12px}
   .subsection-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;color:var(--navy-light);border-bottom:1px solid var(--gray-200);padding-bottom:8px;margin-bottom:4px}
+  .row-num-wrap{display:flex;align-items:center;gap:10px}
+  .row-num{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:var(--navy);color:var(--white);font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center}
+  .row-num-wrap .field-row{flex:1}
   .foto-upload{background:var(--gray-50);border:2px dashed var(--gray-200);border-radius:8px;padding:14px;text-align:center;cursor:pointer;transition:all .2s}
   .foto-upload:hover{border-color:var(--navy);background:var(--gray-100)}
   .foto-upload p{font-size:12px;color:var(--gray-400);margin-top:4px}
@@ -231,7 +234,7 @@
 
   <!-- TAB 0 -->
   <div class="form-panel active" id="panel-0">
-    <div class="panel-header"><div class="panel-number">Form 1</div><div><h2>Data Objek Perumahan FLPP</h2><p>Identitas dan data fisik perumahan beserta dokumen pendukung</p></div></div>
+    <div class="panel-header"><div class="panel-number">Form 1</div><div><h2>Verifikasi Data Objek Perumahan</h2><p>Identitas dan data fisik perumahan beserta dokumen pendukung</p></div></div>
     <div class="panel-body">
       <div class="surveyor-bar"><label for="surveyor0">👤 Nama Surveyor</label><input type="text" id="surveyor0" placeholder="Masukkan nama surveyor..."></div>
       <div class="section">
@@ -263,14 +266,14 @@
         <div class="section-header"><span class="section-num">I</span><h3>Tipe Rumah</h3></div>
         <div class="section-body">
           <div class="subsection"><div class="subsection-title">1. Rumah Subsidi</div>
-            <div class="field-row three"><div class="field"><label>Tipe Rumah</label><input type="text" placeholder="mis: Tipe 36"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div>
-            <div class="field-row three"><div class="field"><label>Tipe Rumah</label><input type="text" placeholder="mis: Tipe 36"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div>
-            <div class="field-row three"><div class="field"><label>Tipe Rumah</label><input type="text" placeholder="mis: Tipe 36"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div>
+            <div class="row-num-wrap"><div class="row-num">1</div><div class="field-row three"><div class="field"><label>Tipe Rumah</label><input type="text" placeholder="mis: Tipe 36"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div></div>
+            <div class="row-num-wrap"><div class="row-num">2</div><div class="field-row three"><div class="field"><label>Tipe Rumah</label><input type="text" placeholder="mis: Tipe 36"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div></div>
+            <div class="row-num-wrap"><div class="row-num">3</div><div class="field-row three"><div class="field"><label>Tipe Rumah</label><input type="text" placeholder="mis: Tipe 36"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div></div>
           </div>
           <div class="subsection"><div class="subsection-title">2. Rumah Komersil</div>
-            <div class="field-row three"><div class="field"><label>Tipe Rumah</label><input type="text"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div>
-            <div class="field-row three"><div class="field"><label>Tipe Rumah</label><input type="text" placeholder="mis: Tipe 36"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div>
-            <div class="field-row three"><div class="field"><label>Tipe Rumah</label><input type="text" placeholder="mis: Tipe 36"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div>
+            <div class="row-num-wrap"><div class="row-num">1</div><div class="field-row three"><div class="field"><label>Tipe Rumah</label><input type="text"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div></div>
+            <div class="row-num-wrap"><div class="row-num">2</div><div class="field-row three"><div class="field"><label>Tipe Rumah</label><input type="text" placeholder="mis: Tipe 36"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div></div>
+            <div class="row-num-wrap"><div class="row-num">3</div><div class="field-row three"><div class="field"><label>Tipe Rumah</label><input type="text" placeholder="mis: Tipe 36"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div></div>
           </div>
         </div>
       </div>
@@ -291,7 +294,7 @@
       </div>
       <div class="send-area">
         <div class="foto-status" id="foto-status-panel-0"></div>
-        <button class="btn-send" data-panel="panel-0" data-surveyor="surveyor0" data-form="Data Objek Perumahan">📤 Kirim Data</button>
+        <button class="btn-send" data-panel="panel-0" data-surveyor="surveyor0" data-form="Verifikasi Data Objek Perumahan">📤 Kirim Data</button>
       </div>
     </div>
   </div>
