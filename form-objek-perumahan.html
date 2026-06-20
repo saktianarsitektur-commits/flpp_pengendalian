@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Form 1 — Data Objek Perumahan FLPP</title>
+<title>Form Isian Pengembang Perumahan FLPP</title>
 <style>
 
   @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Inter:wght@400;500&display=swap');
@@ -221,7 +221,7 @@
   <div class="form-panel active" id="panel-0">
     <div class="panel-header">
       <div class="panel-number">Form 1</div>
-      <div><h2>Data Objek Perumahan FLPP</h2><p>Identitas dan data fisik perumahan beserta dokumen pendukung</p></div>
+      <div><h2>Form Isian Pengembang Perumahan FLPP</h2><p>Identitas dan data fisik perumahan beserta dokumen pendukung</p></div>
     </div>
     <div class="panel-body">
       <div class="section">
@@ -279,7 +279,7 @@
       </div>
       <div class="send-area">
         <div class="foto-status" id="foto-status-panel-0"></div>
-        <button class="btn-send" id="btnKirim" data-panel="panel-0" data-form="Data Objek Perumahan">📤 Kirim Data</button>
+        <button class="btn-send" id="btnKirim" data-panel="panel-0" data-form="Data Objek Perumahan - Pengembang">📤 Kirim Data</button>
       </div>
     </div>
   </div>
@@ -465,7 +465,7 @@ window.addEventListener('load', function() {
   document.querySelectorAll('input[type=date]').forEach(function(d){ d.value=new Date().toISOString().split('T')[0]; });
 
   document.getElementById('btnKirim').addEventListener('click', function() {
-    submitForm('panel-0', 'Data Objek Perumahan', this);
+    submitForm('panel-0', 'Data Objek Perumahan - Pengembang', this);
   });
 
   // ---- DOKUMEN LIST ----
