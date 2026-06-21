@@ -142,9 +142,35 @@
   .geo-status.err{color:var(--red)}
   .geo-status.busy{color:var(--gray-600)}
 
+  #confirmSendModal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:300}
+  #confirmSendModal.open{opacity:1;pointer-events:auto}
+  #confirmSendModal .modal-box{background:var(--white);border-radius:24px;padding:28px 24px;max-width:360px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.2);transform:translateY(16px) scale(.97);transition:transform .2s;text-align:center}
+  #confirmSendModal.open .modal-box{transform:translateY(0) scale(1)}
+  #confirmSendModal .modal-icon{font-size:40px;margin-bottom:8px;line-height:1}
+  #confirmSendModal h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:17px;color:var(--gray-800);margin-bottom:8px}
+  #confirmSendModal p{font-size:13px;color:var(--gray-600);margin-bottom:20px;line-height:1.5}
+  #confirmSendModal .modal-actions{display:flex;gap:10px}
+  #confirmSendModal .btn-cancel{flex:1;padding:11px;border:1.5px solid var(--gray-200);border-radius:999px;background:var(--white);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;color:var(--gray-600);cursor:pointer;transition:all .15s}
+  #confirmSendModal .btn-cancel:hover{background:var(--gray-50)}
+  #confirmSendModal .btn-confirm{flex:1;padding:11px;border:none;border-radius:999px;background:var(--navy);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;color:var(--white);cursor:pointer;transition:all .15s}
+  #confirmSendModal .btn-confirm:hover{background:var(--navy-light)}
+
 </style>
 </head>
 <body>
+
+<!-- MODAL KONFIRMASI KIRIM DATA -->
+<div id="confirmSendModal" role="dialog" aria-modal="true" aria-labelledby="confirmSendTitle">
+  <div class="modal-box">
+    <div class="modal-icon">📋</div>
+    <h3 id="confirmSendTitle">Konfirmasi Pengiriman</h3>
+    <p>Apakah Anda yakin isian formulir Anda sudah benar?</p>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="confirmSendNo">Tidak</button>
+      <button class="btn-confirm" id="confirmSendYes">Ya, Kirim</button>
+    </div>
+  </div>
+</div>
 
 
 <header class="site-header">
@@ -408,8 +434,22 @@ window.addEventListener('load', function() {
   document.querySelectorAll('input[type=date]').forEach(function(d){ d.value=new Date().toISOString().split('T')[0]; });
 
   document.getElementById('btnKirim').addEventListener('click', function() {
-    submitForm('panel-0', 'Data Objek Perumahan - Pengembang', this);
+    document.getElementById('confirmSendModal').classList.add('open');
   });
+
+  (function() {
+    var modal = document.getElementById('confirmSendModal');
+    var btnYes = document.getElementById('confirmSendYes');
+    var btnNo  = document.getElementById('confirmSendNo');
+    function closeConfirmModal() { modal.classList.remove('open'); }
+    btnNo.addEventListener('click', closeConfirmModal);
+    modal.addEventListener('click', function(e) { if (e.target === modal) closeConfirmModal(); });
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeConfirmModal(); });
+    btnYes.addEventListener('click', function() {
+      closeConfirmModal();
+      submitForm('panel-0', 'Data Objek Perumahan - Pengembang', document.getElementById('btnKirim'));
+    });
+  })();
 
   document.getElementById('btnDraft').addEventListener('click', function() {
     saveDraft('panel-0', this);
