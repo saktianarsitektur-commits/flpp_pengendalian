@@ -1289,7 +1289,7 @@ function clearDraft(panelId) {
 function collectData(panelId) {
   var panel = document.getElementById(panelId);
   var data = { Timestamp: new Date().toLocaleString('id-ID') };
-  panel.querySelectorAll('input[type=text],input[type=date],input[type=time],input[type=number],input[type=tel],textarea').forEach(function(e){ if(e.id) data[e.id]=e.value; });
+  panel.querySelectorAll('input[type=text],input[type=date],input[type=time],input[type=number],input[type=tel],textarea,select').forEach(function(e){ if(e.id) data[e.id]=e.value; });
   var rNames = new Set();
   panel.querySelectorAll('input[type=radio]').forEach(function(e){ rNames.add(e.name); });
   rNames.forEach(function(n){ var c=panel.querySelector('input[type=radio][name="'+n+'"]:checked'); data[n]=c?c.value:''; });
