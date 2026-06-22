@@ -53,24 +53,21 @@
   .field-row.three{grid-template-columns:1fr 1fr 1fr}
   @media(max-width:600px){.field-row,.field-row.three{grid-template-columns:1fr}}
   .radio-group,.check-group{display:flex;flex-wrap:wrap;gap:8px}
-  .radio-group{width:100%}
-  .radio-group label{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:7px 16px;border:1.5px solid var(--gray-200);border-radius:999px;cursor:pointer;font-size:13px;color:var(--gray-800);background:var(--white);transition:all .15s;user-select:none;text-align:center}
-  .check-group{width:100%}
-  .check-group label{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:7px 16px;border:1.5px solid var(--gray-200);border-radius:999px;cursor:pointer;font-size:13px;color:var(--gray-800);background:var(--white);transition:all .15s;user-select:none;text-align:center}
+  .radio-group label,.check-group label{display:flex;align-items:center;gap:7px;padding:7px 16px;border:1.5px solid var(--gray-200);border-radius:999px;cursor:pointer;font-size:13px;color:var(--gray-800);background:var(--white);transition:all .15s;user-select:none}
   .radio-group label:hover,.check-group label:hover{border-color:var(--navy);background:var(--gray-50)}
   .radio-group input[type=radio],.check-group input[type=checkbox]{accent-color:var(--navy);width:14px;height:14px}
   .radio-group label:has(input:checked),.check-group label:has(input:checked){border-color:var(--navy);background:#E0F0F5;color:var(--navy);font-weight:500}
   .kondisi-group{display:flex;flex-wrap:wrap;gap:8px}
-  .kondisi-opt{flex:1;min-width:0}
+  .kondisi-opt{flex:1;min-width:130px}
   .kondisi-opt input{display:none}
   .kondisi-opt label{display:block;text-align:center;padding:10px 8px;border:1.5px solid var(--gray-200);border-radius:999px;cursor:pointer;font-size:12px;font-weight:500;transition:all .15s}
   .kondisi-opt label .dot{display:block;width:10px;height:10px;border-radius:50%;margin:0 auto 6px}
   .kondisi-opt.baik label{color:#065F46}.kondisi-opt.baik .dot{background:#10B981}.kondisi-opt.baik input:checked+label{background:#ECFDF5;border-color:#10B981}
   .kondisi-opt.sedang label{color:#92400E}.kondisi-opt.sedang .dot{background:#F59E0B}.kondisi-opt.sedang input:checked+label{background:#FFFBEB;border-color:#F59E0B}
   .kondisi-opt.buruk label{color:#7F1D1D}.kondisi-opt.buruk .dot{background:#EF4444}.kondisi-opt.buruk input:checked+label{background:#FEF2F2;border-color:#EF4444}
-  .kondisi3-group{display:flex;gap:8px;flex-wrap:wrap;width:100%}
+  .kondisi3-group{display:flex;gap:10px;flex-wrap:wrap}
   .kondisi3-group input[type=radio]{display:none}
-  .kondisi3-group .k3-label{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;padding:10px 12px;border:1.5px solid var(--gray-200);border-radius:999px;cursor:pointer;font-size:13px;font-weight:500;color:var(--gray-600);transition:all .15s;text-align:center;background:var(--white)}
+  .kondisi3-group .k3-label{display:flex;flex-direction:column;align-items:center;padding:10px 20px;border:1.5px solid var(--gray-200);border-radius:999px;cursor:pointer;font-size:13px;font-weight:500;color:var(--gray-600);transition:all .15s;min-width:140px;text-align:center;background:var(--white)}
   .kondisi3-group .k3-dot{display:block;width:10px;height:10px;border-radius:50%;margin:0 auto 6px}
   .kondisi3-group .k3-label:hover{border-color:var(--navy)}
   .kondisi3-group input[type=radio]:checked + .k3-label.k3-baik{background:#ECFDF5;border-color:#10B981;color:#065F46;font-weight:700}
@@ -94,8 +91,6 @@
   .btn-send{padding:11px 28px;background:var(--navy);color:var(--white);border:none;border-radius:999px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .2s;white-space:nowrap}
   .btn-draft{padding:11px 24px;background:var(--white);color:var(--navy);border:1.5px solid var(--navy);border-radius:999px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .2s;white-space:nowrap}
   .btn-draft:hover{background:var(--gray-50)}
-  .draft-info{font-size:11px;color:var(--gray-400);margin-right:auto;display:flex;flex-direction:column;gap:2px}
-  .draft-info .draft-ts{color:var(--green);font-weight:600}
   .btn-send:hover{background:var(--navy-light);transform:translateY(-1px);box-shadow:0 4px 12px rgba(11,35,66,.25)}
   .btn-send:active{transform:translateY(0)}
   .btn-send:disabled{opacity:.6;cursor:not-allowed;transform:none}
@@ -111,7 +106,7 @@
   .divider-badge{background:var(--gold);color:var(--navy);font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:13px;padding:4px 12px;border-radius:999px}
   .divider-banner h3{font-family:'Plus Jakarta Sans',sans-serif;color:#fff;font-size:16px;font-weight:700}
   .divider-banner p{color:rgba(255,255,255,.6);font-size:12px;margin-top:3px}
-  .util-row{display:grid;grid-template-columns:1fr 1fr auto;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--gray-100)}
+  .util-row{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--gray-100)}
   /* util-row2 PASCA PENYALURAN: label | tersedia | kondisi | foto (keberfungsian dihapus) */
   .util-row2{display:grid;grid-template-columns:180px auto auto auto;align-items:center;gap:10px;padding:14px 0;border-bottom:1px solid var(--gray-100)}
   @media(max-width:768px){.util-row2{grid-template-columns:1fr;gap:8px}}
@@ -145,35 +140,9 @@
   .btn-home-bar{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;max-width:1100px;padding:11px 10px;border:1.5px solid var(--gray-200);border-radius:999px;background:var(--white);color:var(--navy);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;transition:all .2s}
   .btn-home-bar:hover{background:var(--gray-50)}
 
-  #confirmSendModal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:300}
-  #confirmSendModal.open{opacity:1;pointer-events:auto}
-  #confirmSendModal .modal-box{background:var(--white);border-radius:24px;padding:28px 24px;max-width:360px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.2);transform:translateY(16px) scale(.97);transition:transform .2s;text-align:center}
-  #confirmSendModal.open .modal-box{transform:translateY(0) scale(1)}
-  #confirmSendModal .modal-icon{font-size:40px;margin-bottom:8px;line-height:1}
-  #confirmSendModal h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:17px;color:var(--gray-800);margin-bottom:8px}
-  #confirmSendModal p{font-size:13px;color:var(--gray-600);margin-bottom:20px;line-height:1.5}
-  #confirmSendModal .modal-actions{display:flex;gap:10px}
-  #confirmSendModal .btn-cancel{flex:1;padding:11px;border:1.5px solid var(--gray-200);border-radius:999px;background:var(--white);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;color:var(--gray-600);cursor:pointer;transition:all .15s}
-  #confirmSendModal .btn-cancel:hover{background:var(--gray-50)}
-  #confirmSendModal .btn-confirm{flex:1;padding:11px;border:none;border-radius:999px;background:var(--navy);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;color:var(--white);cursor:pointer;transition:all .15s}
-  #confirmSendModal .btn-confirm:hover{background:var(--navy-light)}
-
 </style>
 </head>
 <body>
-
-<!-- MODAL KONFIRMASI KIRIM DATA -->
-<div id="confirmSendModal" role="dialog" aria-modal="true" aria-labelledby="confirmSendTitle">
-  <div class="modal-box">
-    <div class="modal-icon">📋</div>
-    <h3 id="confirmSendTitle">Konfirmasi Pengiriman</h3>
-    <p>Apakah Anda yakin isian formulir Anda sudah benar?</p>
-    <div class="modal-actions">
-      <button class="btn-cancel" id="confirmSendNo">Tidak</button>
-      <button class="btn-confirm" id="confirmSendYes">Ya, Kirim</button>
-    </div>
-  </div>
-</div>
 
 <header class="site-header">
   <div class="header-inner">
@@ -248,15 +217,11 @@
       <div class="section">
         <div class="section-header"><span class="section-num">III</span><h3>Data Dukung / Dokumen</h3></div>
         <div class="section-body">
-          <p style="font-size:12px;color:var(--gray-400);margin-bottom:12px">Pilih ketersediaan setiap dokumen</p>
+          <p style="font-size:12px;color:var(--gray-400);margin-bottom:12px">Pilih ketersediaan dan kesesuaian setiap dokumen</p>
           <div id="dokumen-list"></div>
         </div>
       </div>
       <div class="send-area">
-        <div class="draft-info" id="draft-info-panel-0">
-          <span id="draft-label-panel-0" style="display:none">Draft tersimpan</span>
-          <span class="draft-ts" id="draft-ts-panel-0"></span>
-        </div>
         <div class="foto-status" id="foto-status-panel-0"></div>
         <button class="btn-draft" data-panel="panel-0">Simpan Draft</button>
         <button class="btn-send" data-panel="panel-0" data-surveyor="surveyor0" data-form="Verifikasi Data Objek Perumahan">Kirim Data</button>
@@ -285,10 +250,6 @@
       </div>
       <div id="psu-sections"></div>
       <div class="send-area">
-        <div class="draft-info" id="draft-info-panel-1">
-          <span id="draft-label-panel-1" style="display:none">Draft tersimpan</span>
-          <span class="draft-ts" id="draft-ts-panel-1"></span>
-        </div>
         <div class="foto-status" id="foto-status-panel-1"></div>
         <button class="btn-draft" data-panel="panel-1">Simpan Draft</button>
         <button class="btn-send" data-panel="panel-1" data-surveyor="surveyor1" data-form="Kondisi PSU">Kirim Data</button>
@@ -317,10 +278,6 @@
       </div>
       <div id="penyaluran-sections"></div>
       <div class="send-area">
-        <div class="draft-info" id="draft-info-panel-2">
-          <span id="draft-label-panel-2" style="display:none">Draft tersimpan</span>
-          <span class="draft-ts" id="draft-ts-panel-2"></span>
-        </div>
         <div class="foto-status" id="foto-status-panel-2"></div>
         <button class="btn-draft" data-panel="panel-2">Simpan Draft</button>
         <button class="btn-send" data-panel="panel-2" data-surveyor="surveyor2" data-form="Tahap Penyaluran">Kirim Data</button>
@@ -492,10 +449,6 @@
         </div>
       </div>
       <div class="send-area">
-        <div class="draft-info" id="draft-info-panel-3">
-          <span id="draft-label-panel-3" style="display:none">Draft tersimpan</span>
-          <span class="draft-ts" id="draft-ts-panel-3"></span>
-        </div>
         <div class="foto-status" id="foto-status-panel-3"></div>
         <button class="btn-draft" data-panel="panel-3">Simpan Draft</button>
         <button class="btn-send" data-panel="panel-3" data-surveyor="surveyor3" data-form="Pasca Penyaluran">Kirim Data</button>
@@ -769,21 +722,12 @@ function previewDoc(inp, previewEl, fieldName) {
   processAndUploadFiles(inp.files,fieldName,panelId,previewEl,true);
 }
 
-var draftCheckedPanels = {};
-function checkDraftForPanel(idx) {
-  var panelId = 'panel-' + idx;
-  if (draftCheckedPanels[panelId]) return;
-  draftCheckedPanels[panelId] = true;
-  loadDraftIfExists(panelId);
-}
-
 function switchTab(idx) {
   document.querySelectorAll('.tab-btn').forEach(function(b,i){b.classList.toggle('active',i===idx);});
   document.querySelectorAll('.form-panel').forEach(function(p,i){p.classList.toggle('active',i===idx);});
   var pb=document.getElementById('progressBar');
   if(pb) pb.style.width=((idx+1)/4*100)+'%';
   window.scrollTo({top:0,behavior:'smooth'});
-  checkDraftForPanel(idx);
 }
 
 window.addEventListener('load', function() {
@@ -791,31 +735,11 @@ window.addEventListener('load', function() {
   document.querySelectorAll('.tab-btn').forEach(function(btn){
     btn.addEventListener('click', function(){ switchTab(parseInt(btn.getAttribute('data-tab'),10)); });
   });
-  var pendingSubmit = null;
   document.querySelectorAll('.btn-send').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      pendingSubmit = { panelId: btn.getAttribute('data-panel'), surveyorId: btn.getAttribute('data-surveyor'), formName: btn.getAttribute('data-form'), btn: btn };
-      document.getElementById('confirmSendModal').classList.add('open');
-    });
+    btn.addEventListener('click', function(){ submitForm(btn.getAttribute('data-panel'),btn.getAttribute('data-surveyor'),btn.getAttribute('data-form'),btn); });
   });
-  (function() {
-    var modal  = document.getElementById('confirmSendModal');
-    var btnYes = document.getElementById('confirmSendYes');
-    var btnNo  = document.getElementById('confirmSendNo');
-    function closeConfirmModal() { modal.classList.remove('open'); }
-    btnNo.addEventListener('click', closeConfirmModal);
-    modal.addEventListener('click', function(e) { if (e.target === modal) closeConfirmModal(); });
-    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeConfirmModal(); });
-    btnYes.addEventListener('click', function() {
-      closeConfirmModal();
-      if (pendingSubmit) {
-        submitForm(pendingSubmit.panelId, pendingSubmit.surveyorId, pendingSubmit.formName, pendingSubmit.btn);
-        pendingSubmit = null;
-      }
-    });
-  })();
   document.querySelectorAll('.btn-draft').forEach(function(btn){
-    btn.addEventListener('click', function(){ saveDraft(btn.getAttribute('data-panel'), btn); });
+    btn.addEventListener('click', function(){ saveDraft(btn.getAttribute('data-panel')); });
   });
   setupGeoButton('t1_koordinat');
   setupGeoButton('t3_koordinat');
@@ -830,6 +754,7 @@ window.addEventListener('load', function() {
     var row=el('div',{cls:'doc-row'});
     row.appendChild(el('span',{text:dok,style:'flex:1;font-size:13px;font-weight:500;min-width:160px'}));
     row.appendChild(makeRadioGroup('dok_ada_'+i,['Ada','Tidak Ada']));
+    row.appendChild(makeRadioGroup('dok_sesuai_'+i,['Sesuai','Tidak Sesuai']));
     var prev=el('div',{cls:'doc-preview'});
     row.appendChild(makeDocUploadBtn(prev,dok));
     wrapper.appendChild(row); wrapper.appendChild(prev);
@@ -1033,13 +958,17 @@ window.addEventListener('load', function() {
           if(row.catatan) info.appendChild(el('div',{text:row.catatan,style:'color:var(--gray-400);font-size:11px;margin-top:4px;font-style:italic'}));
           if(row.parameter) info.appendChild(el('div',{text:'Parameter (Acuan): '+row.parameter,style:'color:var(--gray-600);font-size:12px;margin-top:5px;line-height:1.4'}));
           card.appendChild(info);
+          var optWrap=el('div',{cls:'radio-group',style:'flex-shrink:0'});
+          var lblYa=el('label'); var inpYa=el('input'); inpYa.type='radio'; inpYa.name=row.name; inpYa.value='Sesuai'; inpYa.style.accentColor='var(--green)'; lblYa.appendChild(inpYa); lblYa.appendChild(document.createTextNode('Sesuai')); optWrap.appendChild(lblYa);
+          var lblTidak=el('label'); var inpTidak=el('input'); inpTidak.type='radio'; inpTidak.name=row.name; inpTidak.value='Tidak Sesuai'; inpTidak.style.accentColor='var(--red)'; lblTidak.appendChild(inpTidak); lblTidak.appendChild(document.createTextNode('Tidak Sesuai')); optWrap.appendChild(lblTidak);
+          card.appendChild(optWrap);
           listWrap.appendChild(card);
         });
         body.appendChild(listWrap);
       } else {
       var tbl2=el('table',{style:'width:100%;border-collapse:collapse;font-size:13px'});
       var thead2=el('thead'); var trH2=el('tr');
-      var headCols2 = [['NO','40px','center'],['DOKUMEN','190px','left'],['PARAMETER (Acuan)','','left']];
+      var headCols2 = [['NO','40px','center'],['DOKUMEN','190px','left'],['PARAMETER (Acuan)','','left'],['Sesuai','90px','center'],['Tidak Sesuai','90px','center']];
       headCols2.forEach(function(h){
         trH2.appendChild(el('th',{text:h[0],style:'padding:9px 10px;background:var(--navy);color:#fff;font-size:11px;font-weight:600;text-align:'+h[2]+(h[1]?';width:'+h[1]:'')}));
       });
@@ -1053,6 +982,12 @@ window.addEventListener('load', function() {
         if(row.catatan) tdDok.appendChild(el('div',{text:row.catatan,style:'color:var(--gray-400);font-size:11px;margin-top:3px;font-style:italic'}));
         tr2.appendChild(tdDok);
         tr2.appendChild(el('td',{text:row.parameter,style:'padding:10px 8px;border-bottom:1px solid var(--gray-100);vertical-align:top;color:var(--gray-600);line-height:1.4'}));
+        var tdYa=el('td',{style:'padding:10px 6px;text-align:center;border-bottom:1px solid var(--gray-100);vertical-align:top'});
+        var inpYa=el('input'); inpYa.type='radio'; inpYa.name=row.name; inpYa.value='Sesuai'; inpYa.style.cssText='accent-color:var(--green);width:16px;height:16px;cursor:pointer';
+        tdYa.appendChild(inpYa); tr2.appendChild(tdYa);
+        var tdTidak=el('td',{style:'padding:10px 6px;text-align:center;border-bottom:1px solid var(--gray-100);vertical-align:top'});
+        var inpTidak=el('input'); inpTidak.type='radio'; inpTidak.name=row.name; inpTidak.value='Tidak Sesuai'; inpTidak.style.cssText='accent-color:var(--red);width:16px;height:16px;cursor:pointer';
+        tdTidak.appendChild(inpTidak); tr2.appendChild(tdTidak);
         tbody2.appendChild(tr2);
       });
       tbl2.appendChild(tbody2); body.appendChild(tbl2);
@@ -1184,104 +1119,59 @@ window.addEventListener('load', function() {
     pfContainer.appendChild(sec);
   });
 
-  checkDraftForPanel(0);
+  loadAllDrafts();
 
 }); // end load
 
-/* ===== SIMPAN & MUAT DRAFT (localStorage, sama seperti Form 1) ===== */
-var DRAFT_KEY_PREFIX = 'draft_form_survei_';
-
-function saveDraft(panelId, btn) {
-  try {
-    var data = collectData(panelId);
-    var savedAt = new Date().toLocaleString('id-ID');
-    var draft = { data: data, savedAt: savedAt };
-    localStorage.setItem(DRAFT_KEY_PREFIX + panelId, JSON.stringify(draft));
-
-    updateDraftInfo(panelId, savedAt);
-    showToast('Draft berhasil disimpan di perangkat ini!');
-    if (btn) {
-      var orig = btn.textContent;
-      btn.textContent = 'Tersimpan';
-      btn.disabled = true;
-      setTimeout(function() { btn.textContent = orig; btn.disabled = false; }, 1500);
-    }
-  } catch(e) {
-    showToast('❌ Gagal menyimpan draft: ' + e.message, true);
-  }
-}
-
-function loadDraftIfExists(panelId) {
-  try {
-    var raw = localStorage.getItem(DRAFT_KEY_PREFIX + panelId);
-    if (!raw) return;
-    var draft = JSON.parse(raw);
-    if (!draft || !draft.data) return;
-
-    var tsSafe = draft.savedAt || 'waktu tidak diketahui';
-    var muat = confirm('Ditemukan draft yang tersimpan (' + tsSafe + ').\n\nApakah Anda ingin melanjutkan dari draft ini?');
-    if (!muat) return;
-
-    restoreDraft(panelId, draft.data);
-    updateDraftInfo(panelId, tsSafe);
-    showToast('Draft berhasil dimuat!');
-  } catch(e) {
-    console.warn('Gagal memuat draft:', e);
-  }
-}
-
-function restoreDraft(panelId, data) {
+/* ===== SIMPAN & MUAT DRAFT (disimpan lokal di perangkat/browser ini) ===== */
+function saveDraft(panelId) {
   var panel = document.getElementById(panelId);
   if (!panel) return;
-
-  panel.querySelectorAll('input[type=text],input[type=date],input[type=time],input[type=number],input[type=tel],textarea').forEach(function(inp) {
-    if (inp.id && data[inp.id] !== undefined) inp.value = data[inp.id];
-  });
-
-  panel.querySelectorAll('select').forEach(function(sel) {
-    if (sel.id && data[sel.id] !== undefined) sel.value = data[sel.id];
-  });
-
-  var rNames = new Set();
-  panel.querySelectorAll('input[type=radio]').forEach(function(r) { rNames.add(r.name); });
-  rNames.forEach(function(n) {
-    if (data[n] !== undefined && data[n] !== '') {
-      var target = panel.querySelector('input[type=radio][name="'+n+'"][value="'+data[n]+'"]');
-      if (target) target.checked = true;
+  var fields = panel.querySelectorAll('input, select, textarea');
+  var data = [];
+  fields.forEach(function(f) {
+    if (f.type === 'radio' || f.type === 'checkbox') {
+      data.push({ t: 'check', c: f.checked });
+    } else if (f.type === 'file') {
+      data.push(null);
+    } else {
+      data.push({ t: 'val', v: f.value });
     }
   });
+  try {
+    localStorage.setItem('flpp_draft_' + panelId, JSON.stringify(data));
+    showToast('💾 Draft berhasil disimpan di perangkat ini.');
+  } catch (e) {
+    showToast('⚠️ Gagal menyimpan draft.', true);
+  }
+}
 
-  var cNames = new Set();
-  panel.querySelectorAll('input[type=checkbox]').forEach(function(c) { if(c.name) cNames.add(c.name); });
-  cNames.forEach(function(n) {
-    if (data[n] !== undefined && data[n] !== '') {
-      var vals = data[n].split(', ');
-      panel.querySelectorAll('input[type=checkbox][name="'+n+'"]').forEach(function(c) {
-        c.checked = vals.indexOf(c.value) > -1;
-      });
-    }
+function loadDraft(panelId) {
+  var panel = document.getElementById(panelId);
+  if (!panel) return;
+  var raw;
+  try { raw = localStorage.getItem('flpp_draft_' + panelId); } catch (e) { return; }
+  if (!raw) return;
+  var data;
+  try { data = JSON.parse(raw); } catch (e) { return; }
+  var fields = panel.querySelectorAll('input, select, textarea');
+  if (!data || fields.length !== data.length) return;
+  fields.forEach(function(f, i) {
+    var d = data[i];
+    if (!d) return;
+    if (d.t === 'check') { f.checked = !!d.c; }
+    else if (d.t === 'val') { f.value = d.v; }
   });
 }
 
-function updateDraftInfo(panelId, savedAt) {
-  var label = document.getElementById('draft-label-' + panelId);
-  var ts    = document.getElementById('draft-ts-' + panelId);
-  if (label) label.style.display = 'inline';
-  if (ts)    ts.textContent = savedAt;
-}
-
-function clearDraft(panelId) {
-  try { localStorage.removeItem(DRAFT_KEY_PREFIX + panelId); } catch(e) {}
-  var label = document.getElementById('draft-label-' + panelId);
-  var ts    = document.getElementById('draft-ts-' + panelId);
-  if (label) label.style.display = 'none';
-  if (ts)    ts.textContent = '';
+function loadAllDrafts() {
+  ['panel-0', 'panel-1', 'panel-2', 'panel-3'].forEach(loadDraft);
 }
 
 function collectData(panelId) {
   var panel = document.getElementById(panelId);
   var data = { Timestamp: new Date().toLocaleString('id-ID') };
-  panel.querySelectorAll('input[type=text],input[type=date],input[type=time],input[type=number],input[type=tel],textarea,select').forEach(function(e){ if(e.id) data[e.id]=e.value; });
+  panel.querySelectorAll('input[type=text],input[type=date],input[type=time],input[type=number],input[type=tel],textarea').forEach(function(e){ if(e.id) data[e.id]=e.value; });
   var rNames = new Set();
   panel.querySelectorAll('input[type=radio]').forEach(function(e){ rNames.add(e.name); });
   rNames.forEach(function(n){ var c=panel.querySelector('input[type=radio][name="'+n+'"]:checked'); data[n]=c?c.value:''; });
@@ -1308,18 +1198,6 @@ function resetFotoState(panelId) {
   refreshFotoStatus(panelId);
 }
 
-/* ===== RESET SEMUA ISIAN + FOTO (dipanggil otomatis setelah kirim sukses) ===== */
-function resetFormFields(panelId) {
-  var panel = document.getElementById(panelId);
-  if (!panel) return;
-  panel.querySelectorAll('input[type=text], input[type=date], input[type=time], input[type=number], input[type=tel], textarea').forEach(function(el) { el.value = ''; });
-  panel.querySelectorAll('input[type=radio]').forEach(function(el) { el.checked = false; });
-  panel.querySelectorAll('input[type=checkbox]').forEach(function(el) { el.checked = false; });
-  panel.querySelectorAll('select').forEach(function(el) { el.selectedIndex = 0; });
-  resetFotoState(panelId);
-  clearDraft(panelId); // Hapus draft setelah data berhasil terkirim
-}
-
 async function submitForm(panelId, surveyorId, formName, btn) {
   var surveyor = document.getElementById(surveyorId);
   if (!surveyor || !surveyor.value.trim()) { showToast('⚠️ Harap isi nama surveyor terlebih dahulu!', true); if(surveyor) surveyor.focus(); return; }
@@ -1335,7 +1213,7 @@ async function submitForm(panelId, surveyorId, formName, btn) {
     var payload = {data:data, fotoUrls:fotoPayload.fotoUrls, fotos:fotoPayload.fotos};
     if (typeof google !== 'undefined' && google.script && google.script.run) {
       google.script.run
-        .withSuccessHandler(function(result){ var msg=result&&result.message?result.message:'Data berhasil dikirim!'; showToast('✅ '+msg); btn.textContent='Kirim Data'; btn.disabled=false; resetFormFields(panelId); window.scrollTo({top:0,behavior:'smooth'}); })
+        .withSuccessHandler(function(result){ var msg=result&&result.message?result.message:'Data berhasil dikirim!'; showToast('✅ '+msg); btn.textContent='Kirim Data'; btn.disabled=false; resetFotoState(panelId); try{localStorage.removeItem('flpp_draft_'+panelId);}catch(e){} window.scrollTo({top:0,behavior:'smooth'}); })
         .withFailureHandler(function(err){ showToast('❌ Gagal: '+(err.message||err),true); btn.textContent='Kirim Data'; btn.disabled=false; })
         .processFormData(JSON.stringify(payload));
     } else {
@@ -1345,8 +1223,8 @@ async function submitForm(panelId, surveyorId, formName, btn) {
       var frm=el('form'); frm.method='POST'; frm.action=gsUrl; frm.target=iid; frm.style.display='none';
       var inp2=el('input'); inp2.type='hidden'; inp2.name='payload'; inp2.value=JSON.stringify(payload);
       frm.appendChild(inp2); document.body.appendChild(ifr); document.body.appendChild(frm);
-      ifr.onload=function(){ showToast('✅ Data & foto berhasil dikirim!'); btn.textContent='Kirim Data'; btn.disabled=false; resetFormFields(panelId); window.scrollTo({top:0,behavior:'smooth'}); setTimeout(function(){try{document.body.removeChild(frm);document.body.removeChild(ifr);}catch(e){}},1000); };
-      setTimeout(function(){try{document.body.removeChild(frm);document.body.removeChild(ifr);}catch(e){} showToast('✅ Data terkirim!'); btn.textContent='Kirim Data'; btn.disabled=false; resetFormFields(panelId); },30000);
+      ifr.onload=function(){ showToast('✅ Data & foto berhasil dikirim!'); btn.textContent='Kirim Data'; btn.disabled=false; resetFotoState(panelId); try{localStorage.removeItem('flpp_draft_'+panelId);}catch(e){} window.scrollTo({top:0,behavior:'smooth'}); setTimeout(function(){try{document.body.removeChild(frm);document.body.removeChild(ifr);}catch(e){}},1000); };
+      setTimeout(function(){try{document.body.removeChild(frm);document.body.removeChild(ifr);}catch(e){} showToast('✅ Data terkirim!'); btn.textContent='Kirim Data'; btn.disabled=false; },30000);
       frm.submit();
     }
   } catch(err) { console.error(err); showToast('❌ Gagal: '+err.message,true); btn.textContent='Kirim Data'; btn.disabled=false; }
