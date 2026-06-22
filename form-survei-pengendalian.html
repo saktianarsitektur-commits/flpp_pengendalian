@@ -51,7 +51,9 @@
   .field textarea{resize:vertical;min-height:80px}
   .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .field-row.three{grid-template-columns:1fr 1fr 1fr}
-  @media(max-width:600px){.field-row,.field-row.three{grid-template-columns:1fr}}
+  .field-row.five{grid-template-columns:repeat(5,1fr)}
+  @media(max-width:760px){.field-row.five{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:600px){.field-row,.field-row.three,.field-row.five{grid-template-columns:1fr}}
   .radio-group{display:flex;flex-wrap:wrap;gap:8px}
   .check-group{display:grid;grid-template-columns:1fr 1fr;gap:8px}
   .radio-group{width:100%}
@@ -243,9 +245,35 @@
         </div>
       </div>
       <div class="section">
-        <div class="section-header"><span class="section-num">II</span><h3>Rumah Subsidi yang Sudah Akad FLPP</h3></div>
+        <div class="section-header"><span class="section-num">II</span><h3>Status Rumah di Perumahan</h3></div>
         <div class="section-body">
-          <div class="field-row"><div class="field"><label>Jumlah Unit</label><input type="number"></div></div>
+          <div class="field">
+            <label>Sesuai dengan Data SIKUMBANG</label>
+            <div class="radio-group" id="status_sikumbang_group">
+              <label><input type="radio" name="status_sikumbang" value="Sesuai"> Sesuai</label>
+              <label><input type="radio" name="status_sikumbang" value="Tidak Sesuai"> Tidak Sesuai</label>
+            </div>
+          </div>
+          <div id="status_rumah_detail" style="display:none">
+            <div class="subsection"><div class="subsection-title">1. Rumah Komersil</div>
+              <div class="field-row five">
+                <div class="field"><label>Kavling</label><input type="number" id="status_komersil_kavling"></div>
+                <div class="field"><label>Pembangunan</label><input type="number" id="status_komersil_pembangunan"></div>
+                <div class="field"><label>Ready Stock</label><input type="number" id="status_komersil_readystock"></div>
+                <div class="field"><label>Dipesan</label><input type="number" id="status_komersil_dipesan"></div>
+                <div class="field"><label>Terjual</label><input type="number" id="status_komersil_terjual"></div>
+              </div>
+            </div>
+            <div class="subsection"><div class="subsection-title">2. Rumah Subsidi</div>
+              <div class="field-row five">
+                <div class="field"><label>Kavling</label><input type="number" id="status_subsidi_kavling"></div>
+                <div class="field"><label>Pembangunan</label><input type="number" id="status_subsidi_pembangunan"></div>
+                <div class="field"><label>Ready Stock</label><input type="number" id="status_subsidi_readystock"></div>
+                <div class="field"><label>Proses Bank</label><input type="number" id="status_subsidi_prosesbank"></div>
+                <div class="field"><label>Terjual</label><input type="number" id="status_subsidi_terjual"></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="section">
@@ -827,6 +855,14 @@ window.addEventListener('load', function() {
   setupGeoButton('t3_koordinat');
   initProvDropdowns();
   document.querySelectorAll('input[type=date]').forEach(function(d){ d.value=new Date().toISOString().split('T')[0]; });
+
+  // ---- TOGGLE DETAIL STATUS RUMAH (tampil saat "Tidak Sesuai" dengan SIKUMBANG) ----
+  var statusDetail = document.getElementById('status_rumah_detail');
+  document.querySelectorAll('input[name="status_sikumbang"]').forEach(function(r){
+    r.addEventListener('change', function(){
+      if(statusDetail) statusDetail.style.display = (r.checked && r.value === 'Tidak Sesuai') ? 'grid' : (r.checked ? 'none' : statusDetail.style.display);
+    });
+  });
 
   // ---- DOKUMEN LIST ----
   var dokumenGroups=[
