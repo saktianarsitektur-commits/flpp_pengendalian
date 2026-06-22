@@ -632,12 +632,14 @@ function makeKondisi3(name) {
 
 function makeFotoUpload(fieldName) {
   var inp = el('input'); inp.type='file'; inp.accept='image/*'; inp.multiple=true;
-  var box = el('div', {cls:'foto-upload'}, [el('div',{cls:'ico',text:'📷'}), el('p',{text:'Klik untuk upload foto'})]);
+  inp.style.display='none';
+  var btn = el('button', {cls:'upload-btn', type:'button'});
+  btn.innerHTML = '📷 Upload Foto';
+  btn.appendChild(inp);
+  btn.addEventListener('click', function() { inp.click(); });
   var prev = el('div', {cls:'foto-preview'});
-  box.appendChild(inp);
-  box.addEventListener('click', function() { inp.click(); });
   inp.addEventListener('change', function() { previewInto(inp, prev, fieldName); inp.value=''; });
-  return {wrap: [box, prev], inp: inp, fieldName: fieldName};
+  return {wrap: [btn, prev], inp: inp, fieldName: fieldName};
 }
 function makeUploadBtn(fieldName, previewEl) {
   var inp = el('input'); inp.type='file'; inp.accept='image/*'; inp.multiple=true;
@@ -1176,7 +1178,11 @@ window.addEventListener('load', function() {
         if (f.type === 'kondisi3') {
           body.appendChild(makeField(f.label, makeKondisi3(f.name)));
         } else if (f.type === 'check') {
-          body.appendChild(makeField(f.label, makeCheckGroup(f.name, f.opts)));
+          var hasLainnya = f.opts && f.opts.indexOf('Lainnya') !== -1;
+          var checkWidget = hasLainnya
+            ? makeCheckGroupWithOther(f.name, f.opts, 'Sebutkan ' + f.label.toLowerCase() + ' lainnya...')
+            : makeCheckGroup(f.name, f.opts);
+          body.appendChild(makeField(f.label, checkWidget));
         } else {
           body.appendChild(makeField(f.label, makeRadioGroup(f.name, f.opts)));
         }
