@@ -73,6 +73,7 @@
   .kondisi3-group input[type=radio]{display:none}
   .kondisi3-group .k3-label{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;padding:10px 12px;border:1.5px solid var(--gray-200);border-radius:999px;cursor:pointer;font-size:13px;font-weight:500;color:var(--gray-600);transition:all .15s;text-align:center;background:var(--white)}
   .kondisi3-group .k3-dot{display:block;width:10px;height:10px;border-radius:50%;margin:0 auto 6px}
+  @media(max-width:600px){.kondisi3-group{flex-direction:column}.kondisi3-group .k3-label{flex-direction:row;justify-content:flex-start;padding:10px 14px;gap:8px;text-align:left}.kondisi3-group .k3-dot{margin:0;flex-shrink:0}}
   .kondisi3-group .k3-label:hover{border-color:var(--navy)}
   .kondisi3-group input[type=radio]:checked + .k3-label.k3-baik{background:#ECFDF5;border-color:#10B981;color:#065F46;font-weight:700}
   .kondisi3-group input[type=radio]:checked + .k3-label.k3-sedang{background:#FFFBEB;border-color:#F59E0B;color:#92400E;font-weight:700}
