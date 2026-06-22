@@ -3,9 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Form Isian Pengembang Perumahan FLPP</title>
+<title>Sistem Survei FLPP Digital</title>
 <style>
-
   @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Inter:wght@400;500&display=swap');
   :root {
     --navy:#0E5B73; --navy-light:#084C61; --gold:#D5C58A; --gold-light:#e8d9a8;
@@ -20,19 +19,22 @@
   .header-logo{width:48px;height:48px;background:var(--gold);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',sans-serif;font-size:20px;font-weight:700;color:var(--navy);flex-shrink:0}
   .header-text h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:700;color:var(--white);line-height:1.2}
   .header-text p{font-size:12px;color:var(--gold-light);margin-top:2px}
-
+  .header-back:hover{background:rgba(255,255,255,.18)}
   .tabs-wrapper{background:var(--navy-light);overflow-x:auto;scrollbar-width:none}
   .tabs-wrapper::-webkit-scrollbar{display:none}
   .tabs-nav{max-width:1100px;margin:0 auto;display:flex;padding:0 24px}
   .tab-btn{padding:12px 18px;border:none;background:none;color:rgba(255,255,255,.65);font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;transition:all .2s;letter-spacing:.02em;text-transform:uppercase}
   .tab-btn:hover{color:var(--white)}
   .tab-btn.active{color:var(--gold-light);border-bottom-color:var(--gold)}
-  .main{max-width:1100px;margin:0 auto;padding:32px 24px 110px}
+  .main{max-width:1100px;margin:0 auto;padding:32px 24px 100px}
   .form-panel{visibility:hidden;position:absolute;top:-9999px;left:-9999px;width:100%;pointer-events:none}
   .form-panel.active{visibility:visible;position:relative;top:auto;left:auto;pointer-events:auto;animation:fadeIn .25s ease}
   @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-
-  .panel-body{background:var(--white);border-radius:24px;padding:28px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+  .panel-header{background:var(--navy);border-radius:24px 24px 0 0;padding:24px 28px;display:flex;align-items:flex-start;gap:16px}
+  .panel-number{background:var(--gold);color:var(--navy);font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:13px;padding:4px 10px;border-radius:999px;white-space:nowrap;margin-top:3px}
+  .panel-header h2{font-family:'Plus Jakarta Sans',sans-serif;color:var(--white);font-size:18px;font-weight:700;line-height:1.3}
+  .panel-header p{color:rgba(255,255,255,.6);font-size:13px;margin-top:4px}
+  .panel-body{background:var(--white);border-radius:0 0 24px 24px;padding:28px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
   .surveyor-bar{background:linear-gradient(135deg,#F0EAD0,#E8D9A8);border:1.5px solid var(--gold);border-radius:20px;padding:16px 20px;margin-bottom:28px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
   .surveyor-bar label{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:13px;color:var(--navy);white-space:nowrap}
   .surveyor-bar input{flex:1;min-width:200px;padding:8px 16px;border:1.5px solid var(--gold);border-radius:999px;font-size:14px;background:var(--white);outline:none}
@@ -51,21 +53,24 @@
   .field-row.three{grid-template-columns:1fr 1fr 1fr}
   @media(max-width:600px){.field-row,.field-row.three{grid-template-columns:1fr}}
   .radio-group,.check-group{display:flex;flex-wrap:wrap;gap:8px}
-  .radio-group label,.check-group label{display:flex;align-items:center;gap:7px;padding:7px 16px;border:1.5px solid var(--gray-200);border-radius:999px;cursor:pointer;font-size:13px;color:var(--gray-800);background:var(--white);transition:all .15s;user-select:none}
+  .radio-group{width:100%}
+  .radio-group label{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:7px 16px;border:1.5px solid var(--gray-200);border-radius:999px;cursor:pointer;font-size:13px;color:var(--gray-800);background:var(--white);transition:all .15s;user-select:none;text-align:center}
+  .check-group{width:100%}
+  .check-group label{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:7px 16px;border:1.5px solid var(--gray-200);border-radius:999px;cursor:pointer;font-size:13px;color:var(--gray-800);background:var(--white);transition:all .15s;user-select:none;text-align:center}
   .radio-group label:hover,.check-group label:hover{border-color:var(--navy);background:var(--gray-50)}
   .radio-group input[type=radio],.check-group input[type=checkbox]{accent-color:var(--navy);width:14px;height:14px}
   .radio-group label:has(input:checked),.check-group label:has(input:checked){border-color:var(--navy);background:#E0F0F5;color:var(--navy);font-weight:500}
   .kondisi-group{display:flex;flex-wrap:wrap;gap:8px}
-  .kondisi-opt{flex:1;min-width:130px}
+  .kondisi-opt{flex:1;min-width:0}
   .kondisi-opt input{display:none}
   .kondisi-opt label{display:block;text-align:center;padding:10px 8px;border:1.5px solid var(--gray-200);border-radius:999px;cursor:pointer;font-size:12px;font-weight:500;transition:all .15s}
   .kondisi-opt label .dot{display:block;width:10px;height:10px;border-radius:50%;margin:0 auto 6px}
   .kondisi-opt.baik label{color:#065F46}.kondisi-opt.baik .dot{background:#10B981}.kondisi-opt.baik input:checked+label{background:#ECFDF5;border-color:#10B981}
   .kondisi-opt.sedang label{color:#92400E}.kondisi-opt.sedang .dot{background:#F59E0B}.kondisi-opt.sedang input:checked+label{background:#FFFBEB;border-color:#F59E0B}
   .kondisi-opt.buruk label{color:#7F1D1D}.kondisi-opt.buruk .dot{background:#EF4444}.kondisi-opt.buruk input:checked+label{background:#FEF2F2;border-color:#EF4444}
-  .kondisi3-group{display:flex;gap:10px;flex-wrap:wrap}
+  .kondisi3-group{display:flex;gap:8px;flex-wrap:wrap;width:100%}
   .kondisi3-group input[type=radio]{display:none}
-  .kondisi3-group .k3-label{display:flex;flex-direction:column;align-items:center;padding:10px 20px;border:1.5px solid var(--gray-200);border-radius:999px;cursor:pointer;font-size:13px;font-weight:500;color:var(--gray-600);transition:all .15s;min-width:140px;text-align:center;background:var(--white)}
+  .kondisi3-group .k3-label{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;padding:10px 12px;border:1.5px solid var(--gray-200);border-radius:999px;cursor:pointer;font-size:13px;font-weight:500;color:var(--gray-600);transition:all .15s;text-align:center;background:var(--white)}
   .kondisi3-group .k3-dot{display:block;width:10px;height:10px;border-radius:50%;margin:0 auto 6px}
   .kondisi3-group .k3-label:hover{border-color:var(--navy)}
   .kondisi3-group input[type=radio]:checked + .k3-label.k3-baik{background:#ECFDF5;border-color:#10B981;color:#065F46;font-weight:700}
@@ -84,28 +89,16 @@
   .foto-badge{position:absolute;bottom:-4px;right:-4px;background:var(--white);border-radius:50%;font-size:12px;padding:1px 4px;box-shadow:0 1px 4px rgba(0,0,0,.3);line-height:1.3}
   .upload-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border:1.5px dashed var(--gray-200);border-radius:999px;cursor:pointer;font-size:12px;color:var(--gray-400);white-space:nowrap;background:var(--gray-50);transition:all .2s;flex-shrink:0;font-family:'Inter',sans-serif}
   .upload-btn:hover{border-color:var(--navy);color:var(--navy)}
-  .send-inline{margin-top:28px;background:var(--gray-50);border:1.5px solid var(--gray-200);border-radius:20px;padding:20px;display:flex;align-items:center;justify-content:flex-end;gap:14px;flex-wrap:wrap}
-  .send-area{
-    position:fixed;left:0;right:0;bottom:0;z-index:150;
-    background:var(--white);border-top:1.5px solid var(--gray-200);
-    box-shadow:0 -6px 20px rgba(0,0,0,.08);
-    padding:10px 16px;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px));
-    display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;
-  }
-  .btn-home-bar{display:flex;align-items:center;justify-content:center;gap:6px;flex:1;padding:11px 10px;border:1.5px solid var(--gray-200);border-radius:999px;background:var(--white);color:var(--navy);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;transition:all .2s}
-  .btn-home-bar:hover{background:var(--gray-50)}
-  @media(max-width:480px){.btn-home-bar span.label{display:none}}
+  .send-area{margin-top:28px;background:var(--gray-50);border:1.5px solid var(--gray-200);border-radius:20px;padding:20px;display:flex;align-items:center;justify-content:flex-end;gap:14px;flex-wrap:wrap}
   .foto-status{font-size:12px;color:var(--gray-600);margin-right:auto}
   .btn-send{padding:11px 28px;background:var(--navy);color:var(--white);border:none;border-radius:999px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .2s;white-space:nowrap}
+  .btn-draft{padding:11px 24px;background:var(--white);color:var(--navy);border:1.5px solid var(--navy);border-radius:999px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .2s;white-space:nowrap}
+  .btn-draft:hover{background:var(--gray-50)}
+  .draft-info{font-size:11px;color:var(--gray-400);margin-right:auto;display:flex;flex-direction:column;gap:2px}
+  .draft-info .draft-ts{color:var(--green);font-weight:600}
   .btn-send:hover{background:var(--navy-light);transform:translateY(-1px);box-shadow:0 4px 12px rgba(11,35,66,.25)}
   .btn-send:active{transform:translateY(0)}
   .btn-send:disabled{opacity:.6;cursor:not-allowed;transform:none}
-  .btn-draft{padding:11px 22px;background:var(--white);color:var(--navy);border:2px solid var(--navy);border-radius:999px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .2s;white-space:nowrap}
-  .btn-draft:hover{background:var(--gray-50);transform:translateY(-1px);box-shadow:0 4px 12px rgba(11,35,66,.12)}
-  .btn-draft:active{transform:translateY(0)}
-  .btn-draft:disabled{opacity:.6;cursor:not-allowed;transform:none}
-  .draft-info{font-size:11px;color:var(--gray-400);margin-right:auto;display:flex;flex-direction:column;gap:2px}
-  .draft-info .draft-ts{color:var(--green);font-weight:600}
   #toast{position:fixed;bottom:28px;right:28px;background:var(--green);color:var(--white);padding:14px 20px;border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.15);z-index:999;display:none;align-items:center;gap:10px}
   #toast.show{display:flex}
   #toast.error{background:var(--red)}
@@ -118,7 +111,7 @@
   .divider-badge{background:var(--gold);color:var(--navy);font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:13px;padding:4px 12px;border-radius:999px}
   .divider-banner h3{font-family:'Plus Jakarta Sans',sans-serif;color:#fff;font-size:16px;font-weight:700}
   .divider-banner p{color:rgba(255,255,255,.6);font-size:12px;margin-top:3px}
-  .util-row{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--gray-100)}
+  .util-row{display:grid;grid-template-columns:1fr 1fr auto;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--gray-100)}
   /* util-row2 PASCA PENYALURAN: label | tersedia | kondisi | foto (keberfungsian dihapus) */
   .util-row2{display:grid;grid-template-columns:180px auto auto auto;align-items:center;gap:10px;padding:14px 0;border-bottom:1px solid var(--gray-100)}
   @media(max-width:768px){.util-row2{grid-template-columns:1fr;gap:8px}}
@@ -141,6 +134,16 @@
   .geo-status.ok{color:var(--green)}
   .geo-status.err{color:var(--red)}
   .geo-status.busy{color:var(--gray-600)}
+
+  .footer-nav{
+    position:fixed;left:0;right:0;bottom:0;z-index:150;
+    background:var(--white);border-top:1.5px solid var(--gray-200);
+    box-shadow:0 -6px 20px rgba(0,0,0,.08);
+    padding:10px 16px;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px));
+    display:flex;align-items:center;justify-content:center;
+  }
+  .btn-home-bar{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;max-width:1100px;padding:11px 10px;border:1.5px solid var(--gray-200);border-radius:999px;background:var(--white);color:var(--navy);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;transition:all .2s}
+  .btn-home-bar:hover{background:var(--gray-50)}
 
   #confirmSendModal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:300}
   #confirmSendModal.open{opacity:1;pointer-events:auto}
@@ -172,19 +175,30 @@
   </div>
 </div>
 
-
 <header class="site-header">
   <div class="header-inner">
     <div class="header-text">
-      <h1>Form Isian Pengembang Perumahan FLPP</h1>
-      <p>Identitas dan Data Fisik Perumahan Beserta Dokumen Pendukung</p>
+      <h1>Form Pengendalian Tim Direktorat Teknis</h1>
+    </div>
+  </div>
+  <div class="tabs-wrapper">
+    <div class="tabs-nav" id="tabsNav">
+      <button class="tab-btn active" data-tab="0">Objek Perumahan</button>
+      <button class="tab-btn" data-tab="1">Kondisi PSU</button>
+      <button class="tab-btn" data-tab="2">Tahap Penyaluran</button>
+      <button class="tab-btn" data-tab="3">Tahap Pasca Penyaluran</button>
     </div>
   </div>
 </header>
 
 <div class="main">
+  <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar" style="width:25%"></div></div>
+
+  <!-- TAB 0 -->
   <div class="form-panel active" id="panel-0">
+    <div class="panel-header"><div class="panel-number">Form 1</div><div><h2>Verifikasi Data Objek Perumahan</h2><p>Identitas dan data fisik perumahan beserta dokumen pendukung</p></div></div>
     <div class="panel-body">
+      <div class="surveyor-bar"><label for="surveyor0">👤 Nama Surveyor</label><input type="text" id="surveyor0" placeholder="Masukkan nama surveyor..."></div>
       <div class="section">
         <div class="section-header"><span class="section-num">INFO</span><h3>Identitas Perumahan</h3></div>
         <div class="section-body">
@@ -206,7 +220,7 @@
               </div>
               <div class="geo-status" id="geoStatus_t1_koordinat"></div>
             </div>
-            <div class="field"><label>Luas Perumahan (m²)</label><input type="number" id="t1_luas_perumahan"></div>
+            <div class="field"><label>Luas Perumahan (m²)</label><input type="number"></div>
           </div>
         </div>
       </div>
@@ -214,21 +228,21 @@
         <div class="section-header"><span class="section-num">I</span><h3>Tipe Rumah</h3></div>
         <div class="section-body">
           <div class="subsection"><div class="subsection-title">1. Rumah Subsidi</div>
-            <div class="field-row three"><div class="field"><label>1. Tipe Rumah</label><input type="text" id="t1_subsidi_tipe_1" placeholder="mis: Tipe 36"></div><div class="field"><label>Jumlah Unit</label><input type="number" id="t1_subsidi_unit_1"></div><div class="field"><label>Harga (Rp)</label><input type="number" id="t1_subsidi_harga_1"></div></div>
-            <div class="field-row three"><div class="field"><label>2. Tipe Rumah</label><input type="text" id="t1_subsidi_tipe_2" placeholder="mis: Tipe 36"></div><div class="field"><label>Jumlah Unit</label><input type="number" id="t1_subsidi_unit_2"></div><div class="field"><label>Harga (Rp)</label><input type="number" id="t1_subsidi_harga_2"></div></div>
-            <div class="field-row three"><div class="field"><label>3. Tipe Rumah</label><input type="text" id="t1_subsidi_tipe_3" placeholder="mis: Tipe 36"></div><div class="field"><label>Jumlah Unit</label><input type="number" id="t1_subsidi_unit_3"></div><div class="field"><label>Harga (Rp)</label><input type="number" id="t1_subsidi_harga_3"></div></div>
+            <div class="field-row three"><div class="field"><label>1. Tipe Rumah</label><input type="text" placeholder="mis: Tipe 36"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div>
+            <div class="field-row three"><div class="field"><label>2. Tipe Rumah</label><input type="text" placeholder="mis: Tipe 36"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div>
+            <div class="field-row three"><div class="field"><label>3. Tipe Rumah</label><input type="text" placeholder="mis: Tipe 36"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div>
           </div>
           <div class="subsection"><div class="subsection-title">2. Rumah Komersil</div>
-            <div class="field-row three"><div class="field"><label>1. Tipe Rumah</label><input type="text" id="t1_komersil_tipe_1" placeholder="mis: Tipe 36"></div><div class="field"><label>Jumlah Unit</label><input type="number" id="t1_komersil_unit_1"></div><div class="field"><label>Harga (Rp)</label><input type="number" id="t1_komersil_harga_1"></div></div>
-            <div class="field-row three"><div class="field"><label>2. Tipe Rumah</label><input type="text" id="t1_komersil_tipe_2" placeholder="mis: Tipe 36"></div><div class="field"><label>Jumlah Unit</label><input type="number" id="t1_komersil_unit_2"></div><div class="field"><label>Harga (Rp)</label><input type="number" id="t1_komersil_harga_2"></div></div>
-            <div class="field-row three"><div class="field"><label>3. Tipe Rumah</label><input type="text" id="t1_komersil_tipe_3" placeholder="mis: Tipe 36"></div><div class="field"><label>Jumlah Unit</label><input type="number" id="t1_komersil_unit_3"></div><div class="field"><label>Harga (Rp)</label><input type="number" id="t1_komersil_harga_3"></div></div>
+            <div class="field-row three"><div class="field"><label>1. Tipe Rumah</label><input type="text"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div>
+            <div class="field-row three"><div class="field"><label>2. Tipe Rumah</label><input type="text" placeholder="mis: Tipe 36"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div>
+            <div class="field-row three"><div class="field"><label>3. Tipe Rumah</label><input type="text" placeholder="mis: Tipe 36"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div>
           </div>
         </div>
       </div>
       <div class="section">
         <div class="section-header"><span class="section-num">II</span><h3>Rumah Subsidi yang Sudah Akad FLPP</h3></div>
         <div class="section-body">
-          <div class="field-row"><div class="field"><label>Jumlah Unit</label><input type="number" id="t2_akad_unit_1"></div></div>
+          <div class="field-row"><div class="field"><label>Jumlah Unit</label><input type="number"></div></div>
         </div>
       </div>
       <div class="section">
@@ -238,26 +252,296 @@
           <div id="dokumen-list"></div>
         </div>
       </div>
-      <div class="send-inline">
+      <div class="send-area">
         <div class="draft-info" id="draft-info-panel-0">
           <span id="draft-label-panel-0" style="display:none">Draft tersimpan</span>
           <span class="draft-ts" id="draft-ts-panel-0"></span>
         </div>
         <div class="foto-status" id="foto-status-panel-0"></div>
-        <button class="btn-draft" id="btnDraft" data-panel="panel-0">Simpan Draft</button>
-        <button class="btn-send" id="btnKirim" data-panel="panel-0" data-form="Data Objek Perumahan - Pengembang">Kirim Data</button>
+        <button class="btn-draft" data-panel="panel-0">Simpan Draft</button>
+        <button class="btn-send" data-panel="panel-0" data-surveyor="surveyor0" data-form="Verifikasi Data Objek Perumahan">Kirim Data</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 1 -->
+  <div class="form-panel" id="panel-1">
+    <div class="panel-header"><div class="panel-number">Form 3</div><div><h2>Kondisi Fisik PSU Perumahan FLPP</h2><p>Prasarana, Sarana, dan Utilitas Umum</p></div></div>
+    <div class="panel-body">
+      <div class="surveyor-bar"><label for="surveyor1">👤 Nama Surveyor</label><input type="text" id="surveyor1" placeholder="Masukkan nama surveyor..."></div>
+      <div class="section">
+        <div class="section-header"><span class="section-num">INFO</span><h3>Data Umum</h3></div>
+        <div class="section-body">
+          <div class="field-row">
+            <div class="field"><label>Tanggal Pengisian</label><input type="date"></div>
+            <div class="field"><label>Waktu Pengendalian</label><input type="time"></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>Nama Perumahan</label><input type="text"></div>
+            <div class="field"><label>Provinsi</label><select id="prov_panel1" onchange="onProvChange('prov_panel1','kab_panel1')"><option value="">-- Pilih Provinsi --</option></select></div>
+          </div>
+          <div class="field"><label>Kabupaten/Kota</label><select id="kab_panel1"><option value="">-- Pilih Provinsi dahulu --</option></select></div>
+        </div>
+      </div>
+      <div id="psu-sections"></div>
+      <div class="send-area">
+        <div class="draft-info" id="draft-info-panel-1">
+          <span id="draft-label-panel-1" style="display:none">Draft tersimpan</span>
+          <span class="draft-ts" id="draft-ts-panel-1"></span>
+        </div>
+        <div class="foto-status" id="foto-status-panel-1"></div>
+        <button class="btn-draft" data-panel="panel-1">Simpan Draft</button>
+        <button class="btn-send" data-panel="panel-1" data-surveyor="surveyor1" data-form="Kondisi PSU">Kirim Data</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2 -->
+  <div class="form-panel" id="panel-2">
+    <div class="panel-header"><div class="panel-number">Form 4</div><div><h2>Kondisi Fisik Bangunan Tahap Penyaluran FLPP</h2><p>Pemeriksaan komponen fisik bangunan pada tahap penyaluran yaitu bangunan rumah dalam proses pembangunan</p></div></div>
+    <div class="panel-body">
+      <div class="surveyor-bar"><label for="surveyor2">👤 Nama Surveyor</label><input type="text" id="surveyor2" placeholder="Masukkan nama surveyor..."></div>
+      <div class="section">
+        <div class="section-header"><span class="section-num">INFO</span><h3>Data Umum</h3></div>
+        <div class="section-body">
+          <div class="field-row">
+            <div class="field"><label>Tanggal Pengisian</label><input type="date"></div>
+            <div class="field"><label>Waktu Pengendalian</label><input type="time"></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>Nama Perumahan</label><input type="text"></div>
+            <div class="field"><label>Provinsi</label><select id="prov_panel2" onchange="onProvChange('prov_panel2','kab_panel2')"><option value="">-- Pilih Provinsi --</option></select></div>
+          </div>
+          <div class="field"><label>Kabupaten/Kota</label><select id="kab_panel2"><option value="">-- Pilih Provinsi dahulu --</option></select></div>
+        </div>
+      </div>
+      <div id="penyaluran-sections"></div>
+      <div class="send-area">
+        <div class="draft-info" id="draft-info-panel-2">
+          <span id="draft-label-panel-2" style="display:none">Draft tersimpan</span>
+          <span class="draft-ts" id="draft-ts-panel-2"></span>
+        </div>
+        <div class="foto-status" id="foto-status-panel-2"></div>
+        <button class="btn-draft" data-panel="panel-2">Simpan Draft</button>
+        <button class="btn-send" data-panel="panel-2" data-surveyor="surveyor2" data-form="Tahap Penyaluran">Kirim Data</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3 -->
+  <div class="form-panel" id="panel-3">
+    <div class="panel-header"><div class="panel-number">Form 5</div><div><h2>Kondisi Pasca Penyaluran FLPP</h2><p>Profil penghuni, keterhunian, komponen fisik bangunan, dan penilaian penerima manfaat</p></div></div>
+    <div class="panel-body">
+      <div class="surveyor-bar"><label for="surveyor3">👤 Nama Surveyor</label><input type="text" id="surveyor3" placeholder="Masukkan nama surveyor..."></div>
+      <div class="section">
+        <div class="section-header"><span class="section-num">INFO</span><h3>Data Umum</h3></div>
+        <div class="section-body">
+          <div class="field-row">
+            <div class="field"><label>Tanggal Pengisian</label><input type="date"></div>
+            <div class="field"><label>Waktu</label><input type="time"></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>Nama Perumahan</label><input type="text"></div>
+            <div class="field"><label>Provinsi</label><select id="prov_panel3" onchange="onProvChange('prov_panel3','kab_panel3')"><option value="">-- Pilih Provinsi --</option></select></div>
+          </div>
+          <div class="field"><label>Kabupaten/Kota</label><select id="kab_panel3"><option value="">-- Pilih Provinsi dahulu --</option></select></div>
+        </div>
+      </div>
+      <div class="divider-banner"><span class="divider-badge">KETERHUNIAN</span><div><h3>Kondisi Keterhunian Rumah</h3><p>Profil penghuni, tipe unit, dan status keterhunian perumahan FLPP</p></div></div>
+      <div class="section">
+        <div class="section-header"><span class="section-num">1.0</span><h3>Profil Penghuni</h3></div>
+        <div class="section-body">
+          <div class="subsection"><div class="subsection-title">Data Responden (Penghuni)</div>
+            <div class="field-row">
+              <div class="field"><label>Nama Lengkap</label><input type="text"></div>
+              <div class="field"><label>NIK</label><input type="text" maxlength="16"></div>
+            </div>
+            <div class="field"><label>Jenis Kelamin</label><div class="radio-group"><label><input type="radio" name="jk_penghuni" value="Laki-laki"> Laki-laki</label><label><input type="radio" name="jk_penghuni" value="Perempuan"> Perempuan</label></div></div>
+            <div class="field"><label>Status Pernikahan</label><div class="radio-group"><label><input type="radio" name="kawin_penghuni" value="Belum Kawin"> Belum Kawin</label><label><input type="radio" name="kawin_penghuni" value="Kawin"> Kawin</label></div></div>
+            <div class="field-row">
+              <div class="field"><label>Provinsi Domisili</label><select id="prov_domisili" onchange="onProvChange('prov_domisili','kab_domisili')"><option value="">-- Pilih Provinsi --</option></select></div>
+              <div class="field"><label>Kabupaten/Kota Domisili</label><select id="kab_domisili"><option value="">-- Pilih Provinsi dahulu --</option></select></div>
+            </div>
+            <div class="field"><label>Nomor HP</label><input type="tel"></div>
+            <div class="field"><label>Pekerjaan</label><div class="radio-group">
+              <label><input type="radio" name="kerja_penghuni" value="ASN/BUMN/BUMD"> ASN/BUMN/BUMD</label>
+              <label><input type="radio" name="kerja_penghuni" value="TNI/POLRI"> TNI/POLRI</label>
+              <label><input type="radio" name="kerja_penghuni" value="Swasta"> Swasta</label>
+              <label><input type="radio" name="kerja_penghuni" value="Wiraswasta"> Wiraswasta</label>
+              <label><input type="radio" name="kerja_penghuni" value="Informal"> Informal</label>
+              <label><input type="radio" name="kerja_penghuni" value="Tidak Bekerja"> Tidak Bekerja</label>
+            </div></div>
+            <div class="field"><label>Jumlah Penghasilan Rata-rata</label><div class="radio-group">
+              <label><input type="radio" name="gaji_penghuni" value="< 2 Juta"> &lt; 2 Juta</label>
+              <label><input type="radio" name="gaji_penghuni" value="2-5 Juta"> 2–5 Juta</label>
+              <label><input type="radio" name="gaji_penghuni" value="5-6 Juta"> 5–6 Juta</label>
+              <label><input type="radio" name="gaji_penghuni" value="6-7 Juta"> 6–7 Juta</label>
+              <label><input type="radio" name="gaji_penghuni" value="7-8 Juta"> 7–8 Juta</label>
+              <label><input type="radio" name="gaji_penghuni" value="> 8 Juta"> &gt; 8 Juta</label>
+            </div></div>
+          </div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="section-num">2.0</span><h3>Tipe Unit Rumah</h3></div>
+        <div class="section-body">
+          <div class="field-row three">
+            <div class="field"><label>Luas Tanah (m²)</label><input type="number"></div>
+            <div class="field"><label>Luas Bangunan (m²)</label><input type="number"></div>
+            <div class="field"><label>Jumlah Kamar</label><input type="number"></div>
+          </div>
+          <div class="field">
+            <label>Koordinat Titik Rumah</label>
+            <div class="geo-field-row">
+              <input type="text" id="t3_koordinat" placeholder="-6.200000, 106.816666">
+              <button type="button" class="geo-btn" id="geoBtn_t3_koordinat">📍 Ambil Lokasi</button>
+            </div>
+            <div class="geo-status" id="geoStatus_t3_koordinat"></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>Harga Rumah (Rp)</label><input type="number"></div>
+            <div class="field"><label>Tenor Kredit (tahun)</label><input type="number"></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>DP Awal (Rp)</label><input type="number"></div>
+            <div class="field"><label>Cicilan per Bulan (Rp)</label><input type="number"></div>
+          </div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header"><span class="section-num">3.0</span><h3>Keterhunian Perumahan FLPP</h3></div>
+        <div class="section-body">
+          <div class="field"><label>Jenis Program Penerima Manfaat</label><div class="check-group"><label><input type="checkbox" value="FLPP"> FLPP</label><label><input type="checkbox" value="SBUM"> SBUM</label></div></div>
+          <div class="field"><label>Sticker/Plat KPR Bersubsidi</label><div class="radio-group"><label><input type="radio" name="sticker" value="Tersedia"> Tersedia</label><label><input type="radio" name="sticker" value="Tidak Tersedia"> Tidak Tersedia</label></div></div>
+          <div class="field"><label>Sertifikat Rumah</label><div class="radio-group"><label><input type="radio" name="sertif" value="Tersedia"> Tersedia</label><label><input type="radio" name="sertif" value="Tidak Tersedia"> Tidak Tersedia</label></div></div>
+          <div class="field-row">
+            <div class="field"><label>PBG</label><div class="radio-group"><label><input type="radio" name="pbg" value="Tersedia"> Tersedia</label><label><input type="radio" name="pbg" value="Tidak Tersedia"> Tidak Tersedia</label></div></div>
+            <div class="field"><label>Nomor PBG</label><input type="text"></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>SLF</label><div class="radio-group"><label><input type="radio" name="slf" value="Tersedia"> Tersedia</label><label><input type="radio" name="slf" value="Tidak Tersedia"> Tidak Tersedia</label></div></div>
+            <div class="field"><label>Nomor SLF</label><input type="text"></div>
+          </div>
+          <div class="field"><label>Jumlah Penghuni</label><div class="radio-group">
+            <label><input type="radio" name="penghuni" value="1 Orang"> 1 Orang</label>
+            <label><input type="radio" name="penghuni" value="2 Orang"> 2 Orang</label>
+            <label><input type="radio" name="penghuni" value="3-4 Orang"> 3–4 Orang</label>
+            <label><input type="radio" name="penghuni" value="> 4 Orang"> &gt; 4 Orang</label>
+          </div></div>
+          <div class="field"><label>Status Keterhunian</label><div class="radio-group">
+            <label><input type="radio" name="status_huni" value="Dihuni Sendiri"> Dihuni Sendiri</label>
+            <label><input type="radio" name="status_huni" value="Tidak Dihuni Terawat"> Tidak Dihuni Terawat</label>
+            <label><input type="radio" name="status_huni" value="Tidak Dihuni Tidak Terawat"> Tidak Dihuni Tidak Terawat</label>
+            <label><input type="radio" name="status_huni" value="Bebas Sewa"> Bebas Sewa</label>
+            <label><input type="radio" name="status_huni" value="Disewakan"> Disewakan</label>
+            <label><input type="radio" name="status_huni" value="Dijual"> Dijual</label>
+          </div></div>
+          <div class="field"><label>Mulai Menghuni Sejak Tahun</label><div class="radio-group">
+            <label><input type="radio" name="tahun_huni" value="2020"> 2020</label>
+            <label><input type="radio" name="tahun_huni" value="2021"> 2021</label>
+            <label><input type="radio" name="tahun_huni" value="2022"> 2022</label>
+            <label><input type="radio" name="tahun_huni" value="2023"> 2023</label>
+            <label><input type="radio" name="tahun_huni" value="2024"> 2024</label>
+            <label><input type="radio" name="tahun_huni" value="2025"> 2025</label>
+          </div></div>
+          <div class="field"><label>Renovasi yang Pernah Dilakukan</label><div class="check-group">
+            <label><input type="checkbox" value="Tidak Pernah"> Tidak Pernah</label>
+            <label><input type="checkbox" value="Perbaikan Sarana"> Perbaikan Sarana</label>
+            <label><input type="checkbox" value="Perluasan Horizontal"> Perluasan Horizontal</label>
+            <label><input type="checkbox" value="Perluasan Vertikal"> Perluasan Vertikal</label>
+            <label><input type="checkbox" value="Keamanan"> Keamanan</label>
+            <label><input type="checkbox" value="Estetika"> Estetika</label>
+          </div></div>
+          <div class="field-row">
+            <div class="field"><label>Perubahan Fungsi Bangunan</label><div class="radio-group"><label><input type="radio" name="fungsi" value="Ya"> Ya</label><label><input type="radio" name="fungsi" value="Tidak"> Tidak</label></div></div>
+            <div class="field"><label>Jika Ya, Sebagai</label><input type="text"></div>
+          </div>
+        </div>
+      </div>
+      <div id="pasca-fisik-sections"></div>
+      <div class="divider-banner" style="margin-top:24px"><span class="divider-badge">PENILAIAN</span><div><h3>Penilaian Manfaat</h3><p>Penilaian penerima manfaat terhadap program FLPP</p></div></div>
+      <div class="section">
+        <div class="section-header"><span class="section-num">PENILAIAN</span><h3>Penilaian Penerima Manfaat</h3></div>
+        <div class="section-body">
+          <div class="field"><span class="chip-label">Kementerian PKP</span><label>Kemudahan mencari informasi KPR Bersubsidi</label><div class="radio-group" style="margin-top:6px">
+            <label><input type="radio" name="info_kpr" value="Sangat Mudah"> Sangat Mudah</label>
+            <label><input type="radio" name="info_kpr" value="Mudah"> Mudah</label>
+            <label><input type="radio" name="info_kpr" value="Kurang Mudah"> Kurang Mudah</label>
+            <label><input type="radio" name="info_kpr" value="Tidak Mudah"> Tidak Mudah</label>
+          </div></div>
+          <div class="field"><label>Mengetahui program ini dari Kementerian PKP</label><div class="radio-group" style="margin-top:6px">
+            <label><input type="radio" name="tahu_pkp" value="Sangat Setuju"> Sangat Setuju</label>
+            <label><input type="radio" name="tahu_pkp" value="Setuju"> Setuju</label>
+            <label><input type="radio" name="tahu_pkp" value="Kurang Setuju"> Kurang Setuju</label>
+            <label><input type="radio" name="tahu_pkp" value="Tidak Setuju"> Tidak Setuju</label>
+          </div></div>
+          <hr class="separator">
+          <div class="field"><span class="chip-label">Bank Pelaksana</span><label>Kemudahan memenuhi persyaratan KPR Bersubsidi</label><div class="radio-group" style="margin-top:6px">
+            <label><input type="radio" name="syarat_bank" value="Sangat Jelas"> Sangat Jelas</label>
+            <label><input type="radio" name="syarat_bank" value="Jelas"> Jelas</label>
+            <label><input type="radio" name="syarat_bank" value="Kurang Jelas"> Kurang Jelas</label>
+            <label><input type="radio" name="syarat_bank" value="Tidak Jelas"> Tidak Jelas</label>
+          </div></div>
+          <div class="field"><label>Kecepatan proses pengajuan kredit</label><div class="radio-group" style="margin-top:6px">
+            <label><input type="radio" name="proses_bank" value="Sangat Cepat"> Sangat Cepat</label>
+            <label><input type="radio" name="proses_bank" value="Cepat"> Cepat</label>
+            <label><input type="radio" name="proses_bank" value="Kurang Cepat"> Kurang Cepat</label>
+            <label><input type="radio" name="proses_bank" value="Tidak Cepat"> Tidak Cepat</label>
+          </div></div>
+          <div class="field"><label>Masukan, Kritik, dan Saran</label><textarea placeholder="Tuliskan masukan atau saran..."></textarea></div>
+        </div>
       </div>
       <div class="send-area">
-        <a class="btn-home-bar" href="index.html"><span class="label">Home</span></a>
+        <div class="draft-info" id="draft-info-panel-3">
+          <span id="draft-label-panel-3" style="display:none">Draft tersimpan</span>
+          <span class="draft-ts" id="draft-ts-panel-3"></span>
+        </div>
+        <div class="foto-status" id="foto-status-panel-3"></div>
+        <button class="btn-draft" data-panel="panel-3">Simpan Draft</button>
+        <button class="btn-send" data-panel="panel-3" data-surveyor="surveyor3" data-form="Pasca Penyaluran">Kirim Data</button>
       </div>
     </div>
   </div>
 </div>
 
+<footer class="footer-nav">
+  <a class="btn-home-bar" href="index.html"><span class="label">Home</span></a>
+</footer>
+
 <div id="toast"></div>
 
 <script>
 var GAS_URL = 'https://script.google.com/macros/s/AKfycbwL_U155tjBT1nim0SxD4Qu4LM2EsWc7wlWTEcokU-SfAiglJlhG4Qt7iBJ6X5sEgfr6A/exec';
+
+var WILAYAH_INDONESIA = {"Aceh":["Kab. Aceh Barat","Kab. Aceh Barat Daya","Kab. Aceh Besar","Kab. Aceh Jaya","Kab. Aceh Selatan","Kab. Aceh Singkil","Kab. Aceh Tamiang","Kab. Aceh Tengah","Kab. Aceh Tenggara","Kab. Aceh Timur","Kab. Aceh Utara","Kab. Bener Meriah","Kab. Bireuen","Kab. Gayo Lues","Kab. Nagan Raya","Kab. Pidie","Kab. Pidie Jaya","Kab. Simeulue","Kota Banda Aceh","Kota Langsa","Kota Lhokseumawe","Kota Sabang","Kota Subulussalam"],"Sumatera Utara":["Kab. Asahan","Kab. Batu Bara","Kab. Dairi","Kab. Deli Serdang","Kab. Humbang Hasundutan","Kab. Karo","Kab. Labuhanbatu","Kab. Labuhanbatu Selatan","Kab. Labuhanbatu Utara","Kab. Langkat","Kab. Mandailing Natal","Kab. Nias","Kab. Nias Barat","Kab. Nias Selatan","Kab. Nias Utara","Kab. Padang Lawas","Kab. Padang Lawas Utara","Kab. Pakpak Bharat","Kab. Samosir","Kab. Serdang Bedagai","Kab. Simalungun","Kab. Tapanuli Selatan","Kab. Tapanuli Tengah","Kab. Tapanuli Utara","Kab. Toba","Kota Binjai","Kota Gunungsitoli","Kota Medan","Kota Padangsidempuan","Kota Pematangsiantar","Kota Sibolga","Kota Tanjungbalai","Kota Tebing Tinggi"],"Sumatera Barat":["Kab. Agam","Kab. Dharmasraya","Kab. Kepulauan Mentawai","Kab. Lima Puluh Kota","Kab. Padang Pariaman","Kab. Pasaman","Kab. Pasaman Barat","Kab. Pesisir Selatan","Kab. Sijunjung","Kab. Solok","Kab. Solok Selatan","Kab. Tanah Datar","Kota Bukittinggi","Kota Padang","Kota Padang Panjang","Kota Pariaman","Kota Payakumbuh","Kota Sawahlunto","Kota Solok"],"Riau":["Kab. Bengkalis","Kab. Indragiri Hilir","Kab. Indragiri Hulu","Kab. Kampar","Kab. Kepulauan Meranti","Kab. Kuantan Singingi","Kab. Pelalawan","Kab. Rokan Hilir","Kab. Rokan Hulu","Kab. Siak","Kota Dumai","Kota Pekanbaru"],"Kepulauan Riau":["Kab. Bintan","Kab. Karimun","Kab. Kepulauan Anambas","Kab. Lingga","Kab. Natuna","Kota Batam","Kota Tanjungpinang"],"Jambi":["Kab. Batanghari","Kab. Bungo","Kab. Kerinci","Kab. Merangin","Kab. Muaro Jambi","Kab. Sarolangun","Kab. Tanjung Jabung Barat","Kab. Tanjung Jabung Timur","Kab. Tebo","Kota Jambi","Kota Sungai Penuh"],"Sumatera Selatan":["Kab. Banyuasin","Kab. Empat Lawang","Kab. Lahat","Kab. Muara Enim","Kab. Musi Banyuasin","Kab. Musi Rawas","Kab. Musi Rawas Utara","Kab. Ogan Ilir","Kab. Ogan Komering Ilir","Kab. Ogan Komering Ulu","Kab. Ogan Komering Ulu Selatan","Kab. Ogan Komering Ulu Timur","Kab. Penukal Abab Lematang Ilir","Kota Lubuklinggau","Kota Pagar Alam","Kota Palembang","Kota Prabumulih"],"Bangka Belitung":["Kab. Bangka","Kab. Bangka Barat","Kab. Bangka Selatan","Kab. Bangka Tengah","Kab. Belitung","Kab. Belitung Timur","Kota Pangkalpinang"],"Bengkulu":["Kab. Bengkulu Selatan","Kab. Bengkulu Tengah","Kab. Bengkulu Utara","Kab. Kaur","Kab. Kepahiang","Kab. Lebong","Kab. Mukomuko","Kab. Rejang Lebong","Kab. Seluma","Kota Bengkulu"],"Lampung":["Kab. Lampung Barat","Kab. Lampung Selatan","Kab. Lampung Tengah","Kab. Lampung Timur","Kab. Lampung Utara","Kab. Mesuji","Kab. Pesawaran","Kab. Pesisir Barat","Kab. Pringsewu","Kab. Tanggamus","Kab. Tulang Bawang","Kab. Tulang Bawang Barat","Kab. Way Kanan","Kota Bandar Lampung","Kota Metro"],"DKI Jakarta":["Kota Jakarta Barat","Kota Jakarta Pusat","Kota Jakarta Selatan","Kota Jakarta Timur","Kota Jakarta Utara","Kab. Kepulauan Seribu"],"Jawa Barat":["Kab. Bandung","Kab. Bandung Barat","Kab. Bekasi","Kab. Bogor","Kab. Ciamis","Kab. Cianjur","Kab. Cirebon","Kab. Garut","Kab. Indramayu","Kab. Karawang","Kab. Kuningan","Kab. Majalengka","Kab. Pangandaran","Kab. Purwakarta","Kab. Subang","Kab. Sukabumi","Kab. Sumedang","Kab. Tasikmalaya","Kota Bandung","Kota Banjar","Kota Bekasi","Kota Bogor","Kota Cimahi","Kota Cirebon","Kota Depok","Kota Sukabumi","Kota Tasikmalaya"],"Jawa Tengah":["Kab. Banjarnegara","Kab. Banyumas","Kab. Batang","Kab. Blora","Kab. Boyolali","Kab. Brebes","Kab. Cilacap","Kab. Demak","Kab. Grobogan","Kab. Jepara","Kab. Karanganyar","Kab. Kebumen","Kab. Kendal","Kab. Klaten","Kab. Kudus","Kab. Magelang","Kab. Pati","Kab. Pekalongan","Kab. Pemalang","Kab. Purbalingga","Kab. Purworejo","Kab. Rembang","Kab. Semarang","Kab. Sragen","Kab. Sukoharjo","Kab. Tegal","Kab. Temanggung","Kab. Wonogiri","Kab. Wonosobo","Kota Magelang","Kota Pekalongan","Kota Salatiga","Kota Semarang","Kota Surakarta","Kota Tegal"],"DI Yogyakarta":["Kab. Bantul","Kab. Gunungkidul","Kab. Kulon Progo","Kab. Sleman","Kota Yogyakarta"],"Jawa Timur":["Kab. Bangkalan","Kab. Banyuwangi","Kab. Blitar","Kab. Bojonegoro","Kab. Bondowoso","Kab. Gresik","Kab. Jember","Kab. Jombang","Kab. Kediri","Kab. Lamongan","Kab. Lumajang","Kab. Madiun","Kab. Magetan","Kab. Malang","Kab. Mojokerto","Kab. Nganjuk","Kab. Ngawi","Kab. Pacitan","Kab. Pamekasan","Kab. Pasuruan","Kab. Ponorogo","Kab. Probolinggo","Kab. Sampang","Kab. Sidoarjo","Kab. Situbondo","Kab. Sumenep","Kab. Trenggalek","Kab. Tuban","Kab. Tulungagung","Kota Batu","Kota Blitar","Kota Kediri","Kota Madiun","Kota Malang","Kota Mojokerto","Kota Pasuruan","Kota Probolinggo","Kota Surabaya"],"Banten":["Kab. Lebak","Kab. Pandeglang","Kab. Serang","Kab. Tangerang","Kota Cilegon","Kota Serang","Kota Tangerang","Kota Tangerang Selatan"],"Bali":["Kab. Badung","Kab. Bangli","Kab. Buleleng","Kab. Gianyar","Kab. Jembrana","Kab. Karangasem","Kab. Klungkung","Kab. Tabanan","Kota Denpasar"],"Nusa Tenggara Barat":["Kab. Bima","Kab. Dompu","Kab. Lombok Barat","Kab. Lombok Tengah","Kab. Lombok Timur","Kab. Lombok Utara","Kab. Sumbawa","Kab. Sumbawa Barat","Kota Bima","Kota Mataram"],"Nusa Tenggara Timur":["Kab. Alor","Kab. Belu","Kab. Ende","Kab. Flores Timur","Kab. Kupang","Kab. Lembata","Kab. Malaka","Kab. Manggarai","Kab. Manggarai Barat","Kab. Manggarai Timur","Kab. Nagekeo","Kab. Ngada","Kab. Rote Ndao","Kab. Sabu Raijua","Kab. Sikka","Kab. Sumba Barat","Kab. Sumba Barat Daya","Kab. Sumba Tengah","Kab. Sumba Timur","Kab. Timor Tengah Selatan","Kab. Timor Tengah Utara","Kota Kupang"],"Kalimantan Barat":["Kab. Bengkayang","Kab. Kapuas Hulu","Kab. Kayong Utara","Kab. Ketapang","Kab. Kubu Raya","Kab. Landak","Kab. Melawi","Kab. Mempawah","Kab. Sambas","Kab. Sanggau","Kab. Sekadau","Kab. Sintang","Kota Pontianak","Kota Singkawang"],"Kalimantan Tengah":["Kab. Barito Selatan","Kab. Barito Timur","Kab. Barito Utara","Kab. Gunung Mas","Kab. Kapuas","Kab. Katingan","Kab. Kotawaringin Barat","Kab. Kotawaringin Timur","Kab. Lamandau","Kab. Murung Raya","Kab. Pulang Pisau","Kab. Seruyan","Kab. Sukamara","Kota Palangka Raya"],"Kalimantan Selatan":["Kab. Balangan","Kab. Banjar","Kab. Barito Kuala","Kab. Hulu Sungai Selatan","Kab. Hulu Sungai Tengah","Kab. Hulu Sungai Utara","Kab. Kotabaru","Kab. Tabalong","Kab. Tanah Bumbu","Kab. Tanah Laut","Kab. Tapin","Kota Banjarbaru","Kota Banjarmasin"],"Kalimantan Timur":["Kab. Berau","Kab. Kutai Barat","Kab. Kutai Kartanegara","Kab. Kutai Timur","Kab. Mahakam Ulu","Kab. Paser","Kab. Penajam Paser Utara","Kota Balikpapan","Kota Bontang","Kota Samarinda"],"Kalimantan Utara":["Kab. Bulungan","Kab. Malinau","Kab. Nunukan","Kab. Tana Tidung","Kota Tarakan"],"Sulawesi Utara":["Kab. Bolaang Mongondow","Kab. Bolaang Mongondow Selatan","Kab. Bolaang Mongondow Timur","Kab. Bolaang Mongondow Utara","Kab. Kepulauan Sangihe","Kab. Kepulauan Siau Tagulandang Biaro","Kab. Kepulauan Talaud","Kab. Minahasa","Kab. Minahasa Selatan","Kab. Minahasa Tenggara","Kab. Minahasa Utara","Kota Bitung","Kota Kotamobagu","Kota Manado","Kota Tomohon"],"Sulawesi Tengah":["Kab. Banggai","Kab. Banggai Kepulauan","Kab. Banggai Laut","Kab. Buol","Kab. Donggala","Kab. Morowali","Kab. Morowali Utara","Kab. Parigi Moutong","Kab. Poso","Kab. Sigi","Kab. Tojo Una-Una","Kab. Tolitoli","Kota Palu"],"Sulawesi Selatan":["Kab. Bantaeng","Kab. Barru","Kab. Bone","Kab. Bulukumba","Kab. Enrekang","Kab. Gowa","Kab. Jeneponto","Kab. Kepulauan Selayar","Kab. Luwu","Kab. Luwu Timur","Kab. Luwu Utara","Kab. Maros","Kab. Pangkajene dan Kepulauan","Kab. Pinrang","Kab. Sidenreng Rappang","Kab. Sinjai","Kab. Soppeng","Kab. Takalar","Kab. Tana Toraja","Kab. Toraja Utara","Kab. Wajo","Kota Makassar","Kota Palopo","Kota Parepare"],"Sulawesi Tenggara":["Kab. Bombana","Kab. Buton","Kab. Buton Selatan","Kab. Buton Tengah","Kab. Buton Utara","Kab. Kolaka","Kab. Kolaka Timur","Kab. Kolaka Utara","Kab. Konawe","Kab. Konawe Kepulauan","Kab. Konawe Selatan","Kab. Konawe Utara","Kab. Muna","Kab. Muna Barat","Kab. Wakatobi","Kota Baubau","Kota Kendari"],"Gorontalo":["Kab. Boalemo","Kab. Bone Bolango","Kab. Gorontalo","Kab. Gorontalo Utara","Kab. Pohuwato","Kota Gorontalo"],"Sulawesi Barat":["Kab. Majene","Kab. Mamasa","Kab. Mamuju","Kab. Mamuju Tengah","Kab. Mamuju Utara","Kab. Polewali Mandar"],"Maluku":["Kab. Buru","Kab. Buru Selatan","Kab. Kepulauan Aru","Kab. Maluku Barat Daya","Kab. Maluku Tengah","Kab. Maluku Tenggara","Kab. Maluku Tenggara Barat","Kab. Seram Bagian Barat","Kab. Seram Bagian Timur","Kota Ambon","Kota Tual"],"Maluku Utara":["Kab. Halmahera Barat","Kab. Halmahera Selatan","Kab. Halmahera Tengah","Kab. Halmahera Timur","Kab. Halmahera Utara","Kab. Kepulauan Sula","Kab. Pulau Morotai","Kab. Pulau Taliabu","Kota Ternate","Kota Tidore Kepulauan"],"Papua":["Kab. Biak Numfor","Kab. Jayapura","Kab. Kepulauan Yapen","Kab. Mamberamo Raya","Kab. Sarmi","Kab. Supiori","Kab. Waropen","Kota Jayapura"],"Papua Barat":["Kab. Fakfak","Kab. Kaimana","Kab. Manokwari","Kab. Manokwari Selatan","Kab. Pegunungan Arfak","Kab. Teluk Bintuni","Kab. Teluk Wondama","Kota Manokwari"],"Papua Barat Daya":["Kab. Maybrat","Kab. Raja Ampat","Kab. Sorong","Kab. Sorong Selatan","Kab. Tambrauw","Kota Sorong"],"Papua Tengah":["Kab. Deiyai","Kab. Dogiyai","Kab. Intan Jaya","Kab. Mimika","Kab. Nabire","Kab. Paniai","Kab. Puncak","Kab. Puncak Jaya"],"Papua Pegunungan":["Kab. Jayawijaya","Kab. Lanny Jaya","Kab. Mamberamo Tengah","Kab. Nduga","Kab. Pegunungan Bintang","Kab. Tolikara","Kab. Yahukimo","Kab. Yalimo"],"Papua Selatan":["Kab. Asmat","Kab. Boven Digoel","Kab. Mappi","Kab. Merauke"]};
+
+function initProvDropdowns() {
+  var provIds = ['prov_panel1','prov_panel2','prov_panel3','prov_domisili'];
+  var provinces = Object.keys(WILAYAH_INDONESIA).sort();
+  provIds.forEach(function(pid) {
+    var sel = document.getElementById(pid);
+    if (!sel) return;
+    provinces.forEach(function(prov) {
+      var opt = document.createElement('option');
+      opt.value = prov; opt.textContent = prov;
+      sel.appendChild(opt);
+    });
+  });
+}
+function onProvChange(provId, kabId) {
+  var provSel = document.getElementById(provId);
+  var kabSel  = document.getElementById(kabId);
+  if (!provSel || !kabSel) return;
+  var prov = provSel.value;
+  kabSel.innerHTML = '<option value="">-- Pilih Kab/Kota --</option>';
+  if (prov && WILAYAH_INDONESIA[prov]) {
+    WILAYAH_INDONESIA[prov].forEach(function(kab) {
+      var opt = document.createElement('option');
+      opt.value = kab; opt.textContent = kab;
+      kabSel.appendChild(opt);
+    });
+  }
+}
 
 var fotoState   = {};
 var sessionTime = {};
@@ -296,11 +580,77 @@ function makeRadioGroup(name, opts) {
   });
   return grp;
 }
+function makeCheckGroup(name, opts) {
+  var grp = el('div', {cls:'check-group'});
+  opts.forEach(function(o) {
+    var inp = el('input'); inp.type='checkbox'; inp.name=name; inp.value=o;
+    var lbl = el('label', {}, [inp, document.createTextNode(' '+o)]);
+    grp.appendChild(lbl);
+  });
+  return grp;
+}
+function makeCheckGroupWithOther(name, opts, otherPlaceholder) {
+  var wrap = el('div', {style:'display:flex;flex-direction:column;gap:8px'});
+  var grp = el('div', {cls:'check-group'});
+  var otherInput = el('input', {type:'text', id:name+'_lainnya_text', placeholder:(otherPlaceholder||'Sebutkan...'), style:'display:none;padding:9px 16px;border:1.5px solid var(--gray-200);border-radius:999px;font-size:14px;font-family:\'Inter\',sans-serif;color:var(--gray-800);background:var(--white);outline:none;width:100%;max-width:340px'});
+  opts.forEach(function(o) {
+    var inp = el('input'); inp.type='checkbox'; inp.name=name; inp.value=o;
+    if(o==='Lainnya'){
+      inp.addEventListener('change', function(){ otherInput.style.display = inp.checked ? 'block' : 'none'; if(!inp.checked) otherInput.value=''; });
+    }
+    var lbl = el('label', {}, [inp, document.createTextNode(' '+o)]);
+    grp.appendChild(lbl);
+  });
+  wrap.appendChild(grp);
+  wrap.appendChild(otherInput);
+  return wrap;
+}
 function makeField(labelText, child) {
   var f = el('div', {cls:'field'});
   f.appendChild(el('label', {text: labelText}));
   f.appendChild(child);
   return f;
+}
+
+function makeKondisi3(name) {
+  var defs = [
+    { val:'Baik / Berfungsi',        cls:'k3-baik',   dot:'#10B981' },
+    { val:'Sedang / Ada Gangguan',   cls:'k3-sedang', dot:'#F59E0B' },
+    { val:'Buruk / Tidak Berfungsi', cls:'k3-buruk',  dot:'#EF4444' }
+  ];
+  var grp = el('div', {cls:'kondisi3-group'});
+  defs.forEach(function(d, i) {
+    var rid = name + '_' + i;
+    var inp = el('input'); inp.type='radio'; inp.name=name; inp.id=rid; inp.value=d.val;
+    var dot = el('span', {cls:'k3-dot', style:'background:'+d.dot});
+    var lbl = el('label'); lbl.setAttribute('for', rid);
+    lbl.className = 'k3-label ' + d.cls;
+    lbl.appendChild(dot);
+    lbl.appendChild(document.createTextNode(d.val));
+    grp.appendChild(inp);
+    grp.appendChild(lbl);
+  });
+  return grp;
+}
+
+function makeFotoUpload(fieldName) {
+  var inp = el('input'); inp.type='file'; inp.accept='image/*'; inp.multiple=true;
+  var box = el('div', {cls:'foto-upload'}, [el('div',{cls:'ico',text:'📷'}), el('p',{text:'Klik untuk upload foto'})]);
+  var prev = el('div', {cls:'foto-preview'});
+  box.appendChild(inp);
+  box.addEventListener('click', function() { inp.click(); });
+  inp.addEventListener('change', function() { previewInto(inp, prev, fieldName); inp.value=''; });
+  return {wrap: [box, prev], inp: inp, fieldName: fieldName};
+}
+function makeUploadBtn(fieldName, previewEl) {
+  var inp = el('input'); inp.type='file'; inp.accept='image/*'; inp.multiple=true;
+  inp.style.display='none';
+  var btn = el('button', {cls:'upload-btn', type:'button'});
+  btn.textContent = '📷 Upload Foto';
+  btn.appendChild(inp);
+  btn.addEventListener('click', function() { inp.click(); });
+  inp.addEventListener('change', function() { previewInto(inp, previewEl, fieldName); inp.value=''; });
+  return {btn: btn, inp: inp, fieldName: fieldName};
 }
 function makeDocUploadBtn(previewEl, fieldName) {
   var inp = el('input'); inp.type='file'; inp.accept='image/*,.pdf,.doc,.docx,.xls,.xlsx'; inp.multiple=true;
@@ -374,16 +724,6 @@ function processAndUploadFiles(files, fieldName, panelId, previewEl, isDocMode) 
         itemEl.appendChild(badge);
       }
       previewEl.appendChild(itemEl);
-      // Buat payloadString sekali di sini, saat base64 sudah pasti tersedia.
-      // Jangan buat ulang di dalam doUpload() karena closure bisa stale saat retry.
-      var payloadString = JSON.stringify({
-        fieldName : fieldName,
-        fileName  : file.name,
-        mimeType  : file.type || 'image/jpeg',
-        base64    : base64,
-        formName  : formName,
-        timestamp : ts
-      });
       var entry = {fieldName:fieldName,fileName:file.name,mimeType:file.type||'image/jpeg',base64:base64,status:'uploading',url:null};
       list.push(entry);
       refreshFotoStatus(panelId);
@@ -397,7 +737,7 @@ function processAndUploadFiles(files, fieldName, panelId, previewEl, isDocMode) 
         google.script.run
           .withSuccessHandler(function(res){ entry.status='success'; entry.url=res&&res.url?res.url:null; badge.textContent='✅'; badge.title='Tersimpan di Google Drive'; refreshFotoStatus(panelId); })
           .withFailureHandler(function(err){ entry.status='error'; badge.textContent='❌'; badge.title='Gagal upload — klik untuk coba lagi'; badge.style.cursor='pointer'; badge.onclick=function(ev){ev.stopPropagation();doUpload();}; refreshFotoStatus(panelId); })
-          .uploadFotoLangsung(payloadString);
+          .uploadFotoLangsung(JSON.stringify({fieldName:fieldName,fileName:file.name,mimeType:file.type||'image/jpeg',base64:base64,formName:formName,timestamp:ts}));
       }
       doUpload();
     };
@@ -429,16 +769,37 @@ function previewDoc(inp, previewEl, fieldName) {
   processAndUploadFiles(inp.files,fieldName,panelId,previewEl,true);
 }
 
+var draftCheckedPanels = {};
+function checkDraftForPanel(idx) {
+  var panelId = 'panel-' + idx;
+  if (draftCheckedPanels[panelId]) return;
+  draftCheckedPanels[panelId] = true;
+  loadDraftIfExists(panelId);
+}
+
+function switchTab(idx) {
+  document.querySelectorAll('.tab-btn').forEach(function(b,i){b.classList.toggle('active',i===idx);});
+  document.querySelectorAll('.form-panel').forEach(function(p,i){p.classList.toggle('active',i===idx);});
+  var pb=document.getElementById('progressBar');
+  if(pb) pb.style.width=((idx+1)/4*100)+'%';
+  window.scrollTo({top:0,behavior:'smooth'});
+  checkDraftForPanel(idx);
+}
+
 window.addEventListener('load', function() {
-  setupGeoButton('t1_koordinat');
-  document.querySelectorAll('input[type=date]').forEach(function(d){ d.value=new Date().toISOString().split('T')[0]; });
 
-  document.getElementById('btnKirim').addEventListener('click', function() {
-    document.getElementById('confirmSendModal').classList.add('open');
+  document.querySelectorAll('.tab-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){ switchTab(parseInt(btn.getAttribute('data-tab'),10)); });
   });
-
+  var pendingSubmit = null;
+  document.querySelectorAll('.btn-send').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      pendingSubmit = { panelId: btn.getAttribute('data-panel'), surveyorId: btn.getAttribute('data-surveyor'), formName: btn.getAttribute('data-form'), btn: btn };
+      document.getElementById('confirmSendModal').classList.add('open');
+    });
+  });
   (function() {
-    var modal = document.getElementById('confirmSendModal');
+    var modal  = document.getElementById('confirmSendModal');
     var btnYes = document.getElementById('confirmSendYes');
     var btnNo  = document.getElementById('confirmSendNo');
     function closeConfirmModal() { modal.classList.remove('open'); }
@@ -447,16 +808,19 @@ window.addEventListener('load', function() {
     document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeConfirmModal(); });
     btnYes.addEventListener('click', function() {
       closeConfirmModal();
-      submitForm('panel-0', 'Data Objek Perumahan - Pengembang', document.getElementById('btnKirim'));
+      if (pendingSubmit) {
+        submitForm(pendingSubmit.panelId, pendingSubmit.surveyorId, pendingSubmit.formName, pendingSubmit.btn);
+        pendingSubmit = null;
+      }
     });
   })();
-
-  document.getElementById('btnDraft').addEventListener('click', function() {
-    saveDraft('panel-0', this);
+  document.querySelectorAll('.btn-draft').forEach(function(btn){
+    btn.addEventListener('click', function(){ saveDraft(btn.getAttribute('data-panel'), btn); });
   });
-
-  // Muat draft otomatis saat halaman dibuka
-  loadDraftIfExists('panel-0');
+  setupGeoButton('t1_koordinat');
+  setupGeoButton('t3_koordinat');
+  initProvDropdowns();
+  document.querySelectorAll('input[type=date]').forEach(function(d){ d.value=new Date().toISOString().split('T')[0]; });
 
   // ---- DOKUMEN LIST ----
   var dokumenList=['Gambar Site Plan Perumahan','Brosur Pemasaran (Spesifikasi dan Floor Plan)','As-Built Drawing','Perizinan Bangunan Gedung (PBG)','Sertifikat Layak Fungsi (SLF)','RKS (Rencana Kerja dan Syarat-Syarat)','Perizinan Lingkungan (Amdal/UKL-UPL/SPPL)'];
@@ -466,86 +830,377 @@ window.addEventListener('load', function() {
     var row=el('div',{cls:'doc-row'});
     row.appendChild(el('span',{text:dok,style:'flex:1;font-size:13px;font-weight:500;min-width:160px'}));
     row.appendChild(makeRadioGroup('dok_ada_'+i,['Ada','Tidak Ada']));
+    row.appendChild(makeRadioGroup('dok_sesuai_'+i,['Sesuai','Tidak Sesuai']));
     var prev=el('div',{cls:'doc-preview'});
     row.appendChild(makeDocUploadBtn(prev,dok));
     wrapper.appendChild(row); wrapper.appendChild(prev);
     dokContainer.appendChild(wrapper);
   });
-});
 
-function collectData(panelId) {
-  var panel = document.getElementById(panelId);
-  var data = { Timestamp: new Date().toLocaleString('id-ID') };
-  panel.querySelectorAll('input[type=text],input[type=date],input[type=time],input[type=number],input[type=tel],textarea').forEach(function(e){ if(e.id) data[e.id]=e.value; });
-  var rNames = new Set();
-  panel.querySelectorAll('input[type=radio]').forEach(function(e){ rNames.add(e.name); });
-  rNames.forEach(function(n){ var c=panel.querySelector('input[type=radio][name="'+n+'"]:checked'); data[n]=c?c.value:''; });
-  var cNames = new Set();
-  panel.querySelectorAll('input[type=checkbox]').forEach(function(e){ if(e.name) cNames.add(e.name); });
-  cNames.forEach(function(n){ var vals=[]; panel.querySelectorAll('input[type=checkbox][name="'+n+'"]:checked').forEach(function(e){ vals.push(e.value); }); data[n]=vals.join(', '); });
-  return data;
-}
-
-function buildFotoPayload(panelId) {
-  var list = fotoState[panelId] || [];
-  var fotoUrls = {}, fotosFallback = [];
-  list.forEach(function(item) {
-    if(item.status==='success'&&item.url){ if(!fotoUrls[item.fieldName]) fotoUrls[item.fieldName]=[]; fotoUrls[item.fieldName].push(item.url); }
-    else fotosFallback.push({fieldName:item.fieldName,fileName:item.fileName,mimeType:item.mimeType,base64:item.base64});
-  });
-  return {fotoUrls:fotoUrls, fotos:fotosFallback, total:list.length};
-}
-
-function resetFotoState(panelId) {
-  delete fotoState[panelId]; delete sessionTime[panelId];
-  var panel = document.getElementById(panelId);
-  if(panel) panel.querySelectorAll('.foto-preview,.foto-preview-inline,.doc-preview').forEach(function(p){p.innerHTML='';});
-  refreshFotoStatus(panelId);
-}
-
-async function submitForm(panelId, formName, btn) {
-  var namaPerumahan = document.getElementById('t1_nama_perumahan');
-  if (!namaPerumahan || !namaPerumahan.value.trim()) {
-    showToast('⚠️ Harap isi Nama Perumahan terlebih dahulu!', true);
-    if(namaPerumahan) namaPerumahan.focus();
-    return;
-  }
-  btn.textContent = '⏳ Mengumpulkan data...'; btn.disabled = true;
-  try {
-    var ts = getSessionTimestamp(panelId);
-    var data = collectData(panelId);
-    data['Timestamp'] = ts; data['Form'] = formName;
-    var fotoPayload = buildFotoPayload(panelId);
-    var sudahDiUpload = Object.keys(fotoPayload.fotoUrls).reduce(function(a,k){return a+fotoPayload.fotoUrls[k].length;},0);
-    var belumSiap = fotoPayload.fotos.length;
-    btn.textContent = belumSiap>0 ? ('⏳ Mengirim data + '+belumSiap+' foto cadangan...') : ('⏳ Mengirim data ('+sudahDiUpload+' foto sudah di Drive)...');
-    var payload = {data:data, fotoUrls:fotoPayload.fotoUrls, fotos:fotoPayload.fotos};
-    if (typeof google !== 'undefined' && google.script && google.script.run) {
-      google.script.run
-        .withSuccessHandler(function(result){ var msg=result&&result.message?result.message:'Data berhasil dikirim!'; showToast('✅ '+msg); btn.textContent='📤 Kirim Data'; btn.disabled=false; resetFormFields(panelId); window.scrollTo({top:0,behavior:'smooth'}); })
-        .withFailureHandler(function(err){ showToast('❌ Gagal: '+(err.message||err),true); btn.textContent='📤 Kirim Data'; btn.disabled=false; })
-        .processFormData(JSON.stringify(payload));
+  // ---- PSU SECTIONS ----
+  var psuItems = [
+    {num:'1.0',label:'Jaringan Jalan',subs:[{label:'Jalan Utama Perumahan',types:['Aspal','Paving Block','Tanah','Beton','Makadam','Lainnya']},{label:'Jalan Lingkungan Perumahan',types:['Aspal','Paving Block','Tanah','Beton','Makadam','Lainnya']}]},
+    {num:'2.0',label:'Saluran Drainase',subs:[{label:'Jalur Utama',types:['Terbuka','Box Culvert','Talang Air','Tertutup','U-Ditch','Lainnya']},{label:'Jalur Lingkungan',types:['Terbuka','Box Culvert','Talang Air','Tertutup','U-Ditch','Lainnya']}]},
+    {num:'3.0',label:'Sistem Jaringan Air Bersih',subs:[{label:'Sumber Air Bersih',types:['PDAM','Sumur Artesis','Tangki Mandiri','Tangki Komunal','Sumur Mandiri','Lainnya']}]},
+    {num:'4.0',label:'Sistem Pengelolaan Air Limbah',subs:[{label:'Jaringan Air Kotor',types:['Tangki Septic Komunal','Tangki Septic Mandiri','Lainnya']}]},
+    {num:'5.0',label:'Sistem Pengelolaan Sampah',subs:[{label:'Sarana Sampah',types:['Tong Sampah','Bak Sampah','Gerobak Sampah','Mobil Sampah','Tempat Daur Ulang','Lainnya']}]},
+    {num:'6.0',label:'Sistem Jaringan Listrik',subs:[{label:'Sumber Listrik',types:['PLN','Solar Panel','Lainnya']}]},
+    {num:'7.0',label:'Penerangan Jalan',subs:[{label:'Jenis Penerangan',types:['Lampu Surya','Listrik Konvensional','Lainnya']}]},
+    {num:'8.0',label:'Fasilitas Umum',subs:[
+      {label:'Sarana Sosial',hasFoto:true,types:['Pos Jaga','Kantor RT/RW','Gedung Serba Guna','Lainnya']},
+      {label:'Sarana Pendidikan',hasFoto:true,types:['Taman Kanak-kanak','Sekolah Dasar','SLTP','SMU','Taman Bacaan','Lainnya']},
+      {label:'Sarana Ibadah',hasFoto:true,types:['Masjid','Mushola','Gereja','Lainnya']},
+      {label:'Sarana Kesehatan',hasFoto:true,types:['Apotek','Klinik Bersalin','Posyandu','Puskesmas','Praktek Dokter','Lainnya']},
+      {label:'Sarana Ekonomi',hasFoto:true,types:['Pasar','Ruko','Toko','Lainnya']},
+      {label:'Sarana Olahraga',hasFoto:true,types:['Lapangan Voley','Lapangan Futsal','Area Taman','Lainnya']}
+    ]},
+    {num:'9.0',label:'Ruang Terbuka Hijau (RTH)',type:'rth',groups:[
+      {label:'Ruang Terbuka Hijau',prefix:'psu_rth_hijau',items:['Taman Kota','Jalur Hijau','Hutan Kota','Kebun Raya','Taman Bermain','Makam','Lainnya']},
+      {label:'Ruang Terbuka Non Hijau',prefix:'psu_rth_nonhijau',items:['Lapangan Olahraga','Alun-alun','Trotoar','Area Parkir','Jalan','Lainnya']},
+      {label:'Ruang Terbuka Biru',prefix:'psu_rth_biru',items:['Sungai','Danau','Pantai','Laut','Waduk','Kolam','Lainnya']}
+    ]}
+  ];
+  var kondisiOpts=[{cls:'baik',label:'Baik / Berfungsi'},{cls:'sedang',label:'Sedang / Ada Gangguan'},{cls:'buruk',label:'Buruk / Tidak Berfungsi'}];
+  var psuContainer=document.getElementById('psu-sections');
+  psuItems.forEach(function(item,si){
+    var sec=el('div',{cls:'section',style:'margin-bottom:20px'});
+    var hdr=el('div',{cls:'section-header'},[el('span',{cls:'section-num',text:item.num}),el('h3',{text:item.label})]);
+    var body=el('div',{cls:'section-body'});
+    if(item.type==='rth'){
+      var rthK=[{val:'Baik / Berfungsi',color:'#10B981'},{val:'Sedang / Ada Gangguan',color:'#F59E0B'},{val:'Buruk / Tidak Berfungsi',color:'#EF4444'}];
+      item.groups.forEach(function(grp,gi){
+        var sub_el=el('div',{cls:'subsection'});
+        sub_el.appendChild(el('div',{cls:'subsection-title',text:grp.label}));
+        var tbl=el('table',{style:'width:100%;border-collapse:collapse;font-size:13px'});
+        var thead=el('thead'); var trH=el('tr');
+        [['No','28px','center'],['Jenis','','left'],['Ada / Tidak Ada','160px','center'],['Kondisi','260px','left']].forEach(function(h){
+          trH.appendChild(el('th',{text:h[0],style:'padding:8px 10px;background:var(--navy);color:#fff;font-size:11px;font-weight:600;text-align:'+h[2]+(h[1]?';width:'+h[1]:'')}));
+        });
+        thead.appendChild(trH); tbl.appendChild(thead);
+        var tbody=el('tbody');
+        grp.items.forEach(function(itemName,ii){
+          var tr=el('tr',{style:'background:'+(ii%2===0?'#fff':'var(--gray-50)')});
+          var rname=grp.prefix+'_'+gi+'_'+ii;
+          tr.appendChild(el('td',{text:String(ii+1)+'.',style:'text-align:center;padding:8px 6px;color:var(--gray-400);font-weight:600;font-size:11px;border-bottom:1px solid var(--gray-100)'}));
+          var tdJ=el('td',{style:'padding:8px 6px;border-bottom:1px solid var(--gray-100)'});
+          if(itemName==='Lainnya') tdJ.appendChild(el('input',{type:'text',name:rname+'_nama',placeholder:'Sebutkan...',style:'width:100%;padding:5px 8px;border:1.5px solid var(--gray-200);border-radius:999px;font-size:12px'}));
+          else tdJ.appendChild(el('span',{text:itemName}));
+          tr.appendChild(tdJ);
+          var tdAda=el('td',{style:'padding:8px 6px;text-align:center;border-bottom:1px solid var(--gray-100)'}); var adaGrp=el('div',{style:'display:flex;gap:10px;justify-content:center;flex-wrap:wrap'});
+          ['Ada','Tidak Ada'].forEach(function(opt){ var rid=rname+'_ada_'+opt.replace(' ','_'); var inp=el('input'); inp.type='radio'; inp.name=rname+'_ada'; inp.id=rid; inp.value=opt; inp.style.cssText='accent-color:var(--navy);width:13px;height:13px'; var lbl=el('label'); lbl.setAttribute('for',rid); lbl.style.cssText='display:flex;align-items:center;gap:4px;font-size:12px;cursor:pointer'; lbl.appendChild(inp); lbl.appendChild(document.createTextNode(opt)); adaGrp.appendChild(lbl); });
+          tdAda.appendChild(adaGrp); tr.appendChild(tdAda);
+          var tdK=el('td',{style:'padding:8px 6px;border-bottom:1px solid var(--gray-100)'}); var kGrp2=el('div',{style:'display:flex;gap:6px;flex-wrap:wrap'});
+          rthK.forEach(function(k,ki){ var rid2=rname+'_kond_'+ki; var inp2=el('input'); inp2.type='radio'; inp2.name=rname+'_kondisi'; inp2.id=rid2; inp2.value=k.val; inp2.style.display='none'; var dot=el('span',{style:'display:inline-block;width:8px;height:8px;border-radius:50%;background:'+k.color+';margin-right:4px;flex-shrink:0'}); var lbl2=el('label'); lbl2.setAttribute('for',rid2); lbl2.style.cssText='display:inline-flex;align-items:center;padding:4px 12px;border:1.5px solid var(--gray-200);border-radius:999px;font-size:11px;cursor:pointer;white-space:nowrap;transition:all .15s'; lbl2.appendChild(inp2); lbl2.appendChild(dot); lbl2.appendChild(document.createTextNode(k.val)); inp2.addEventListener('change',function(){ kGrp2.querySelectorAll('label').forEach(function(l){l.style.background='';l.style.borderColor='var(--gray-200)';l.style.fontWeight='';}); if(inp2.checked){lbl2.style.background=k.color+'22';lbl2.style.borderColor=k.color;lbl2.style.fontWeight='600';} }); kGrp2.appendChild(lbl2); });
+          tdK.appendChild(kGrp2); tr.appendChild(tdK);
+          tbody.appendChild(tr);
+        });
+        tbl.appendChild(tbody); sub_el.appendChild(tbl);
+        var fo=makeFotoUpload('PSU_RTH_'+grp.prefix); var ff=el('div',{cls:'field',style:'margin-top:10px'}); ff.appendChild(el('label',{text:'Upload Foto — '+grp.label})); ff.appendChild(fo.wrap[0]); ff.appendChild(fo.wrap[1]); sub_el.appendChild(ff);
+        body.appendChild(sub_el);
+      });
     } else {
-      var gsUrl = GAS_URL;
-      if (!gsUrl || gsUrl.indexOf('GANTI_DENGAN_URL_ANDA') > -1) { showToast('⚠️ URL Apps Script belum dikonfigurasi.', true); btn.textContent='📤 Kirim Data'; btn.disabled=false; return; }
-      var iid='ifr_'+Date.now(); var ifr=el('iframe'); ifr.name=iid; ifr.style.display='none';
-      var frm=el('form'); frm.method='POST'; frm.action=gsUrl; frm.target=iid; frm.style.display='none';
-      var inp2=el('input'); inp2.type='hidden'; inp2.name='payload'; inp2.value=JSON.stringify(payload);
-      frm.appendChild(inp2); document.body.appendChild(ifr); document.body.appendChild(frm);
-      ifr.onload=function(){ showToast('✅ Data & foto berhasil dikirim!'); btn.textContent='📤 Kirim Data'; btn.disabled=false; resetFormFields(panelId); window.scrollTo({top:0,behavior:'smooth'}); setTimeout(function(){try{document.body.removeChild(frm);document.body.removeChild(ifr);}catch(e){}},1000); };
-      setTimeout(function(){try{document.body.removeChild(frm);document.body.removeChild(ifr);}catch(e){} showToast('✅ Data terkirim!'); btn.textContent='📤 Kirim Data'; btn.disabled=false; resetFormFields(panelId); },30000);
-      frm.submit();
+      item.subs.forEach(function(sub,ssi){
+        var sub_el=el('div',{cls:'subsection'});
+        sub_el.appendChild(el('div',{cls:'subsection-title',text:sub.label}));
+        if(sub.hasFoto){
+          sub_el.appendChild(makeField('Jenis/Material',makeCheckGroup('psu_mat_'+si+'_'+ssi,sub.types)));
+          var kGrp=el('div',{cls:'kondisi-group'});
+          kondisiOpts.forEach(function(k,ki){ var rid='psu_k_'+si+'_'+ssi+'_'+ki; var inp=el('input'); inp.type='radio'; inp.name='psu_k_'+si+'_'+ssi; inp.id=rid; inp.value=k.label; var dot=el('span',{cls:'dot'}); var lbl=el('label'); lbl.setAttribute('for',rid); lbl.appendChild(dot); lbl.appendChild(document.createTextNode(k.label)); var opt=el('div',{cls:'kondisi-opt '+k.cls},[inp,lbl]); kGrp.appendChild(opt); });
+          sub_el.appendChild(makeField('Kondisi',kGrp));
+          sub_el.appendChild(makeField('Catatan',el('input',{type:'text',placeholder:'Catatan tambahan...'})));
+          var fs=makeFotoUpload('PSU_Fas_'+si+'_'+ssi+'_'+sub.label); var fsf=el('div',{cls:'field'}); fsf.appendChild(el('label',{text:'Upload Foto'})); fsf.appendChild(fs.wrap[0]); fsf.appendChild(fs.wrap[1]); sub_el.appendChild(fsf);
+        } else {
+          sub_el.appendChild(makeField('Jenis/Material',makeCheckGroup('psu_mat_'+si+'_'+ssi,sub.types)));
+          var kGrp=el('div',{cls:'kondisi-group'});
+          kondisiOpts.forEach(function(k,ki){ var rid='psu_k_'+si+'_'+ssi+'_'+ki; var inp=el('input'); inp.type='radio'; inp.name='psu_k_'+si+'_'+ssi; inp.id=rid; inp.value=k.label; var dot=el('span',{cls:'dot'}); var lbl=el('label'); lbl.setAttribute('for',rid); lbl.appendChild(dot); lbl.appendChild(document.createTextNode(k.label)); var opt=el('div',{cls:'kondisi-opt '+k.cls},[inp,lbl]); kGrp.appendChild(opt); });
+          sub_el.appendChild(makeField('Kondisi',kGrp));
+          sub_el.appendChild(makeField('Catatan',el('input',{type:'text',placeholder:'Catatan tambahan...'})));
+        }
+        body.appendChild(sub_el);
+      });
+      var anyHasFoto=item.subs.some(function(s){return s.hasFoto;});
+      if(!anyHasFoto){ var fo=makeFotoUpload('PSU_'+item.label); var ff=el('div',{cls:'field'}); ff.appendChild(el('label',{text:'Upload Foto'})); ff.appendChild(fo.wrap[0]); ff.appendChild(fo.wrap[1]); body.appendChild(ff); }
     }
-  } catch(err) { console.error(err); showToast('❌ Gagal: '+err.message,true); btn.textContent='📤 Kirim Data'; btn.disabled=false; }
-}
+    sec.appendChild(hdr); sec.appendChild(body); psuContainer.appendChild(sec);
+  });
 
-function showToast(msg, isErr) {
-  var t=document.getElementById('toast'); t.textContent=msg; t.classList.toggle('error',!!isErr); t.classList.add('show');
-  setTimeout(function(){ t.classList.remove('show'); }, 4000);
-}
+  // ---- PENYALURAN SECTIONS ----
+  var penyaluranItems = [
+    {num:'1.0',label:'Pondasi',type:'komponen',jenisPondasi:['Batu Kali','Batu Bata','Strauss Pile','Tapak','Lainnya'],subTitle:'Penilaian Kualitas Pondasi Batu Kali',paramInline:true,rows:[
+      {dokumen:'Kualitas mortar',parameter:'Padat (tidak bolong-bolong) dan keras (tidak bisa dipatahkan oleh tangan)',name:'py_pondasi_mortar'},
+      {dokumen:'Kualitas material pondasi',parameter:'Keras (batu kali sisi-sisinya memiliki muka tajam/kasar) dan ukuran rata-rata > 30 cm',name:'py_pondasi_material'},
+      {dokumen:'Dimensi pondasi',parameter:'Kedalaman sampai tanah keras atau sekitar 60-80 cm',name:'py_pondasi_dimensi'},
+      {dokumen:'Koneksi sloof dan kolom',parameter:'Terlihat kokoh menyatu (ada angkur dengan kolom dan sloof)',name:'py_pondasi_koneksi'}
+    ]},
+    {num:'2.0',label:'Sloof',type:'komponen',subTitle:'Penilaian Kualitas Sloof Beton',paramInline:true,rows:[
+      {dokumen:'Kualitas mortar beton',parameter:'Padat (tidak bolong-bolong) dan keras (tidak bisa dipatahkan oleh tangan)',name:'py_sloofb_mortar'},
+      {dokumen:'Koneksi besi sloof dengan besi kolom',parameter:'Terkoneksi dengan overlap penyaluran 40-D',name:'py_sloofb_koneksi'},
+      {dokumen:'Diameter tulangan',parameter:'Minimal 4 batang besi diameter 9,6-10 mm',name:'py_sloofb_tulangan'},
+      {dokumen:'Diameter besi Sengkang',parameter:'Diameter 7.6-8 mm',name:'py_sloofb_sengkang_d'},
+      {dokumen:'Jarak antar besi sengkang',parameter:'< 15 cm',name:'py_sloofb_sengkang_j'},
+      {dokumen:'Dimensi sloof terpasang',parameter:'> 15x20 cm',name:'py_sloofb_dimensi'}
+    ]},
+    {num:'3.0',label:'Kolom',type:'komponen',subTitle:'Penilaian Kualitas Kolom Beton',paramInline:true,rows:[
+      {dokumen:'Kualitas mortar beton',parameter:'Padat (tidak bolong-bolong) dan keras (tidak bisa dipatahkan oleh tangan)',name:'py_kolomb_mortar'},
+      {dokumen:'Koneksi besi kolom dengan besi sloof dan besi ring balok',parameter:'Terkoneksi dengan overlap penyaluran 40-D',name:'py_kolomb_koneksi'},
+      {dokumen:'Diameter tulangan',parameter:'Minimal 4 batang besi diameter 9,6-10 mm',name:'py_kolomb_tulangan'},
+      {dokumen:'Diameter besi Sengkang',parameter:'Diameter 7.6-8 mm',name:'py_kolomb_sengkang_d'},
+      {dokumen:'Jarak antar besi sengkang',parameter:'< 15 cm',name:'py_kolomb_sengkang_j'},
+      {dokumen:'Dimensi kolom terpasang',parameter:'> 15x15 cm',name:'py_kolomb_dimensi'}
+    ]},
+    {num:'4.0',label:'Ring Balok',type:'komponen',subTitle:'Penilaian Kualitas Ring Balok Beton',paramInline:true,rows:[
+      {dokumen:'Kualitas mortar beton',parameter:'Padat (tidak bolong-bolong) dan keras (tidak bisa dipatahkan oleh tangan)',name:'py_ringbalok_mortar'},
+      {dokumen:'Koneksi besi ring balok dengan besi kolom',parameter:'Terkoneksi dengan overlap penyaluran 40-D',name:'py_ringbalok_koneksi'},
+      {dokumen:'Diameter tulangan',parameter:'Minimal 4 batang besi diameter 9,6-10 mm',name:'py_ringbalok_tulangan'},
+      {dokumen:'Diameter besi Sengkang',parameter:'Diameter 7.6-8 mm',name:'py_ringbalok_sengkang_d'},
+      {dokumen:'Jarak antar besi sengkang',parameter:'< 15 cm',name:'py_ringbalok_sengkang_j'},
+      {dokumen:'Dimensi kolom terpasang',parameter:'> 12x15 cm',name:'py_ringbalok_dimensi'}
+    ]},
+    {num:'5.0',label:'Rangka Atap',type:'komponen',jenisField:{label:'Jenis Rangka Atap',name:'py_rangka_jenis',opts:['Kayu','Baja Ringan','Besi Galvanis','Lainnya'],otherPlaceholder:'Sebutkan jenis rangka atap lainnya...'},subTitle:'Penilaian Rangka Atap Baja Ringan',paramInline:true,rows:[
+      {dokumen:'Penopang dinding sopi-sopi',parameter:'Terdapat bingkai sopi-sopi',name:'py_rab_penopang'},
+      {dokumen:'Koneksi & kekokohan antar bagian kuda-kuda',parameter:'Sambungan antar batang kokoh dan minimal terpasang 3 baut',name:'py_rab_koneksi'},
+      {dokumen:'Jarak kuda-kuda baja ringan',parameter:'Jarak maksimum 1,2 m untuk atap ringan. Dan minimum 1 m',name:'py_rab_jarak'},
+      {dokumen:'Angkur kuda-kuda ke ring balok/kolom',parameter:'Kuda-kuda diangkur besi/kawat yg dijepit paku atau dibaut tanam ke ring balok',name:'py_rab_angkur'},
+      {dokumen:'Ketebalan baja ringan',parameter:'< 0,75 mm',name:'py_rab_tebal'}
+    ]},
+    {num:'6.0',label:'Penutup Atap dan Plafon',fields:[{label:'Material Penutup Atap',name:'py_atap_penutup',type:'check_foto',opts:['Genteng Tanah Liat','Genteng Beton','Metal/Spandek','Bitumen','Lainnya']},{label:'Material Plafon',name:'py_atap_plafon',type:'check_foto',opts:['Gypsum','GRC','PVC','Triplek/Kayu','Tanpa Plafon']}]},
+    {num:'7.0',label:'Lantai',fields:[{label:'Tipe',name:'py_lantai_tipe',type:'check',opts:['Keramik','Tegel','Plester Semen','Lainnya']},{label:'Pemasangan Penutup Lantai',name:'py_lantai_pasang',type:'radio',opts:['Rata','Bergelombang']},{label:'Kemiringan > 1% (Kamar Mandi)',name:'py_lantai_miring',type:'radio',opts:['Ya','Tidak']},{label:'Lebar Nat 2–5 mm',name:'py_lantai_nat',type:'radio',opts:['Ya','Tidak']}]},
+    {num:'8.0',label:'Dinding',fields:[{label:'Tipe Dinding',name:'py_dinding_tipe',type:'check',opts:['Bata Merah','Bata Ringan']},{label:'Pemakaian Angkur tiap 6 Lapis Pasangan Bata',name:'py_dinding_angkur',type:'radio',opts:['Tersedia','Tidak Tersedia']},{label:'Double Dinding',name:'py_dinding_double',type:'radio',opts:['Ya','Tidak']}]},
+    {num:'9.0',label:'Rumah Layak Huni',fields:[{label:'Luas Minimum 7.2–9 m²',name:'py_rlh_luas',type:'radio',opts:['Memenuhi','Tidak']},{label:'Ketersediaan Dapur',name:'py_rlh_dapur',type:'radio',opts:['Memenuhi','Tidak']},{label:'Luas Area Hijau 10–20%',name:'py_rlh_hijau',type:'radio',opts:['Memenuhi','Tidak']},{label:'Carport',name:'py_rlh_carport',type:'radio',opts:['Memenuhi','Tidak']},{label:'Pencahayaan 10% dari Luas Lantai',name:'py_rlh_cahaya',type:'radio',opts:['Memenuhi','Tidak']},{label:'Penghawaan 5% dari Luas Lantai',name:'py_rlh_angin',type:'radio',opts:['Memenuhi','Tidak']},{label:'Tipe Closet',name:'py_rlh_closet',type:'radio',opts:['Duduk','Jongkok']}]},
+    {num:'10.0',label:'Ketersediaan Sarana dan Utilitas Umum',type:'util',fields:[
+      {label:'Jaringan Air Bersih',name:'py_util_air',opts:['Tersedia','Tidak Tersedia']},
+      {label:'Jaringan Listrik',name:'py_util_listrik',opts:['Tersedia','Tidak Tersedia']},
+      {label:'Perpipaan Sanitasi',name:'py_util_sanitasi',opts:['Tersedia','Tidak Tersedia']},
+      {label:'Jaringan Fiber Optik',name:'py_util_fiber',opts:['Tersedia','Tidak Tersedia']},
+      {label:'Proteksi Kebakaran',name:'py_util_kebakaran',opts:['Tersedia','Tidak Tersedia']}
+    ]}
+  ];
+  var pyContainer=document.getElementById('penyaluran-sections');
+  penyaluranItems.forEach(function(item){
+    var sec=el('div',{cls:'section',style:'margin-bottom:20px'});
+    var hdr=el('div',{cls:'section-header'},[el('span',{cls:'section-num',text:item.num}),el('h3',{text:item.label})]);
+    var body=el('div',{cls:'section-body'});
+    var hasUtilOrCheckFoto=(item.type==='util')||( item.fields && item.fields.some(function(f){return f.type==='check_foto';}));
+    if(item.type==='util'){
+      item.fields.forEach(function(f){
+        var row=el('div',{cls:'util-row'});
+        row.appendChild(el('span',{text:f.label,style:'font-size:13px;font-weight:500'}));
+        row.appendChild(makeRadioGroup(f.name,f.opts));
+        var prev=el('div',{cls:'foto-preview-inline'}); var uObj=makeUploadBtn(f.name+'_foto',prev);
+        row.appendChild(uObj.btn); body.appendChild(row); body.appendChild(prev);
+      });
+    } else if(item.type==='rth'){
+      var rthK2=[{val:'Baik / Berfungsi',color:'#10B981'},{val:'Sedang / Ada Gangguan',color:'#F59E0B'},{val:'Buruk / Tidak Berfungsi',color:'#EF4444'}];
+      item.groups.forEach(function(grp,gi){
+        var sub_el=el('div',{cls:'subsection'}); sub_el.appendChild(el('div',{cls:'subsection-title',text:grp.label}));
+        var tbl=el('table',{style:'width:100%;border-collapse:collapse;font-size:13px'}); var thead=el('thead'); var trH=el('tr');
+        [['No','28px','center'],['Jenis','','left'],['Ada / Tidak Ada','160px','center'],['Kondisi','260px','left']].forEach(function(h){ trH.appendChild(el('th',{text:h[0],style:'padding:8px 10px;background:var(--navy);color:#fff;font-size:11px;font-weight:600;text-align:'+h[2]+(h[1]?';width:'+h[1]:'')})  ); });
+        thead.appendChild(trH); tbl.appendChild(thead);
+        var tbody=el('tbody');
+        grp.items.forEach(function(itemName,ii){
+          var tr=el('tr',{style:'background:'+(ii%2===0?'#fff':'var(--gray-50)')}); var rname=grp.prefix+'_'+gi+'_'+ii;
+          tr.appendChild(el('td',{text:String(ii+1)+'.',style:'text-align:center;padding:8px 6px;color:var(--gray-400);font-weight:600;font-size:11px;border-bottom:1px solid var(--gray-100)'}));
+          var tdJ=el('td',{style:'padding:8px 6px;border-bottom:1px solid var(--gray-100)'});
+          if(itemName==='Lainnya') tdJ.appendChild(el('input',{type:'text',name:rname+'_nama',placeholder:'Sebutkan...',style:'width:100%;padding:5px 8px;border:1.5px solid var(--gray-200);border-radius:999px;font-size:12px'}));
+          else tdJ.appendChild(el('span',{text:itemName}));
+          tr.appendChild(tdJ);
+          var tdAda=el('td',{style:'padding:8px 6px;text-align:center;border-bottom:1px solid var(--gray-100)'}); var adaGrp=el('div',{style:'display:flex;gap:10px;justify-content:center;flex-wrap:wrap'});
+          ['Ada','Tidak Ada'].forEach(function(opt){ var rid=rname+'_ada_'+opt.replace(' ','_'); var inp=el('input'); inp.type='radio'; inp.name=rname+'_ada'; inp.id=rid; inp.value=opt; inp.style.cssText='accent-color:var(--navy);width:13px;height:13px'; var lbl=el('label'); lbl.setAttribute('for',rid); lbl.style.cssText='display:flex;align-items:center;gap:4px;font-size:12px;cursor:pointer'; lbl.appendChild(inp); lbl.appendChild(document.createTextNode(opt)); adaGrp.appendChild(lbl); });
+          tdAda.appendChild(adaGrp); tr.appendChild(tdAda);
+          var tdK=el('td',{style:'padding:8px 6px;border-bottom:1px solid var(--gray-100)'}); var kGrp2=el('div',{style:'display:flex;gap:6px;flex-wrap:wrap'});
+          rthK2.forEach(function(k,ki){ var rid2=rname+'_kond_'+ki; var inp2=el('input'); inp2.type='radio'; inp2.name=rname+'_kondisi'; inp2.id=rid2; inp2.value=k.val; inp2.style.display='none'; var dot=el('span',{style:'display:inline-block;width:8px;height:8px;border-radius:50%;background:'+k.color+';margin-right:4px;flex-shrink:0'}); var lbl2=el('label'); lbl2.setAttribute('for',rid2); lbl2.style.cssText='display:inline-flex;align-items:center;padding:4px 12px;border:1.5px solid var(--gray-200);border-radius:999px;font-size:11px;cursor:pointer;white-space:nowrap;transition:all .15s'; lbl2.appendChild(inp2); lbl2.appendChild(dot); lbl2.appendChild(document.createTextNode(k.val)); inp2.addEventListener('change',function(){ kGrp2.querySelectorAll('label').forEach(function(l){l.style.background='';l.style.borderColor='var(--gray-200)';l.style.fontWeight='';}); if(inp2.checked){lbl2.style.background=k.color+'22';lbl2.style.borderColor=k.color;lbl2.style.fontWeight='600';} }); kGrp2.appendChild(lbl2); });
+          tdK.appendChild(kGrp2); tr.appendChild(tdK); tbody.appendChild(tr);
+        });
+        tbl.appendChild(tbody); sub_el.appendChild(tbl);
+        var fo=makeFotoUpload('py_RTH_'+grp.prefix); var ff=el('div',{cls:'field',style:'margin-top:10px'}); ff.appendChild(el('label',{text:'Upload Foto — '+grp.label})); ff.appendChild(fo.wrap[0]); ff.appendChild(fo.wrap[1]); sub_el.appendChild(ff);
+        body.appendChild(sub_el);
+      });
+    } else if(item.type==='komponen'){
+      if(item.jenisPondasi){
+        body.appendChild(makeField('Jenis Pondasi', makeCheckGroupWithOther('py_pondasi_jenis', item.jenisPondasi, 'Sebutkan jenis pondasi lainnya...')));
+      }
+      if(item.jenisField){
+        body.appendChild(makeField(item.jenisField.label, makeCheckGroupWithOther(item.jenisField.name, item.jenisField.opts, item.jenisField.otherPlaceholder)));
+      }
+      if(item.subTitle){
+        body.appendChild(el('div',{cls:'subsection-title',text:item.subTitle,style:'margin-top:4px'}));
+      }
+      if(item.paramInline){
+        var listWrap=el('div',{style:'display:grid;gap:10px'});
+        item.rows.forEach(function(row,ri){
+          var card=el('div',{style:'border:1.5px solid var(--gray-200);border-radius:18px;padding:14px 16px;display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;background:var(--white)'});
+          var info=el('div',{style:'flex:1;min-width:220px'});
+          info.appendChild(el('div',{text:(ri+1)+'. '+row.dokumen,style:"font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:13px;color:var(--navy)"}));
+          if(row.catatan) info.appendChild(el('div',{text:row.catatan,style:'color:var(--gray-400);font-size:11px;margin-top:4px;font-style:italic'}));
+          if(row.parameter) info.appendChild(el('div',{text:'Parameter (Acuan): '+row.parameter,style:'color:var(--gray-600);font-size:12px;margin-top:5px;line-height:1.4'}));
+          card.appendChild(info);
+          var optWrap=el('div',{cls:'radio-group',style:'flex-shrink:0'});
+          var lblYa=el('label'); var inpYa=el('input'); inpYa.type='radio'; inpYa.name=row.name; inpYa.value='Sesuai'; inpYa.style.accentColor='var(--green)'; lblYa.appendChild(inpYa); lblYa.appendChild(document.createTextNode('Sesuai')); optWrap.appendChild(lblYa);
+          var lblTidak=el('label'); var inpTidak=el('input'); inpTidak.type='radio'; inpTidak.name=row.name; inpTidak.value='Tidak Sesuai'; inpTidak.style.accentColor='var(--red)'; lblTidak.appendChild(inpTidak); lblTidak.appendChild(document.createTextNode('Tidak Sesuai')); optWrap.appendChild(lblTidak);
+          card.appendChild(optWrap);
+          listWrap.appendChild(card);
+        });
+        body.appendChild(listWrap);
+      } else {
+      var tbl2=el('table',{style:'width:100%;border-collapse:collapse;font-size:13px'});
+      var thead2=el('thead'); var trH2=el('tr');
+      var headCols2 = [['NO','40px','center'],['DOKUMEN','190px','left'],['PARAMETER (Acuan)','','left'],['Sesuai','90px','center'],['Tidak Sesuai','90px','center']];
+      headCols2.forEach(function(h){
+        trH2.appendChild(el('th',{text:h[0],style:'padding:9px 10px;background:var(--navy);color:#fff;font-size:11px;font-weight:600;text-align:'+h[2]+(h[1]?';width:'+h[1]:'')}));
+      });
+      thead2.appendChild(trH2); tbl2.appendChild(thead2);
+      var tbody2=el('tbody');
+      item.rows.forEach(function(row,ri){
+        var tr2=el('tr',{style:'background:'+(ri%2===0?'#fff':'var(--gray-50)')});
+        tr2.appendChild(el('td',{text:String(ri+1),style:'text-align:center;padding:10px 6px;color:var(--gray-400);font-weight:600;font-size:12px;border-bottom:1px solid var(--gray-100);vertical-align:top'}));
+        var tdDok=el('td',{style:'padding:10px 8px;border-bottom:1px solid var(--gray-100);vertical-align:top'});
+        tdDok.appendChild(el('div',{text:row.dokumen,style:'font-weight:500;color:var(--gray-800)'}));
+        if(row.catatan) tdDok.appendChild(el('div',{text:row.catatan,style:'color:var(--gray-400);font-size:11px;margin-top:3px;font-style:italic'}));
+        tr2.appendChild(tdDok);
+        tr2.appendChild(el('td',{text:row.parameter,style:'padding:10px 8px;border-bottom:1px solid var(--gray-100);vertical-align:top;color:var(--gray-600);line-height:1.4'}));
+        var tdYa=el('td',{style:'padding:10px 6px;text-align:center;border-bottom:1px solid var(--gray-100);vertical-align:top'});
+        var inpYa=el('input'); inpYa.type='radio'; inpYa.name=row.name; inpYa.value='Sesuai'; inpYa.style.cssText='accent-color:var(--green);width:16px;height:16px;cursor:pointer';
+        tdYa.appendChild(inpYa); tr2.appendChild(tdYa);
+        var tdTidak=el('td',{style:'padding:10px 6px;text-align:center;border-bottom:1px solid var(--gray-100);vertical-align:top'});
+        var inpTidak=el('input'); inpTidak.type='radio'; inpTidak.name=row.name; inpTidak.value='Tidak Sesuai'; inpTidak.style.cssText='accent-color:var(--red);width:16px;height:16px;cursor:pointer';
+        tdTidak.appendChild(inpTidak); tr2.appendChild(tdTidak);
+        tbody2.appendChild(tr2);
+      });
+      tbl2.appendChild(tbody2); body.appendChild(tbl2);
+      }
+      var foK=makeFotoUpload('py_komponen_'+item.num); var ffK=el('div',{cls:'field',style:'margin-top:14px'}); ffK.appendChild(el('label',{text:'Upload Foto Dokumentasi'})); ffK.appendChild(foK.wrap[0]); ffK.appendChild(foK.wrap[1]); body.appendChild(ffK);
+    } else {
+      item.fields.forEach(function(f){
+        if(f.type==='check') body.appendChild(makeField(f.label,makeCheckGroup(f.name,f.opts)));
+        else if(f.type==='check_foto'){
+          var wrap=el('div',{cls:'check-foto-wrap'}); wrap.appendChild(makeCheckGroupWithOther(f.name,f.opts,'Sebutkan '+f.label.toLowerCase()+' lainnya...'));
+          var prev=el('div',{cls:'foto-preview',style:'margin-top:8px'}); var uObj=makeUploadBtn(f.name+'_foto',prev); wrap.appendChild(uObj.btn);
+          var fd=el('div',{cls:'field'}); fd.appendChild(el('label',{text:f.label})); fd.appendChild(wrap); fd.appendChild(prev); body.appendChild(fd);
+        } else body.appendChild(makeField(f.label,makeRadioGroup(f.name,f.opts)));
+      });
+      if(!hasUtilOrCheckFoto){ var fo=makeFotoUpload('py_'+item.num); var ff=el('div',{cls:'field'}); ff.appendChild(el('label',{text:'Upload Foto'})); ff.appendChild(fo.wrap[0]); ff.appendChild(fo.wrap[1]); body.appendChild(ff); }
+    }
+    sec.appendChild(hdr); sec.appendChild(body); pyContainer.appendChild(sec);
+  });
 
-/* ===== SIMPAN & MUAT DRAFT (localStorage) ===== */
-var DRAFT_KEY_PREFIX = 'draft_form_perumahan_';
+  // ================================================================
+  // PASCA FISIK SECTIONS — Keberfungsian DIHAPUS, digantikan Kondisi
+  // ================================================================
+  var pascaFisikItems = [
+    { num:'4.0', label:'Komponen Fisik Bangunan — Lantai', fields:[
+      { label:'Jenis Lantai',       name:'pf_lantai_jenis',   type:'check', opts:['Keramik','Tegel','Plester Semen','Lainnya'] },
+      { label:'Komponen Visual',    name:'pf_lantai_visual',  type:'check', opts:['Tidak Ada Cacat','Retak/Pecah','Keramik Terangkat','Nat Rusak','Lantai Lembab/Rembes','Ada Genangan'] },
+      { label:'Kondisi',            name:'pf_lantai_kondisi', type:'kondisi3' }
+    ]},
+    { num:'5.0', label:'Komponen Fisik Bangunan — Dinding', fields:[
+      { label:'Jenis Dinding',      name:'pf_dinding_jenis',  type:'check', opts:['Bata Merah','Bata Ringan','Lainnya'] },
+      { label:'Komponen Visual',    name:'pf_dinding_visual', type:'check', opts:['Tidak Ada Cacat','Retak Rambut','Retak Struktur','Rembes Air','Berjamur/Berlumut','Cat Mengelupas','Plesteran Rontok'] },
+      { label:'Kondisi',            name:'pf_dinding_kondisi',type:'kondisi3' }
+    ]},
+    { num:'6.0', label:'Komponen Fisik Bangunan — Atap dan Plafon', fields:[
+      { label:'Material Penutup Atap',      name:'pf_atap_penutup',  type:'check', opts:['Genteng Tanah Liat','Genteng Beton','Metal/Spandek','Bitumen','Lainnya'] },
+      { label:'Material Kuda-Kuda',         name:'pf_atap_kudakuda', type:'check', opts:['Kayu','Baja Ringan','Besi','Beton'] },
+      { label:'Penopang Dinding Sopi-sopi', name:'pf_atap_penopang', type:'radio', opts:['Tersedia','Tidak Tersedia'] },
+      { label:'Indikator Kebocoran',        name:'pf_atap_bocor',    type:'radio', opts:['Tidak Ada Noda','Ada Flek Air di Plafon'] },
+      { label:'Material Plafon',            name:'pf_atap_plafon',   type:'check', opts:['Gypsum','GRC','PVC','Triplek/Kayu','Tanpa Plafon'] },
+      { label:'Kondisi',                    name:'pf_atap_kondisi',  type:'kondisi3' }
+    ]},
+    { num:'7.0', label:'Komponen Fisik Bangunan — Rumah Layak Huni', fields:[
+      { label:'Luas Minimum 7.2–9 m²',          name:'pf_rlh_luas',    type:'radio', opts:['Memenuhi','Tidak'] },
+      { label:'Ketersediaan Dapur',              name:'pf_rlh_dapur',   type:'radio', opts:['Memenuhi','Tidak'] },
+      { label:'Luas Area Hijau 10–20%',          name:'pf_rlh_hijau',   type:'radio', opts:['Memenuhi','Tidak'] },
+      { label:'Carport',                         name:'pf_rlh_carport', type:'radio', opts:['Memenuhi','Tidak'] },
+      { label:'Pencahayaan 10% dari Luas Lantai',name:'pf_rlh_cahaya',  type:'radio', opts:['Memenuhi','Tidak'] },
+      { label:'Penghawaan 5% dari Luas Lantai',  name:'pf_rlh_angin',   type:'radio', opts:['Memenuhi','Tidak'] },
+      { label:'Tipe Closet',                     name:'pf_rlh_closet',  type:'radio', opts:['Duduk','Jongkok'] },
+      { label:'Kondisi',                         name:'pf_rlh_kondisi', type:'kondisi3' }
+    ]},
+    { num:'8.0', label:'Ketersediaan Jaringan Utilitas Bangunan', type:'util2', fields:[
+      { label:'Jaringan Air Bersih',  name:'pf_util_air',       opts:['Tersedia','Tidak Tersedia'] },
+      { label:'Jaringan Listrik',     name:'pf_util_listrik',   opts:['Tersedia','Tidak Tersedia'] },
+      { label:'Perpipaan Sanitasi',   name:'pf_util_sanitasi',  opts:['Tersedia','Tidak Tersedia'] },
+      { label:'Jaringan Fiber Optik', name:'pf_util_fiber',     opts:['Tersedia','Tidak Tersedia'] },
+      { label:'Proteksi Kebakaran',   name:'pf_util_kebakaran', opts:['Tersedia','Tidak Tersedia'] }
+    ]}
+  ];
+
+  var pfContainer = document.getElementById('pasca-fisik-sections');
+
+  var bannerDiv = el('div', {cls:'divider-banner'});
+  bannerDiv.appendChild(el('span', {cls:'divider-badge', text:'FISIK'}));
+  var bannerText = el('div');
+  bannerText.appendChild(el('h3', {text:'Komponen Fisik Bangunan Tahap Pasca Penyaluran'}));
+  bannerText.appendChild(el('p', {text:'Pemeriksaan kondisi fisik bangunan setelah penyaluran FLPP'}));
+  bannerDiv.appendChild(bannerText);
+  pfContainer.appendChild(bannerDiv);
+
+  pascaFisikItems.forEach(function(item) {
+    var sec  = el('div', {cls:'section', style:'margin-bottom:20px'});
+    var hdr  = el('div', {cls:'section-header'}, [el('span',{cls:'section-num',text:item.num}), el('h3',{text:item.label})]);
+    var body = el('div', {cls:'section-body'});
+
+    if (item.type === 'util2') {
+      // Susunan vertikal per item — setiap utilitas jadi kartu tersendiri
+      var grid = el('div', {style:'display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px'});
+
+      item.fields.forEach(function(f) {
+        var card = el('div', {style:'border:1.5px solid var(--gray-200);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:10px;background:var(--white)'});
+
+        // Nama item
+        card.appendChild(el('div', {text:f.label, style:"font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;color:var(--navy);border-bottom:1px solid var(--gray-100);padding-bottom:8px"}));
+
+        // Ketersediaan
+        var secK = el('div', {style:'display:flex;flex-direction:column;gap:6px'});
+        secK.appendChild(el('span', {text:'Ketersediaan', style:'font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:.04em'}));
+        secK.appendChild(makeRadioGroup(f.name, f.opts));
+        card.appendChild(secK);
+
+        // Kondisi 3 dot
+        var secC = el('div', {style:'display:flex;flex-direction:column;gap:6px'});
+        secC.appendChild(el('span', {text:'Kondisi', style:'font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:.04em'}));
+        secC.appendChild(makeKondisi3(f.name+'_kondisi'));
+        card.appendChild(secC);
+
+        // Upload foto
+        var prev = el('div', {cls:'foto-preview-inline'});
+        var uObj = makeUploadBtn(f.name+'_foto', prev);
+        var secF = el('div', {style:'display:flex;flex-direction:column;gap:4px'});
+        secF.appendChild(uObj.btn);
+        secF.appendChild(prev);
+        card.appendChild(secF);
+
+        grid.appendChild(card);
+      });
+      body.appendChild(grid);
+
+    } else {
+      item.fields.forEach(function(f) {
+        if (f.type === 'kondisi3') {
+          body.appendChild(makeField(f.label, makeKondisi3(f.name)));
+        } else if (f.type === 'check') {
+          body.appendChild(makeField(f.label, makeCheckGroup(f.name, f.opts)));
+        } else {
+          body.appendChild(makeField(f.label, makeRadioGroup(f.name, f.opts)));
+        }
+      });
+      var fObj   = makeFotoUpload('pf_'+item.num);
+      var fField = el('div', {cls:'field'});
+      fField.appendChild(el('label', {text:'Upload Foto'}));
+      fField.appendChild(fObj.wrap[0]);
+      fField.appendChild(fObj.wrap[1]);
+      body.appendChild(fField);
+    }
+
+    sec.appendChild(hdr); sec.appendChild(body);
+    pfContainer.appendChild(sec);
+  });
+
+  checkDraftForPanel(0);
+
+}); // end load
+
+/* ===== SIMPAN & MUAT DRAFT (localStorage, sama seperti Form 1) ===== */
+var DRAFT_KEY_PREFIX = 'draft_form_survei_';
 
 function saveDraft(panelId, btn) {
   try {
@@ -554,7 +1209,6 @@ function saveDraft(panelId, btn) {
     var draft = { data: data, savedAt: savedAt };
     localStorage.setItem(DRAFT_KEY_PREFIX + panelId, JSON.stringify(draft));
 
-    // Update UI
     updateDraftInfo(panelId, savedAt);
     showToast('Draft berhasil disimpan di perangkat ini!');
     if (btn) {
@@ -575,7 +1229,6 @@ function loadDraftIfExists(panelId) {
     var draft = JSON.parse(raw);
     if (!draft || !draft.data) return;
 
-    // Tampilkan konfirmasi sebelum memuat
     var tsSafe = draft.savedAt || 'waktu tidak diketahui';
     var muat = confirm('Ditemukan draft yang tersimpan (' + tsSafe + ').\n\nApakah Anda ingin melanjutkan dari draft ini?');
     if (!muat) return;
@@ -592,17 +1245,14 @@ function restoreDraft(panelId, data) {
   var panel = document.getElementById(panelId);
   if (!panel) return;
 
-  // Isian teks / number / tanggal / tel
   panel.querySelectorAll('input[type=text],input[type=date],input[type=time],input[type=number],input[type=tel],textarea').forEach(function(inp) {
     if (inp.id && data[inp.id] !== undefined) inp.value = data[inp.id];
   });
 
-  // Select
   panel.querySelectorAll('select').forEach(function(sel) {
     if (sel.id && data[sel.id] !== undefined) sel.value = data[sel.id];
   });
 
-  // Radio buttons
   var rNames = new Set();
   panel.querySelectorAll('input[type=radio]').forEach(function(r) { rNames.add(r.name); });
   rNames.forEach(function(n) {
@@ -612,7 +1262,6 @@ function restoreDraft(panelId, data) {
     }
   });
 
-  // Checkboxes
   var cNames = new Set();
   panel.querySelectorAll('input[type=checkbox]').forEach(function(c) { if(c.name) cNames.add(c.name); });
   cNames.forEach(function(n) {
@@ -640,7 +1289,37 @@ function clearDraft(panelId) {
   if (ts)    ts.textContent = '';
 }
 
-/* ===== RESET SEMUA ISIAN FORM (dipanggil otomatis setelah submit sukses) ===== */
+function collectData(panelId) {
+  var panel = document.getElementById(panelId);
+  var data = { Timestamp: new Date().toLocaleString('id-ID') };
+  panel.querySelectorAll('input[type=text],input[type=date],input[type=time],input[type=number],input[type=tel],textarea,select').forEach(function(e){ if(e.id) data[e.id]=e.value; });
+  var rNames = new Set();
+  panel.querySelectorAll('input[type=radio]').forEach(function(e){ rNames.add(e.name); });
+  rNames.forEach(function(n){ var c=panel.querySelector('input[type=radio][name="'+n+'"]:checked'); data[n]=c?c.value:''; });
+  var cNames = new Set();
+  panel.querySelectorAll('input[type=checkbox]').forEach(function(e){ if(e.name) cNames.add(e.name); });
+  cNames.forEach(function(n){ var vals=[]; panel.querySelectorAll('input[type=checkbox][name="'+n+'"]:checked').forEach(function(e){ vals.push(e.value); }); data[n]=vals.join(', '); });
+  return data;
+}
+
+function buildFotoPayload(panelId) {
+  var list = fotoState[panelId] || [];
+  var fotoUrls = {}, fotosFallback = [];
+  list.forEach(function(item) {
+    if(item.status==='success'&&item.url){ if(!fotoUrls[item.fieldName]) fotoUrls[item.fieldName]=[]; fotoUrls[item.fieldName].push(item.url); }
+    else fotosFallback.push({fieldName:item.fieldName,fileName:item.fileName,mimeType:item.mimeType,base64:item.base64});
+  });
+  return {fotoUrls:fotoUrls, fotos:fotosFallback, total:list.length};
+}
+
+function resetFotoState(panelId) {
+  delete fotoState[panelId]; delete sessionTime[panelId];
+  var panel = document.getElementById(panelId);
+  if(panel) panel.querySelectorAll('.foto-preview,.foto-preview-inline,.doc-preview').forEach(function(p){p.innerHTML='';});
+  refreshFotoStatus(panelId);
+}
+
+/* ===== RESET SEMUA ISIAN + FOTO (dipanggil otomatis setelah kirim sukses) ===== */
 function resetFormFields(panelId) {
   var panel = document.getElementById(panelId);
   if (!panel) return;
@@ -650,6 +1329,43 @@ function resetFormFields(panelId) {
   panel.querySelectorAll('select').forEach(function(el) { el.selectedIndex = 0; });
   resetFotoState(panelId);
   clearDraft(panelId); // Hapus draft setelah data berhasil terkirim
+}
+
+async function submitForm(panelId, surveyorId, formName, btn) {
+  var surveyor = document.getElementById(surveyorId);
+  if (!surveyor || !surveyor.value.trim()) { showToast('⚠️ Harap isi nama surveyor terlebih dahulu!', true); if(surveyor) surveyor.focus(); return; }
+  btn.textContent = '⏳ Mengumpulkan data...'; btn.disabled = true;
+  try {
+    var ts = getSessionTimestamp(panelId);
+    var data = collectData(panelId);
+    data['Timestamp'] = ts; data['Nama Surveyor'] = surveyor.value.trim(); data['Form'] = formName;
+    var fotoPayload = buildFotoPayload(panelId);
+    var sudahDiUpload = Object.keys(fotoPayload.fotoUrls).reduce(function(a,k){return a+fotoPayload.fotoUrls[k].length;},0);
+    var belumSiap = fotoPayload.fotos.length;
+    btn.textContent = belumSiap>0 ? ('⏳ Mengirim data + '+belumSiap+' foto cadangan...') : ('⏳ Mengirim data ('+sudahDiUpload+' foto sudah di Drive)...');
+    var payload = {data:data, fotoUrls:fotoPayload.fotoUrls, fotos:fotoPayload.fotos};
+    if (typeof google !== 'undefined' && google.script && google.script.run) {
+      google.script.run
+        .withSuccessHandler(function(result){ var msg=result&&result.message?result.message:'Data berhasil dikirim!'; showToast('✅ '+msg); btn.textContent='Kirim Data'; btn.disabled=false; resetFormFields(panelId); window.scrollTo({top:0,behavior:'smooth'}); })
+        .withFailureHandler(function(err){ showToast('❌ Gagal: '+(err.message||err),true); btn.textContent='Kirim Data'; btn.disabled=false; })
+        .processFormData(JSON.stringify(payload));
+    } else {
+      var gsUrl = GAS_URL;
+      if (!gsUrl || gsUrl.indexOf('GANTI_DENGAN_URL_ANDA') > -1) { showToast('⚠️ URL Apps Script belum dikonfigurasi.', true); btn.textContent='Kirim Data'; btn.disabled=false; return; }
+      var iid='ifr_'+Date.now(); var ifr=el('iframe'); ifr.name=iid; ifr.style.display='none';
+      var frm=el('form'); frm.method='POST'; frm.action=gsUrl; frm.target=iid; frm.style.display='none';
+      var inp2=el('input'); inp2.type='hidden'; inp2.name='payload'; inp2.value=JSON.stringify(payload);
+      frm.appendChild(inp2); document.body.appendChild(ifr); document.body.appendChild(frm);
+      ifr.onload=function(){ showToast('✅ Data & foto berhasil dikirim!'); btn.textContent='Kirim Data'; btn.disabled=false; resetFormFields(panelId); window.scrollTo({top:0,behavior:'smooth'}); setTimeout(function(){try{document.body.removeChild(frm);document.body.removeChild(ifr);}catch(e){}},1000); };
+      setTimeout(function(){try{document.body.removeChild(frm);document.body.removeChild(ifr);}catch(e){} showToast('✅ Data terkirim!'); btn.textContent='Kirim Data'; btn.disabled=false; resetFormFields(panelId); },30000);
+      frm.submit();
+    }
+  } catch(err) { console.error(err); showToast('❌ Gagal: '+err.message,true); btn.textContent='Kirim Data'; btn.disabled=false; }
+}
+
+function showToast(msg, isErr) {
+  var t=document.getElementById('toast'); t.textContent=msg; t.classList.toggle('error',!!isErr); t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 4000);
 }
 </script>
 </body>
