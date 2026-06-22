@@ -144,6 +144,19 @@
   .geo-status.err{color:var(--red)}
   .geo-status.busy{color:var(--gray-600)}
 
+  /* Alasan "Tidak Ada" dokumen */
+  .alasan-wrap{display:none;margin-top:8px;width:100%}
+  .alasan-wrap.show{display:block}
+  .alasan-wrap textarea{
+    width:100%;padding:9px 14px;border:1.5px solid var(--red);border-radius:14px;
+    font-size:13px;font-family:'Inter',sans-serif;color:var(--gray-800);
+    background:#FFF8F8;outline:none;resize:vertical;min-height:64px;
+    transition:border-color .15s;
+  }
+  .alasan-wrap textarea:focus{border-color:var(--navy);background:var(--white);box-shadow:0 0 0 3px rgba(14,91,115,.12)}
+  .alasan-wrap .alasan-hint{font-size:11px;color:var(--red);margin-top:4px;display:flex;align-items:center;gap:4px}
+  .alasan-wrap .alasan-hint.filled{color:var(--green)}
+
 </style>
 </head>
 <body>
@@ -466,10 +479,66 @@ window.addEventListener('load', function() {
       var wrapper=el('div',{cls:'doc-wrapper'});
       var row=el('div',{cls:'doc-row'});
       row.appendChild(el('span',{text:dok,style:'flex:1;font-size:13px;font-weight:500;min-width:160px'}));
-      row.appendChild(makeRadioGroup('dok_ada_'+i,['Ada','Tidak Ada']));
+
+      // Radio group dengan handler untuk "Tidak Ada"
+      var radioName = 'dok_ada_'+i;
+      var grp = el('div',{cls:'radio-group'});
+      ['Ada','Tidak Ada'].forEach(function(o){
+        var inp = el('input'); inp.type='radio'; inp.name=radioName; inp.value=o;
+        var lbl = el('label',{},[inp, document.createTextNode(' '+o)]);
+        grp.appendChild(lbl);
+      });
+      row.appendChild(grp);
+
+      // Upload button (hanya tampil saat "Ada")
       var prev=el('div',{cls:'doc-preview'});
-      row.appendChild(makeDocUploadBtn(prev,dok));
-      wrapper.appendChild(row); wrapper.appendChild(prev);
+      var uploadBtn=makeDocUploadBtn(prev,dok);
+      row.appendChild(uploadBtn);
+
+      // Kotak alasan "Tidak Ada"
+      var alasanWrap = el('div',{cls:'alasan-wrap'});
+      var alasanId = 'alasan_dok_'+i;
+      var alasanTa = el('textarea');
+      alasanTa.id = alasanId;
+      alasanTa.placeholder = 'Wajib diisi: tuliskan alasan dokumen tidak ada...';
+      var alasanHint = el('div',{cls:'alasan-hint'});
+      alasanHint.innerHTML = '⚠️ Kolom alasan wajib diisi sebelum dapat mengirim data';
+      alasanWrap.appendChild(alasanTa);
+      alasanWrap.appendChild(alasanHint);
+
+      // Update hint saat textarea diisi
+      alasanTa.addEventListener('input', function(){
+        if(alasanTa.value.trim()){
+          alasanHint.className='alasan-hint filled';
+          alasanHint.innerHTML='✅ Alasan tercatat';
+          alasanTa.style.borderColor='var(--green)';
+        } else {
+          alasanHint.className='alasan-hint';
+          alasanHint.innerHTML='⚠️ Kolom alasan wajib diisi sebelum dapat mengirim data';
+          alasanTa.style.borderColor='var(--red)';
+        }
+      });
+
+      // Logika toggle saat radio berubah
+      grp.addEventListener('change', function(ev){
+        var val = ev.target.value;
+        if(val==='Tidak Ada'){
+          alasanWrap.classList.add('show');
+          uploadBtn.style.display='none';
+          prev.innerHTML='';
+        } else {
+          alasanWrap.classList.remove('show');
+          alasanTa.value='';
+          alasanHint.className='alasan-hint';
+          alasanHint.innerHTML='⚠️ Kolom alasan wajib diisi sebelum dapat mengirim data';
+          alasanTa.style.borderColor='var(--red)';
+          uploadBtn.style.display='';
+        }
+      });
+
+      wrapper.appendChild(row);
+      wrapper.appendChild(alasanWrap);
+      wrapper.appendChild(prev);
       dokContainer.appendChild(wrapper);
     });
   });
@@ -510,6 +579,22 @@ async function submitForm(panelId, formName, btn) {
   if (!namaPerumahan || !namaPerumahan.value.trim()) {
     showToast('⚠️ Harap isi Nama Perumahan terlebih dahulu!', true);
     if(namaPerumahan) namaPerumahan.focus();
+    return;
+  }
+
+  // Validasi: semua dokumen "Tidak Ada" harus ada alasannya
+  var panel = document.getElementById(panelId);
+  var alasanKosong = [];
+  panel.querySelectorAll('.alasan-wrap.show textarea').forEach(function(ta) {
+    if (!ta.value.trim()) {
+      ta.style.borderColor = 'var(--red)';
+      alasanKosong.push(ta);
+    }
+  });
+  if (alasanKosong.length > 0) {
+    showToast('⚠️ Harap isi alasan untuk setiap dokumen yang tidak ada ('+alasanKosong.length+' kolom belum diisi)!', true);
+    alasanKosong[0].scrollIntoView({behavior:'smooth', block:'center'});
+    alasanKosong[0].focus();
     return;
   }
   btn.textContent = '⏳ Mengumpulkan data...'; btn.disabled = true;
