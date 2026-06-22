@@ -52,26 +52,28 @@
   .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .field-row.three{grid-template-columns:1fr 1fr 1fr}
   @media(max-width:600px){.field-row,.field-row.three{grid-template-columns:1fr}}
-  .radio-group,.check-group{display:flex;flex-wrap:wrap;gap:8px}
+  .radio-group{display:flex;flex-wrap:wrap;gap:8px}
+  .check-group{display:grid;grid-template-columns:1fr 1fr;gap:8px}
   .radio-group{width:100%}
-  .radio-group label{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:7px 16px;border:1.5px solid var(--gray-200);border-radius:999px;cursor:pointer;font-size:13px;color:var(--gray-800);background:var(--white);transition:all .15s;user-select:none;text-align:center}
-  .check-group{width:100%}
-  .check-group label{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:7px 16px;border:1.5px solid var(--gray-200);border-radius:999px;cursor:pointer;font-size:13px;color:var(--gray-800);background:var(--white);transition:all .15s;user-select:none;text-align:center}
+  .radio-group label{flex:1;display:flex;align-items:center;justify-content:flex-start;gap:7px;padding:7px 16px;border:1.5px solid var(--gray-200);border-radius:999px;cursor:pointer;font-size:13px;color:var(--gray-800);background:var(--white);transition:all .15s;user-select:none;text-align:left}
+  .check-group label{display:flex;align-items:center;justify-content:flex-start;gap:7px;padding:7px 16px;border:1.5px solid var(--gray-200);border-radius:999px;cursor:pointer;font-size:13px;color:var(--gray-800);background:var(--white);transition:all .15s;user-select:none;text-align:left}
+  @media(max-width:480px){.check-group{grid-template-columns:1fr}}
+  .util-row .radio-group{width:auto;flex:1;flex-wrap:wrap}
   .radio-group label:hover,.check-group label:hover{border-color:var(--navy);background:var(--gray-50)}
   .radio-group input[type=radio],.check-group input[type=checkbox]{accent-color:var(--navy);width:14px;height:14px}
   .radio-group label:has(input:checked),.check-group label:has(input:checked){border-color:var(--navy);background:#E0F0F5;color:var(--navy);font-weight:500}
-  .kondisi-group{display:flex;flex-wrap:wrap;gap:8px}
-  .kondisi-opt{flex:1;min-width:0}
+  .kondisi-group{display:flex;flex-direction:column;gap:6px}
+  .kondisi-opt{width:100%}
   .kondisi-opt input{display:none}
-  .kondisi-opt label{display:block;text-align:center;padding:10px 8px;border:1.5px solid var(--gray-200);border-radius:999px;cursor:pointer;font-size:12px;font-weight:500;transition:all .15s}
-  .kondisi-opt label .dot{display:block;width:10px;height:10px;border-radius:50%;margin:0 auto 6px}
+  .kondisi-opt label{display:flex;align-items:center;gap:8px;padding:8px 14px;border:1.5px solid var(--gray-200);border-radius:999px;cursor:pointer;font-size:12px;font-weight:500;transition:all .15s;background:var(--white)}
+  .kondisi-opt label .dot{display:inline-block;width:10px;height:10px;border-radius:50%;flex-shrink:0;margin:0}
   .kondisi-opt.baik label{color:#065F46}.kondisi-opt.baik .dot{background:#10B981}.kondisi-opt.baik input:checked+label{background:#ECFDF5;border-color:#10B981}
   .kondisi-opt.sedang label{color:#92400E}.kondisi-opt.sedang .dot{background:#F59E0B}.kondisi-opt.sedang input:checked+label{background:#FFFBEB;border-color:#F59E0B}
   .kondisi-opt.buruk label{color:#7F1D1D}.kondisi-opt.buruk .dot{background:#EF4444}.kondisi-opt.buruk input:checked+label{background:#FEF2F2;border-color:#EF4444}
-  .kondisi3-group{display:flex;gap:8px;flex-wrap:wrap;width:100%}
+  .kondisi3-group{display:flex;flex-direction:column;gap:8px;width:100%}
   .kondisi3-group input[type=radio]{display:none}
-  .kondisi3-group .k3-label{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;padding:10px 12px;border:1.5px solid var(--gray-200);border-radius:999px;cursor:pointer;font-size:13px;font-weight:500;color:var(--gray-600);transition:all .15s;text-align:center;background:var(--white)}
-  .kondisi3-group .k3-dot{display:block;width:10px;height:10px;border-radius:50%;margin:0 auto 6px}
+  .kondisi3-group .k3-label{flex:1;min-width:0;display:flex;flex-direction:row;align-items:center;justify-content:flex-start;padding:10px 14px;border:1.5px solid var(--gray-200);border-radius:999px;cursor:pointer;font-size:13px;font-weight:500;color:var(--gray-600);transition:all .15s;text-align:left;background:var(--white);gap:8px}
+  .kondisi3-group .k3-dot{display:block;width:10px;height:10px;border-radius:50%;flex-shrink:0;margin:0}
   .kondisi3-group .k3-label:hover{border-color:var(--navy)}
   .kondisi3-group input[type=radio]:checked + .k3-label.k3-baik{background:#ECFDF5;border-color:#10B981;color:#065F46;font-weight:700}
   .kondisi3-group input[type=radio]:checked + .k3-label.k3-sedang{background:#FFFBEB;border-color:#F59E0B;color:#92400E;font-weight:700}
@@ -112,6 +114,7 @@
   .divider-banner h3{font-family:'Plus Jakarta Sans',sans-serif;color:#fff;font-size:16px;font-weight:700}
   .divider-banner p{color:rgba(255,255,255,.6);font-size:12px;margin-top:3px}
   .util-row{display:grid;grid-template-columns:1fr 1fr auto;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--gray-100)}
+  @media(max-width:600px){.util-row{grid-template-columns:1fr;gap:6px}}
   /* util-row2 PASCA PENYALURAN: label | tersedia | kondisi | foto (keberfungsian dihapus) */
   .util-row2{display:grid;grid-template-columns:180px auto auto auto;align-items:center;gap:10px;padding:14px 0;border-bottom:1px solid var(--gray-100)}
   @media(max-width:768px){.util-row2{grid-template-columns:1fr;gap:8px}}
@@ -228,14 +231,14 @@
         <div class="section-header"><span class="section-num">I</span><h3>Tipe Rumah</h3></div>
         <div class="section-body">
           <div class="subsection"><div class="subsection-title">1. Rumah Subsidi</div>
-            <div class="field-row three"><div class="field"><label>1. Tipe Rumah</label><input type="text" placeholder="mis: Tipe 36"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div>
-            <div class="field-row three"><div class="field"><label>2. Tipe Rumah</label><input type="text" placeholder="mis: Tipe 36"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div>
-            <div class="field-row three"><div class="field"><label>3. Tipe Rumah</label><input type="text" placeholder="mis: Tipe 36"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div>
+            <div class="field-row three"><div class="field"><label>1. Tipe Rumah</label><input type="text" placeholder="Tipe 36/70"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div>
+            <div class="field-row three"><div class="field"><label>2. Tipe Rumah</label><input type="text" placeholder="Tipe 36/70"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div>
+            <div class="field-row three"><div class="field"><label>3. Tipe Rumah</label><input type="text" placeholder="Tipe 36/70"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div>
           </div>
           <div class="subsection"><div class="subsection-title">2. Rumah Komersil</div>
-            <div class="field-row three"><div class="field"><label>1. Tipe Rumah</label><input type="text"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div>
-            <div class="field-row three"><div class="field"><label>2. Tipe Rumah</label><input type="text" placeholder="mis: Tipe 36"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div>
-            <div class="field-row three"><div class="field"><label>3. Tipe Rumah</label><input type="text" placeholder="mis: Tipe 36"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div>
+            <div class="field-row three"><div class="field"><label>1. Tipe Rumah</label><input type="text" placeholder="Tipe 36/70"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div>
+            <div class="field-row three"><div class="field"><label>2. Tipe Rumah</label><input type="text" placeholder="Tipe 36/70"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div>
+            <div class="field-row three"><div class="field"><label>3. Tipe Rumah</label><input type="text" placeholder="Tipe 36/70"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div>
           </div>
         </div>
       </div>
@@ -273,11 +276,11 @@
         <div class="section-header"><span class="section-num">INFO</span><h3>Data Umum</h3></div>
         <div class="section-body">
           <div class="field-row">
-            <div class="field"><label>Tanggal Pengisian</label><input type="date"></div>
-            <div class="field"><label>Waktu Pengendalian</label><input type="time"></div>
+            <div class="field"><label>Tanggal Pengisian</label><input type="date" id="p1_tanggal"></div>
+            <div class="field"><label>Waktu Pengendalian</label><input type="time" id="p1_waktu"></div>
           </div>
           <div class="field-row">
-            <div class="field"><label>Nama Perumahan</label><input type="text"></div>
+            <div class="field"><label>Nama Perumahan</label><input type="text" id="p1_nama_perumahan"></div>
             <div class="field"><label>Provinsi</label><select id="prov_panel1" onchange="onProvChange('prov_panel1','kab_panel1')"><option value="">-- Pilih Provinsi --</option></select></div>
           </div>
           <div class="field"><label>Kabupaten/Kota</label><select id="kab_panel1"><option value="">-- Pilih Provinsi dahulu --</option></select></div>
@@ -305,11 +308,11 @@
         <div class="section-header"><span class="section-num">INFO</span><h3>Data Umum</h3></div>
         <div class="section-body">
           <div class="field-row">
-            <div class="field"><label>Tanggal Pengisian</label><input type="date"></div>
-            <div class="field"><label>Waktu Pengendalian</label><input type="time"></div>
+            <div class="field"><label>Tanggal Pengisian</label><input type="date" id="p2_tanggal"></div>
+            <div class="field"><label>Waktu Pengendalian</label><input type="time" id="p2_waktu"></div>
           </div>
           <div class="field-row">
-            <div class="field"><label>Nama Perumahan</label><input type="text"></div>
+            <div class="field"><label>Nama Perumahan</label><input type="text" id="p2_nama_perumahan"></div>
             <div class="field"><label>Provinsi</label><select id="prov_panel2" onchange="onProvChange('prov_panel2','kab_panel2')"><option value="">-- Pilih Provinsi --</option></select></div>
           </div>
           <div class="field"><label>Kabupaten/Kota</label><select id="kab_panel2"><option value="">-- Pilih Provinsi dahulu --</option></select></div>
@@ -337,11 +340,11 @@
         <div class="section-header"><span class="section-num">INFO</span><h3>Data Umum</h3></div>
         <div class="section-body">
           <div class="field-row">
-            <div class="field"><label>Tanggal Pengisian</label><input type="date"></div>
-            <div class="field"><label>Waktu</label><input type="time"></div>
+            <div class="field"><label>Tanggal Pengisian</label><input type="date" id="p3_tanggal"></div>
+            <div class="field"><label>Waktu</label><input type="time" id="p3_waktu"></div>
           </div>
           <div class="field-row">
-            <div class="field"><label>Nama Perumahan</label><input type="text"></div>
+            <div class="field"><label>Nama Perumahan</label><input type="text" id="p3_nama_perumahan"></div>
             <div class="field"><label>Provinsi</label><select id="prov_panel3" onchange="onProvChange('prov_panel3','kab_panel3')"><option value="">-- Pilih Provinsi --</option></select></div>
           </div>
           <div class="field"><label>Kabupaten/Kota</label><select id="kab_panel3"><option value="">-- Pilih Provinsi dahulu --</option></select></div>
@@ -634,30 +637,32 @@ function makeKondisi3(name) {
 }
 
 function makeFotoUpload(fieldName) {
-  var inp = el('input'); inp.type='file'; inp.accept='image/*'; inp.multiple=true;
-  var box = el('div', {cls:'foto-upload'}, [el('div',{cls:'ico',text:'📷'}), el('p',{text:'Klik untuk upload foto'})]);
   var prev = el('div', {cls:'foto-preview'});
-  box.appendChild(inp);
-  box.addEventListener('click', function() { inp.click(); });
-  inp.addEventListener('change', function() { previewInto(inp, prev, fieldName); inp.value=''; });
-  return {wrap: [box, prev], inp: inp, fieldName: fieldName};
+  var inp = el('input'); inp.type='file'; inp.accept='image/*,.pdf,.doc,.docx,.xls,.xlsx'; inp.multiple=true;
+  inp.style.cssText='position:fixed;top:-9999px;left:-9999px;opacity:0;pointer-events:none';
+  document.body.appendChild(inp);
+  var btn = el('button', {cls:'upload-btn', type:'button'});
+  btn.textContent = '📎 Upload Foto/Dokumen';
+  btn.addEventListener('click', function() { inp.click(); });
+  inp.addEventListener('change', function() { previewDoc(inp, prev, fieldName); inp.value=''; });
+  return {wrap: [btn, prev], inp: inp, fieldName: fieldName};
 }
 function makeUploadBtn(fieldName, previewEl) {
-  var inp = el('input'); inp.type='file'; inp.accept='image/*'; inp.multiple=true;
-  inp.style.display='none';
+  var inp = el('input'); inp.type='file'; inp.accept='image/*,.pdf,.doc,.docx,.xls,.xlsx'; inp.multiple=true;
+  inp.style.cssText='position:fixed;top:-9999px;left:-9999px;opacity:0;pointer-events:none';
+  document.body.appendChild(inp);
   var btn = el('button', {cls:'upload-btn', type:'button'});
-  btn.textContent = '📷 Upload Foto';
-  btn.appendChild(inp);
+  btn.textContent = '📎 Upload Foto/Dokumen';
   btn.addEventListener('click', function() { inp.click(); });
-  inp.addEventListener('change', function() { previewInto(inp, previewEl, fieldName); inp.value=''; });
+  inp.addEventListener('change', function() { previewDoc(inp, previewEl, fieldName); inp.value=''; });
   return {btn: btn, inp: inp, fieldName: fieldName};
 }
 function makeDocUploadBtn(previewEl, fieldName) {
   var inp = el('input'); inp.type='file'; inp.accept='image/*,.pdf,.doc,.docx,.xls,.xlsx'; inp.multiple=true;
-  inp.style.display='none';
+  inp.style.cssText='position:fixed;top:-9999px;left:-9999px;opacity:0;pointer-events:none';
+  document.body.appendChild(inp);
   var btn = el('button', {cls:'upload-btn', type:'button'});
   btn.textContent = '📎 Upload Foto/Dokumen';
-  btn.appendChild(inp);
   btn.addEventListener('click', function() { inp.click(); });
   inp.addEventListener('change', function() { previewDoc(inp, previewEl, fieldName); inp.value=''; });
   return btn;
@@ -777,6 +782,7 @@ function checkDraftForPanel(idx) {
   loadDraftIfExists(panelId);
 }
 
+
 function switchTab(idx) {
   document.querySelectorAll('.tab-btn').forEach(function(b,i){b.classList.toggle('active',i===idx);});
   document.querySelectorAll('.form-panel').forEach(function(p,i){p.classList.toggle('active',i===idx);});
@@ -824,42 +830,41 @@ window.addEventListener('load', function() {
 
   // ---- DOKUMEN LIST ----
   var dokumenGroups=[
-    {group:'Tahap Perencanaan', items:[
-      'Gambar <i>Site Plan</i> Perumahan',
-      'DED (<i>Detailed Engineering Design</i>) Perumahan',
+    {tahap:'Tahap Perencanaan', items:[
+      'Gambar Site Plan Perumahan',
+      'DED (Detailed Engineering Design) Perumahan',
       'Rencana Kerja dan Syarat-syarat (RKS)',
-      'Brosur Pemasaran (spesifikasi rumah/<i>floor plan</i>)'
+      'Brosur Pemasaran (Spesifikasi Rumah/Floor Plan)'
     ]},
-    {group:'Tahap Perizinan', items:[
-      'Persetujuan Lingkungan (AMDAL/UKL-UPL/SPPL atau dokumen lain sesuai ketentuan)',
+    {tahap:'Tahap Perizinan', items:[
+      'Persetujuan Lingkungan (AMDAL/UKL-UPL/SPPL atau Dokumen Lain Sesuai Ketentuan)',
       'Izin Mendirikan Bangunan (IMB)/Persetujuan Bangunan Gedung (PBG)'
     ]},
-    {group:'Tahap Pelaksanaan', items:[
-      '<i>As Built Drawing</i>'
+    {tahap:'Tahap Pelaksanaan', items:[
+      'As Built Drawing'
     ]},
-    {group:'Tahap Pasca Konstruksi', items:[
+    {tahap:'Tahap Pasca Konstruksi', items:[
       'Sertifikat Laik Fungsi (SLF)',
       'Surat Keterangan Kelaikan Fungsi Bangunan Rumah oleh Pengawas Konstruksi/Manajemen Konstruksi'
     ]}
   ];
   var dokContainer=document.getElementById('dokumen-list');
   var dokIdx=0;
-  dokumenGroups.forEach(function(grp){
-    dokContainer.appendChild(el('div',{html:grp.group,style:"font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;color:var(--navy-light);margin-top:14px;margin-bottom:2px;text-transform:uppercase;letter-spacing:.02em"}));
-    grp.items.forEach(function(dok){
+  dokumenGroups.forEach(function(group){
+    dokContainer.appendChild(el('div',{cls:'subsection-title',text:group.tahap,style:'margin-top:14px'}));
+    group.items.forEach(function(dok){
+      var i=dokIdx++;
       var wrapper=el('div',{cls:'doc-wrapper'});
       var row=el('div',{cls:'doc-row'});
-      row.appendChild(el('span',{html:dok,style:'flex:1;font-size:13px;font-weight:500;min-width:160px'}));
-      row.appendChild(makeRadioGroup('dok_ada_'+dokIdx,['Ada','Tidak Ada']));
-      row.appendChild(makeRadioGroup('dok_sesuai_'+dokIdx,['Sesuai','Tidak Sesuai']));
+      row.appendChild(el('span',{text:dok,style:'flex:1;font-size:13px;font-weight:500;min-width:160px'}));
+      row.appendChild(makeRadioGroup('dok_ada_'+i,['Ada','Tidak Ada']));
+      row.appendChild(makeRadioGroup('dok_sesuai_'+i,['Sesuai','Tidak Sesuai']));
       var prev=el('div',{cls:'doc-preview'});
-      row.appendChild(makeDocUploadBtn(prev,dok.replace(/<[^>]+>/g,'')));
+      row.appendChild(makeDocUploadBtn(prev,dok));
       wrapper.appendChild(row); wrapper.appendChild(prev);
       dokContainer.appendChild(wrapper);
-      dokIdx++;
     });
   });
-
 
   // ---- PSU SECTIONS ----
   var psuItems = [
@@ -891,35 +896,76 @@ window.addEventListener('load', function() {
     var hdr=el('div',{cls:'section-header'},[el('span',{cls:'section-num',text:item.num}),el('h3',{text:item.label})]);
     var body=el('div',{cls:'section-body'});
     if(item.type==='rth'){
-      var rthK=[{val:'Baik / Berfungsi',color:'#10B981'},{val:'Sedang / Ada Gangguan',color:'#F59E0B'},{val:'Buruk / Tidak Berfungsi',color:'#EF4444'}];
+      var rthK=[{val:'Baik / Berfungsi',color:'#10B981',bg:'#ECFDF5',icon:'✅'},{val:'Sedang / Ada Gangguan',color:'#F59E0B',bg:'#FFFBEB',icon:'⚠️'},{val:'Buruk / Tidak Berfungsi',color:'#EF4444',bg:'#FEF2F2',icon:'❌'}];
+      var rthGrpIcons=['🌳','🏟️','💧'];
       item.groups.forEach(function(grp,gi){
         var sub_el=el('div',{cls:'subsection'});
-        sub_el.appendChild(el('div',{cls:'subsection-title',text:grp.label}));
-        var tbl=el('table',{style:'width:100%;border-collapse:collapse;font-size:13px'});
-        var thead=el('thead'); var trH=el('tr');
-        [['No','28px','center'],['Jenis','','left'],['Ada / Tidak Ada','160px','center'],['Kondisi','260px','left']].forEach(function(h){
-          trH.appendChild(el('th',{text:h[0],style:'padding:8px 10px;background:var(--navy);color:#fff;font-size:11px;font-weight:600;text-align:'+h[2]+(h[1]?';width:'+h[1]:'')}));
-        });
-        thead.appendChild(trH); tbl.appendChild(thead);
-        var tbody=el('tbody');
+        // Subsection title with group icon
+        var titleRow=el('div',{style:'display:flex;align-items:center;gap:8px;padding-bottom:6px;border-bottom:1px solid var(--gray-200);margin-bottom:8px'});
+        titleRow.appendChild(el('span',{text:rthGrpIcons[gi]||'🌿',style:'font-size:18px;line-height:1'}));
+        titleRow.appendChild(el('div',{cls:'subsection-title',style:'border:none;padding:0;margin:0',text:grp.label}));
+        sub_el.appendChild(titleRow);
+        // Card grid container
+        var cardGrid=el('div',{style:'display:grid;grid-template-columns:repeat(auto-fill,minmax(min(260px,100%),1fr));gap:6px'});
         grp.items.forEach(function(itemName,ii){
-          var tr=el('tr',{style:'background:'+(ii%2===0?'#fff':'var(--gray-50)')});
           var rname=grp.prefix+'_'+gi+'_'+ii;
-          tr.appendChild(el('td',{text:String(ii+1)+'.',style:'text-align:center;padding:8px 6px;color:var(--gray-400);font-weight:600;font-size:11px;border-bottom:1px solid var(--gray-100)'}));
-          var tdJ=el('td',{style:'padding:8px 6px;border-bottom:1px solid var(--gray-100)'});
-          if(itemName==='Lainnya') tdJ.appendChild(el('input',{type:'text',name:rname+'_nama',placeholder:'Sebutkan...',style:'width:100%;padding:5px 8px;border:1.5px solid var(--gray-200);border-radius:999px;font-size:12px'}));
-          else tdJ.appendChild(el('span',{text:itemName}));
-          tr.appendChild(tdJ);
-          var tdAda=el('td',{style:'padding:8px 6px;text-align:center;border-bottom:1px solid var(--gray-100)'}); var adaGrp=el('div',{style:'display:flex;gap:10px;justify-content:center;flex-wrap:wrap'});
-          ['Ada','Tidak Ada'].forEach(function(opt){ var rid=rname+'_ada_'+opt.replace(' ','_'); var inp=el('input'); inp.type='radio'; inp.name=rname+'_ada'; inp.id=rid; inp.value=opt; inp.style.cssText='accent-color:var(--navy);width:13px;height:13px'; var lbl=el('label'); lbl.setAttribute('for',rid); lbl.style.cssText='display:flex;align-items:center;gap:4px;font-size:12px;cursor:pointer'; lbl.appendChild(inp); lbl.appendChild(document.createTextNode(opt)); adaGrp.appendChild(lbl); });
-          tdAda.appendChild(adaGrp); tr.appendChild(tdAda);
-          var tdK=el('td',{style:'padding:8px 6px;border-bottom:1px solid var(--gray-100)'}); var kGrp2=el('div',{style:'display:flex;gap:6px;flex-wrap:wrap'});
-          rthK.forEach(function(k,ki){ var rid2=rname+'_kond_'+ki; var inp2=el('input'); inp2.type='radio'; inp2.name=rname+'_kondisi'; inp2.id=rid2; inp2.value=k.val; inp2.style.display='none'; var dot=el('span',{style:'display:inline-block;width:8px;height:8px;border-radius:50%;background:'+k.color+';margin-right:4px;flex-shrink:0'}); var lbl2=el('label'); lbl2.setAttribute('for',rid2); lbl2.style.cssText='display:inline-flex;align-items:center;padding:4px 12px;border:1.5px solid var(--gray-200);border-radius:999px;font-size:11px;cursor:pointer;white-space:nowrap;transition:all .15s'; lbl2.appendChild(inp2); lbl2.appendChild(dot); lbl2.appendChild(document.createTextNode(k.val)); inp2.addEventListener('change',function(){ kGrp2.querySelectorAll('label').forEach(function(l){l.style.background='';l.style.borderColor='var(--gray-200)';l.style.fontWeight='';}); if(inp2.checked){lbl2.style.background=k.color+'22';lbl2.style.borderColor=k.color;lbl2.style.fontWeight='600';} }); kGrp2.appendChild(lbl2); });
-          tdK.appendChild(kGrp2); tr.appendChild(tdK);
-          tbody.appendChild(tr);
+          // Card wrapper
+          var card=el('div',{style:'background:var(--white);border:1.5px solid var(--gray-200);border-radius:16px;padding:10px 14px;display:flex;flex-direction:column;gap:8px;transition:box-shadow .2s,border-color .2s'});
+          // Card header: number badge + name
+          var cardHead=el('div',{style:'display:flex;align-items:flex-start;gap:10px'});
+          cardHead.appendChild(el('span',{text:String(ii+1),style:'flex-shrink:0;background:var(--navy);color:#fff;font-family:\'Plus Jakarta Sans\',sans-serif;font-weight:700;font-size:11px;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;line-height:1;margin-top:1px'}));
+          if(itemName==='Lainnya'){
+            var lainWrap=el('div',{style:'flex:1;display:flex;flex-direction:column;gap:4px'});
+            lainWrap.appendChild(el('span',{text:'Lainnya',style:'font-size:12px;font-weight:600;color:var(--gray-600)'}));
+            lainWrap.appendChild(el('input',{type:'text',name:rname+'_nama',placeholder:'Sebutkan jenis...',style:'width:100%;padding:5px 10px;border:1.5px solid var(--gray-200);border-radius:999px;font-size:12px;font-family:\'Inter\',sans-serif;outline:none'}));
+            cardHead.appendChild(lainWrap);
+          } else {
+            cardHead.appendChild(el('span',{text:itemName,style:'font-size:13px;font-weight:600;color:var(--gray-800);line-height:1.35;flex:1'}));
+          }
+          card.appendChild(cardHead);
+          // Divider
+          card.appendChild(el('div',{style:'border-top:1px solid var(--gray-100)'}));
+          // Ketersediaan toggle
+          var adaLabel=el('div',{text:'Ketersediaan',style:'font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px'});
+          card.appendChild(adaLabel);
+          var adaRow=el('div',{style:'display:flex;gap:8px'});
+          ['Ada','Tidak Ada'].forEach(function(opt){
+            var rid=rname+'_ada_'+opt.replace(' ','_');
+            var inp=el('input'); inp.type='radio'; inp.name=rname+'_ada'; inp.id=rid; inp.value=opt; inp.style.display='none';
+            var lbl=el('label'); lbl.setAttribute('for',rid);
+            var isAda=(opt==='Ada');
+            lbl.style.cssText='flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;background:var(--white);color:var(--gray-600);min-width:0;overflow:hidden;white-space:nowrap';
+            lbl.appendChild(el('span',{text:isAda?'✓':'✗',style:'font-size:13px'}));
+            lbl.appendChild(document.createTextNode(opt));
+            inp.addEventListener('change',function(){
+              adaRow.querySelectorAll('label').forEach(function(l){l.style.background='var(--white)';l.style.borderColor='var(--gray-200)';l.style.color='var(--gray-600)';});
+              if(inp.checked){ lbl.style.background=isAda?'#E0F0F5':'#FEF2F2'; lbl.style.borderColor=isAda?'var(--navy)':'#EF4444'; lbl.style.color=isAda?'var(--navy)':'#7F1D1D'; }
+            });
+            adaRow.appendChild(inp); adaRow.appendChild(lbl);
+          });
+          card.appendChild(adaRow);
+          // Kondisi pills
+          var kondLabel=el('div',{text:'Kondisi',style:'font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px'});
+          card.appendChild(kondLabel);
+          var kondRow=el('div',{style:'display:flex;flex-direction:column;gap:5px'});
+          rthK.forEach(function(k,ki){
+            var rid2=rname+'_kond_'+ki; var inp2=el('input'); inp2.type='radio'; inp2.name=rname+'_kondisi'; inp2.id=rid2; inp2.value=k.val; inp2.style.display='none';
+            var lbl2=el('label'); lbl2.setAttribute('for',rid2);
+            lbl2.style.cssText='display:flex;align-items:center;gap:7px;padding:6px 12px;border:1.5px solid var(--gray-200);border-radius:999px;font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;background:var(--white);color:var(--gray-600)';
+            var dot=el('span',{style:'display:inline-block;width:9px;height:9px;border-radius:50%;background:'+k.color+';flex-shrink:0'});
+            lbl2.appendChild(inp2); lbl2.appendChild(dot); lbl2.appendChild(document.createTextNode(k.val));
+            inp2.addEventListener('change',function(){
+              kondRow.querySelectorAll('label').forEach(function(l){l.style.background='var(--white)';l.style.borderColor='var(--gray-200)';l.style.color='var(--gray-600)';l.style.fontWeight='500';});
+              if(inp2.checked){ lbl2.style.background=k.bg; lbl2.style.borderColor=k.color; lbl2.style.color=k.color; lbl2.style.fontWeight='700'; }
+            });
+            kondRow.appendChild(lbl2);
+          });
+          card.appendChild(kondRow);
+          cardGrid.appendChild(card);
         });
-        tbl.appendChild(tbody); sub_el.appendChild(tbl);
-        var fo=makeFotoUpload('PSU_RTH_'+grp.prefix); var ff=el('div',{cls:'field',style:'margin-top:10px'}); ff.appendChild(el('label',{text:'Upload Foto — '+grp.label})); ff.appendChild(fo.wrap[0]); ff.appendChild(fo.wrap[1]); sub_el.appendChild(ff);
+        sub_el.appendChild(cardGrid);
+        // Foto upload
+        var fo=makeFotoUpload('PSU_RTH_'+grp.prefix); var ff=el('div',{cls:'field',style:'margin-top:14px'}); ff.appendChild(el('label',{text:'📷 Upload Foto — '+grp.label,style:'font-size:12px;font-weight:600;color:var(--gray-600)'})); ff.appendChild(fo.wrap[0]); ff.appendChild(fo.wrap[1]); sub_el.appendChild(ff);
         body.appendChild(sub_el);
       });
     } else {
@@ -991,12 +1037,13 @@ window.addEventListener('load', function() {
     {num:'7.0',label:'Lantai',fields:[{label:'Tipe',name:'py_lantai_tipe',type:'check',opts:['Keramik','Tegel','Plester Semen','Lainnya']},{label:'Pemasangan Penutup Lantai',name:'py_lantai_pasang',type:'radio',opts:['Rata','Bergelombang']},{label:'Kemiringan > 1% (Kamar Mandi)',name:'py_lantai_miring',type:'radio',opts:['Ya','Tidak']},{label:'Lebar Nat 2–5 mm',name:'py_lantai_nat',type:'radio',opts:['Ya','Tidak']}]},
     {num:'8.0',label:'Dinding',fields:[{label:'Tipe Dinding',name:'py_dinding_tipe',type:'check',opts:['Bata Merah','Bata Ringan']},{label:'Pemakaian Angkur tiap 6 Lapis Pasangan Bata',name:'py_dinding_angkur',type:'radio',opts:['Tersedia','Tidak Tersedia']},{label:'Double Dinding',name:'py_dinding_double',type:'radio',opts:['Ya','Tidak']}]},
     {num:'9.0',label:'Rumah Layak Huni',fields:[{label:'Luas Minimum 7.2–9 m²',name:'py_rlh_luas',type:'radio',opts:['Memenuhi','Tidak']},{label:'Ketersediaan Dapur',name:'py_rlh_dapur',type:'radio',opts:['Memenuhi','Tidak']},{label:'Luas Area Hijau 10–20%',name:'py_rlh_hijau',type:'radio',opts:['Memenuhi','Tidak']},{label:'Carport',name:'py_rlh_carport',type:'radio',opts:['Memenuhi','Tidak']},{label:'Pencahayaan 10% dari Luas Lantai',name:'py_rlh_cahaya',type:'radio',opts:['Memenuhi','Tidak']},{label:'Penghawaan 5% dari Luas Lantai',name:'py_rlh_angin',type:'radio',opts:['Memenuhi','Tidak']},{label:'Tipe Closet',name:'py_rlh_closet',type:'radio',opts:['Duduk','Jongkok']}]},
-    {num:'10.0',label:'Ketersediaan Sarana dan Utilitas Umum',type:'util',fields:[
+    {num:'10.0',label:'Jaringan Utilitas Bangunan',type:'util',fields:[
       {label:'Jaringan Air Bersih',name:'py_util_air',opts:['Tersedia','Tidak Tersedia']},
       {label:'Jaringan Listrik',name:'py_util_listrik',opts:['Tersedia','Tidak Tersedia']},
       {label:'Perpipaan Sanitasi',name:'py_util_sanitasi',opts:['Tersedia','Tidak Tersedia']},
       {label:'Jaringan Fiber Optik',name:'py_util_fiber',opts:['Tersedia','Tidak Tersedia']},
-      {label:'Proteksi Kebakaran',name:'py_util_kebakaran',opts:['Tersedia','Tidak Tersedia']}
+      {label:'Proteksi Kebakaran',name:'py_util_kebakaran',opts:['Tersedia','Tidak Tersedia']},
+      {label:'Jaringan Air Limbah',name:'py_util_airlimbah',opts:['Tersedia','Tidak Tersedia']}
     ]}
   ];
   var pyContainer=document.getElementById('penyaluran-sections');
@@ -1006,6 +1053,7 @@ window.addEventListener('load', function() {
     var body=el('div',{cls:'section-body'});
     var hasUtilOrCheckFoto=(item.type==='util')||( item.fields && item.fields.some(function(f){return f.type==='check_foto';}));
     if(item.type==='util'){
+      body.className='section-body util-section-body';
       item.fields.forEach(function(f){
         var row=el('div',{cls:'util-row'});
         row.appendChild(el('span',{text:f.label,style:'font-size:13px;font-weight:500'}));
@@ -1013,6 +1061,7 @@ window.addEventListener('load', function() {
         var prev=el('div',{cls:'foto-preview-inline'}); var uObj=makeUploadBtn(f.name+'_foto',prev);
         row.appendChild(uObj.btn); body.appendChild(row); body.appendChild(prev);
       });
+
     } else if(item.type==='rth'){
       var rthK2=[{val:'Baik / Berfungsi',color:'#10B981'},{val:'Sedang / Ada Gangguan',color:'#F59E0B'},{val:'Buruk / Tidak Berfungsi',color:'#EF4444'}];
       item.groups.forEach(function(grp,gi){
@@ -1058,13 +1107,17 @@ window.addEventListener('load', function() {
           if(row.catatan) info.appendChild(el('div',{text:row.catatan,style:'color:var(--gray-400);font-size:11px;margin-top:4px;font-style:italic'}));
           if(row.parameter) info.appendChild(el('div',{text:'Parameter (Acuan): '+row.parameter,style:'color:var(--gray-600);font-size:12px;margin-top:5px;line-height:1.4'}));
           card.appendChild(info);
+          var optWrap=el('div',{cls:'radio-group',style:'flex-shrink:0'});
+          var lblYa=el('label'); var inpYa=el('input'); inpYa.type='radio'; inpYa.name=row.name; inpYa.value='Sesuai'; inpYa.style.accentColor='var(--green)'; lblYa.appendChild(inpYa); lblYa.appendChild(document.createTextNode('Sesuai')); optWrap.appendChild(lblYa);
+          var lblTidak=el('label'); var inpTidak=el('input'); inpTidak.type='radio'; inpTidak.name=row.name; inpTidak.value='Tidak Sesuai'; inpTidak.style.accentColor='var(--red)'; lblTidak.appendChild(inpTidak); lblTidak.appendChild(document.createTextNode('Tidak Sesuai')); optWrap.appendChild(lblTidak);
+          card.appendChild(optWrap);
           listWrap.appendChild(card);
         });
         body.appendChild(listWrap);
       } else {
       var tbl2=el('table',{style:'width:100%;border-collapse:collapse;font-size:13px'});
       var thead2=el('thead'); var trH2=el('tr');
-      var headCols2 = [['NO','40px','center'],['DOKUMEN','190px','left'],['PARAMETER (Acuan)','','left']];
+      var headCols2 = [['NO','40px','center'],['DOKUMEN','190px','left'],['PARAMETER (Acuan)','','left'],['Sesuai','90px','center'],['Tidak Sesuai','90px','center']];
       headCols2.forEach(function(h){
         trH2.appendChild(el('th',{text:h[0],style:'padding:9px 10px;background:var(--navy);color:#fff;font-size:11px;font-weight:600;text-align:'+h[2]+(h[1]?';width:'+h[1]:'')}));
       });
@@ -1078,6 +1131,12 @@ window.addEventListener('load', function() {
         if(row.catatan) tdDok.appendChild(el('div',{text:row.catatan,style:'color:var(--gray-400);font-size:11px;margin-top:3px;font-style:italic'}));
         tr2.appendChild(tdDok);
         tr2.appendChild(el('td',{text:row.parameter,style:'padding:10px 8px;border-bottom:1px solid var(--gray-100);vertical-align:top;color:var(--gray-600);line-height:1.4'}));
+        var tdYa=el('td',{style:'padding:10px 6px;text-align:center;border-bottom:1px solid var(--gray-100);vertical-align:top'});
+        var inpYa=el('input'); inpYa.type='radio'; inpYa.name=row.name; inpYa.value='Sesuai'; inpYa.style.cssText='accent-color:var(--green);width:16px;height:16px;cursor:pointer';
+        tdYa.appendChild(inpYa); tr2.appendChild(tdYa);
+        var tdTidak=el('td',{style:'padding:10px 6px;text-align:center;border-bottom:1px solid var(--gray-100);vertical-align:top'});
+        var inpTidak=el('input'); inpTidak.type='radio'; inpTidak.name=row.name; inpTidak.value='Tidak Sesuai'; inpTidak.style.cssText='accent-color:var(--red);width:16px;height:16px;cursor:pointer';
+        tdTidak.appendChild(inpTidak); tr2.appendChild(tdTidak);
         tbody2.appendChild(tr2);
       });
       tbl2.appendChild(tbody2); body.appendChild(tbl2);
@@ -1134,7 +1193,8 @@ window.addEventListener('load', function() {
       { label:'Jaringan Listrik',     name:'pf_util_listrik',   opts:['Tersedia','Tidak Tersedia'] },
       { label:'Perpipaan Sanitasi',   name:'pf_util_sanitasi',  opts:['Tersedia','Tidak Tersedia'] },
       { label:'Jaringan Fiber Optik', name:'pf_util_fiber',     opts:['Tersedia','Tidak Tersedia'] },
-      { label:'Proteksi Kebakaran',   name:'pf_util_kebakaran', opts:['Tersedia','Tidak Tersedia'] }
+      { label:'Proteksi Kebakaran',   name:'pf_util_kebakaran', opts:['Tersedia','Tidak Tersedia'] },
+      { label:'Jaringan Air Limbah',   name:'pf_util_airlimbah', opts:['Tersedia','Tidak Tersedia'] }
     ]}
   ];
 
@@ -1169,10 +1229,12 @@ window.addEventListener('load', function() {
         secK.appendChild(makeRadioGroup(f.name, f.opts));
         card.appendChild(secK);
 
-        // Kondisi 3 dot
+        // Kondisi 3 dot — vertikal agar teks tidak terpotong
         var secC = el('div', {style:'display:flex;flex-direction:column;gap:6px'});
         secC.appendChild(el('span', {text:'Kondisi', style:'font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:.04em'}));
-        secC.appendChild(makeKondisi3(f.name+'_kondisi'));
+        var k3 = makeKondisi3(f.name+'_kondisi');
+        k3.style.cssText = 'display:flex;flex-direction:column;gap:6px;width:100%';
+        secC.appendChild(k3);
         card.appendChild(secC);
 
         // Upload foto
@@ -1192,7 +1254,11 @@ window.addEventListener('load', function() {
         if (f.type === 'kondisi3') {
           body.appendChild(makeField(f.label, makeKondisi3(f.name)));
         } else if (f.type === 'check') {
-          body.appendChild(makeField(f.label, makeCheckGroup(f.name, f.opts)));
+          var hasLainnya = f.opts && f.opts.indexOf('Lainnya') !== -1;
+          var checkWidget = hasLainnya
+            ? makeCheckGroupWithOther(f.name, f.opts, 'Sebutkan ' + f.label.toLowerCase() + ' lainnya...')
+            : makeCheckGroup(f.name, f.opts);
+          body.appendChild(makeField(f.label, checkWidget));
         } else {
           body.appendChild(makeField(f.label, makeRadioGroup(f.name, f.opts)));
         }
@@ -1210,6 +1276,8 @@ window.addEventListener('load', function() {
   });
 
   checkDraftForPanel(0);
+
+  // === EQUALIZER GLOBAL: samakan lebar tombol per .radio-group di seluruh form ===
 
 }); // end load
 
