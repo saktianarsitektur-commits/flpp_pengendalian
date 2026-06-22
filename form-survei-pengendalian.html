@@ -639,7 +639,7 @@ function makeFotoUpload(fieldName) {
   var inp = el('input'); inp.type='file'; inp.accept='image/*'; inp.multiple=true;
   inp.style.display='none';
   var btn = el('button', {cls:'upload-btn', type:'button'});
-  btn.innerHTML = '📷 Upload Foto';
+  btn.textContent = '📷 Upload Foto';
   btn.appendChild(inp);
   btn.addEventListener('click', function() { inp.click(); });
   var prev = el('div', {cls:'foto-preview'});
