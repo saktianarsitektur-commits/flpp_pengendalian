@@ -1127,7 +1127,8 @@ window.addEventListener('load', function() {
       { label:'Jaringan Listrik',     name:'pf_util_listrik',   opts:['Tersedia','Tidak Tersedia'] },
       { label:'Perpipaan Sanitasi',   name:'pf_util_sanitasi',  opts:['Tersedia','Tidak Tersedia'] },
       { label:'Jaringan Fiber Optik', name:'pf_util_fiber',     opts:['Tersedia','Tidak Tersedia'] },
-      { label:'Proteksi Kebakaran',   name:'pf_util_kebakaran', opts:['Tersedia','Tidak Tersedia'] }
+      { label:'Proteksi Kebakaran',   name:'pf_util_kebakaran', opts:['Tersedia','Tidak Tersedia'] },
+      { label:'Jaringan Air Limbah',   name:'pf_util_airlimbah', opts:['Tersedia','Tidak Tersedia'] }
     ]}
   ];
 
@@ -1162,10 +1163,19 @@ window.addEventListener('load', function() {
         secK.appendChild(makeRadioGroup(f.name, f.opts));
         card.appendChild(secK);
 
-        // Kondisi 3 dot
+        // Kondisi 3 dot — vertikal agar teks tidak terpotong
         var secC = el('div', {style:'display:flex;flex-direction:column;gap:6px'});
         secC.appendChild(el('span', {text:'Kondisi', style:'font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:.04em'}));
-        secC.appendChild(makeKondisi3(f.name+'_kondisi'));
+        var k3 = makeKondisi3(f.name+'_kondisi');
+        k3.style.cssText = 'display:flex;flex-direction:column;gap:6px;width:100%';
+        k3.querySelectorAll('.k3-label').forEach(function(lb){
+          lb.style.flexDirection = 'row';
+          lb.style.justifyContent = 'flex-start';
+          lb.style.padding = '8px 14px';
+          lb.style.gap = '8px';
+        });
+        k3.querySelectorAll('.k3-dot').forEach(function(d){ d.style.margin='0'; d.style.flexShrink='0'; });
+        secC.appendChild(k3);
         card.appendChild(secC);
 
         // Upload foto
