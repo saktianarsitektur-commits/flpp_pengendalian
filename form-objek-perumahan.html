@@ -248,7 +248,7 @@
       <div class="section">
         <div class="section-header"><span class="section-num">III</span><h3>Data Dukung / Dokumen</h3></div>
         <div class="section-body">
-          <p style="font-size:12px;color:var(--gray-400);margin-bottom:12px">Pilih ketersediaan dan kesesuaian setiap dokumen</p>
+          <p style="font-size:12px;color:var(--gray-400);margin-bottom:12px">Pilih ketersediaan setiap dokumen</p>
           <div id="dokumen-list"></div>
         </div>
       </div>
@@ -830,7 +830,6 @@ window.addEventListener('load', function() {
     var row=el('div',{cls:'doc-row'});
     row.appendChild(el('span',{text:dok,style:'flex:1;font-size:13px;font-weight:500;min-width:160px'}));
     row.appendChild(makeRadioGroup('dok_ada_'+i,['Ada','Tidak Ada']));
-    row.appendChild(makeRadioGroup('dok_sesuai_'+i,['Sesuai','Tidak Sesuai']));
     var prev=el('div',{cls:'doc-preview'});
     row.appendChild(makeDocUploadBtn(prev,dok));
     wrapper.appendChild(row); wrapper.appendChild(prev);
@@ -1034,17 +1033,13 @@ window.addEventListener('load', function() {
           if(row.catatan) info.appendChild(el('div',{text:row.catatan,style:'color:var(--gray-400);font-size:11px;margin-top:4px;font-style:italic'}));
           if(row.parameter) info.appendChild(el('div',{text:'Parameter (Acuan): '+row.parameter,style:'color:var(--gray-600);font-size:12px;margin-top:5px;line-height:1.4'}));
           card.appendChild(info);
-          var optWrap=el('div',{cls:'radio-group',style:'flex-shrink:0'});
-          var lblYa=el('label'); var inpYa=el('input'); inpYa.type='radio'; inpYa.name=row.name; inpYa.value='Sesuai'; inpYa.style.accentColor='var(--green)'; lblYa.appendChild(inpYa); lblYa.appendChild(document.createTextNode('Sesuai')); optWrap.appendChild(lblYa);
-          var lblTidak=el('label'); var inpTidak=el('input'); inpTidak.type='radio'; inpTidak.name=row.name; inpTidak.value='Tidak Sesuai'; inpTidak.style.accentColor='var(--red)'; lblTidak.appendChild(inpTidak); lblTidak.appendChild(document.createTextNode('Tidak Sesuai')); optWrap.appendChild(lblTidak);
-          card.appendChild(optWrap);
           listWrap.appendChild(card);
         });
         body.appendChild(listWrap);
       } else {
       var tbl2=el('table',{style:'width:100%;border-collapse:collapse;font-size:13px'});
       var thead2=el('thead'); var trH2=el('tr');
-      var headCols2 = [['NO','40px','center'],['DOKUMEN','190px','left'],['PARAMETER (Acuan)','','left'],['Sesuai','90px','center'],['Tidak Sesuai','90px','center']];
+      var headCols2 = [['NO','40px','center'],['DOKUMEN','190px','left'],['PARAMETER (Acuan)','','left']];
       headCols2.forEach(function(h){
         trH2.appendChild(el('th',{text:h[0],style:'padding:9px 10px;background:var(--navy);color:#fff;font-size:11px;font-weight:600;text-align:'+h[2]+(h[1]?';width:'+h[1]:'')}));
       });
@@ -1058,12 +1053,6 @@ window.addEventListener('load', function() {
         if(row.catatan) tdDok.appendChild(el('div',{text:row.catatan,style:'color:var(--gray-400);font-size:11px;margin-top:3px;font-style:italic'}));
         tr2.appendChild(tdDok);
         tr2.appendChild(el('td',{text:row.parameter,style:'padding:10px 8px;border-bottom:1px solid var(--gray-100);vertical-align:top;color:var(--gray-600);line-height:1.4'}));
-        var tdYa=el('td',{style:'padding:10px 6px;text-align:center;border-bottom:1px solid var(--gray-100);vertical-align:top'});
-        var inpYa=el('input'); inpYa.type='radio'; inpYa.name=row.name; inpYa.value='Sesuai'; inpYa.style.cssText='accent-color:var(--green);width:16px;height:16px;cursor:pointer';
-        tdYa.appendChild(inpYa); tr2.appendChild(tdYa);
-        var tdTidak=el('td',{style:'padding:10px 6px;text-align:center;border-bottom:1px solid var(--gray-100);vertical-align:top'});
-        var inpTidak=el('input'); inpTidak.type='radio'; inpTidak.name=row.name; inpTidak.value='Tidak Sesuai'; inpTidak.style.cssText='accent-color:var(--red);width:16px;height:16px;cursor:pointer';
-        tdTidak.appendChild(inpTidak); tr2.appendChild(tdTidak);
         tbody2.appendChild(tr2);
       });
       tbl2.appendChild(tbody2); body.appendChild(tbl2);
