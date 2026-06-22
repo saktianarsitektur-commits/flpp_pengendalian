@@ -964,12 +964,13 @@ window.addEventListener('load', function() {
     {num:'7.0',label:'Lantai',fields:[{label:'Tipe',name:'py_lantai_tipe',type:'check',opts:['Keramik','Tegel','Plester Semen','Lainnya']},{label:'Pemasangan Penutup Lantai',name:'py_lantai_pasang',type:'radio',opts:['Rata','Bergelombang']},{label:'Kemiringan > 1% (Kamar Mandi)',name:'py_lantai_miring',type:'radio',opts:['Ya','Tidak']},{label:'Lebar Nat 2–5 mm',name:'py_lantai_nat',type:'radio',opts:['Ya','Tidak']}]},
     {num:'8.0',label:'Dinding',fields:[{label:'Tipe Dinding',name:'py_dinding_tipe',type:'check',opts:['Bata Merah','Bata Ringan']},{label:'Pemakaian Angkur tiap 6 Lapis Pasangan Bata',name:'py_dinding_angkur',type:'radio',opts:['Tersedia','Tidak Tersedia']},{label:'Double Dinding',name:'py_dinding_double',type:'radio',opts:['Ya','Tidak']}]},
     {num:'9.0',label:'Rumah Layak Huni',fields:[{label:'Luas Minimum 7.2–9 m²',name:'py_rlh_luas',type:'radio',opts:['Memenuhi','Tidak']},{label:'Ketersediaan Dapur',name:'py_rlh_dapur',type:'radio',opts:['Memenuhi','Tidak']},{label:'Luas Area Hijau 10–20%',name:'py_rlh_hijau',type:'radio',opts:['Memenuhi','Tidak']},{label:'Carport',name:'py_rlh_carport',type:'radio',opts:['Memenuhi','Tidak']},{label:'Pencahayaan 10% dari Luas Lantai',name:'py_rlh_cahaya',type:'radio',opts:['Memenuhi','Tidak']},{label:'Penghawaan 5% dari Luas Lantai',name:'py_rlh_angin',type:'radio',opts:['Memenuhi','Tidak']},{label:'Tipe Closet',name:'py_rlh_closet',type:'radio',opts:['Duduk','Jongkok']}]},
-    {num:'10.0',label:'Ketersediaan Sarana dan Utilitas Umum',type:'util',fields:[
+    {num:'10.0',label:'Jaringan Utilitas Bangunan',type:'util',fields:[
       {label:'Jaringan Air Bersih',name:'py_util_air',opts:['Tersedia','Tidak Tersedia']},
       {label:'Jaringan Listrik',name:'py_util_listrik',opts:['Tersedia','Tidak Tersedia']},
       {label:'Perpipaan Sanitasi',name:'py_util_sanitasi',opts:['Tersedia','Tidak Tersedia']},
       {label:'Jaringan Fiber Optik',name:'py_util_fiber',opts:['Tersedia','Tidak Tersedia']},
-      {label:'Proteksi Kebakaran',name:'py_util_kebakaran',opts:['Tersedia','Tidak Tersedia']}
+      {label:'Proteksi Kebakaran',name:'py_util_kebakaran',opts:['Tersedia','Tidak Tersedia']},
+      {label:'Jaringan Air Kotor (Septitank)',name:'py_util_septitank',opts:['Tersedia','Tidak Tersedia']}
     ]}
   ];
   var pyContainer=document.getElementById('penyaluran-sections');
