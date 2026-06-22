@@ -636,7 +636,7 @@ function makeKondisi3(name) {
 }
 
 function makeFotoUpload(fieldName) {
-  var inp = el('input'); inp.type='file'; inp.accept='image/*'; inp.capture='environment'; inp.multiple=true;
+  var inp = el('input'); inp.type='file'; inp.accept='image/*'; inp.multiple=true;
   inp.style.cssText='position:fixed;top:-9999px;left:-9999px;opacity:0;pointer-events:none';
   document.body.appendChild(inp);
   var btn = el('button', {cls:'upload-btn', type:'button'});
@@ -647,7 +647,7 @@ function makeFotoUpload(fieldName) {
   return {wrap: [btn, prev], inp: inp, fieldName: fieldName};
 }
 function makeUploadBtn(fieldName, previewEl) {
-  var inp = el('input'); inp.type='file'; inp.accept='image/*'; inp.capture='environment'; inp.multiple=true;
+  var inp = el('input'); inp.type='file'; inp.accept='image/*'; inp.multiple=true;
   inp.style.cssText='position:fixed;top:-9999px;left:-9999px;opacity:0;pointer-events:none';
   document.body.appendChild(inp);
   var btn = el('button', {cls:'upload-btn', type:'button'});
