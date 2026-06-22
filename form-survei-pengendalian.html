@@ -27,8 +27,8 @@
   .tab-btn:hover{color:var(--white)}
   .tab-btn.active{color:var(--gold-light);border-bottom-color:var(--gold)}
   .main{max-width:1100px;margin:0 auto;padding:32px 24px 100px}
-  .panels-track-wrapper{overflow:hidden;width:100%}
-  .panels-track{display:flex;transition:transform .35s cubic-bezier(.4,0,.2,1);will-change:transform}
+  .panels-track-wrapper{overflow:hidden;width:100%;transition:height .35s cubic-bezier(.4,0,.2,1)}
+  .panels-track{display:flex;transition:transform .35s cubic-bezier(.4,0,.2,1);will-change:transform;align-items:flex-start}
   .form-panel{flex:0 0 100%;width:100%;min-width:100%;pointer-events:none;opacity:0;transition:opacity .35s ease}
   .form-panel.active{pointer-events:auto;opacity:1}
   .panel-header{background:var(--navy);border-radius:24px 24px 0 0;padding:24px 28px;display:flex;align-items:flex-start;gap:16px}
@@ -816,6 +816,14 @@ function checkDraftForPanel(idx) {
 
 
 var currentTabIdx = 0;
+function syncWrapperHeight(idx) {
+  var wrapper = document.querySelector('.panels-track-wrapper');
+  var panels  = document.querySelectorAll('.form-panel');
+  if (!wrapper || !panels[idx]) return;
+  // Ukur tinggi panel aktif dengan visibility sementara
+  var panel = panels[idx];
+  wrapper.style.height = panel.scrollHeight + 'px';
+}
 function switchTab(idx) {
   var prevIdx = currentTabIdx;
   currentTabIdx = idx;
@@ -823,6 +831,7 @@ function switchTab(idx) {
   document.querySelectorAll('.form-panel').forEach(function(p,i){p.classList.toggle('active',i===idx);});
   var track = document.getElementById('panelsTrack');
   if (track) track.style.transform = 'translateX(-' + (idx * 100) + '%)';
+  syncWrapperHeight(idx);
   var pb=document.getElementById('progressBar');
   if(pb) pb.style.width=((idx+1)/4*100)+'%';
   window.scrollTo({top:0,behavior:'smooth'});
@@ -1419,6 +1428,15 @@ window.addEventListener('load', function() {
   });
 
   checkDraftForPanel(0);
+
+  // Sync tinggi wrapper ke panel aktif setelah semua konten dinamis selesai di-render
+  setTimeout(function() { syncWrapperHeight(0); }, 50);
+
+  // Update tinggi wrapper jika layar di-resize (orientasi berubah, dll)
+  if (window.ResizeObserver) {
+    var ro = new ResizeObserver(function() { syncWrapperHeight(currentTabIdx); });
+    document.querySelectorAll('.form-panel').forEach(function(p) { ro.observe(p); });
+  }
 
   // === EQUALIZER GLOBAL: samakan lebar tombol per .radio-group di seluruh form ===
 
