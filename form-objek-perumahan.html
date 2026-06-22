@@ -49,7 +49,9 @@
   .field textarea{resize:vertical;min-height:80px}
   .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .field-row.three{grid-template-columns:1fr 1fr 1fr}
-  @media(max-width:600px){.field-row,.field-row.three{grid-template-columns:1fr}}
+  .field-row.five{grid-template-columns:repeat(5,1fr)}
+  @media(max-width:760px){.field-row.five{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:600px){.field-row,.field-row.three,.field-row.five{grid-template-columns:1fr}}
   .radio-group,.check-group{display:flex;flex-wrap:wrap;gap:8px}
   .radio-group label,.check-group label{display:flex;align-items:center;gap:7px;padding:7px 16px;border:1.5px solid var(--gray-200);border-radius:999px;cursor:pointer;font-size:13px;color:var(--gray-800);background:var(--white);transition:all .15s;user-select:none}
   .radio-group label:hover,.check-group label:hover{border-color:var(--navy);background:var(--gray-50)}
@@ -200,9 +202,26 @@
         </div>
       </div>
       <div class="section">
-        <div class="section-header"><span class="section-num">II</span><h3>Rumah Subsidi yang Sudah Akad FLPP</h3></div>
+        <div class="section-header"><span class="section-num">II</span><h3>Status Rumah di Perumahan</h3></div>
         <div class="section-body">
-          <div class="field-row"><div class="field"><label>Jumlah Unit</label><input type="number" id="t2_akad_unit_1"></div></div>
+          <div class="subsection"><div class="subsection-title">1. Rumah Komersil</div>
+            <div class="field-row five">
+              <div class="field"><label>Kavling</label><input type="number" id="status_komersil_kavling"></div>
+              <div class="field"><label>Pembangunan</label><input type="number" id="status_komersil_pembangunan"></div>
+              <div class="field"><label>Ready Stock</label><input type="number" id="status_komersil_readystock"></div>
+              <div class="field"><label>Dipesan</label><input type="number" id="status_komersil_dipesan"></div>
+              <div class="field"><label>Terjual</label><input type="number" id="status_komersil_terjual"></div>
+            </div>
+          </div>
+          <div class="subsection"><div class="subsection-title">2. Rumah Subsidi</div>
+            <div class="field-row five">
+              <div class="field"><label>Kavling</label><input type="number" id="status_subsidi_kavling"></div>
+              <div class="field"><label>Pembangunan</label><input type="number" id="status_subsidi_pembangunan"></div>
+              <div class="field"><label>Ready Stock</label><input type="number" id="status_subsidi_readystock"></div>
+              <div class="field"><label>Proses Bank</label><input type="number" id="status_subsidi_prosesbank"></div>
+              <div class="field"><label>Terjual</label><input type="number" id="status_subsidi_terjual"></div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="section">
