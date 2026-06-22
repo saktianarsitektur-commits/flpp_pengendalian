@@ -58,7 +58,7 @@
   .radio-group label{flex:1;display:flex;align-items:center;justify-content:flex-start;gap:7px;padding:7px 16px;border:1.5px solid var(--gray-200);border-radius:999px;cursor:pointer;font-size:13px;color:var(--gray-800);background:var(--white);transition:all .15s;user-select:none;text-align:left}
   .check-group label{display:flex;align-items:center;justify-content:flex-start;gap:7px;padding:7px 16px;border:1.5px solid var(--gray-200);border-radius:999px;cursor:pointer;font-size:13px;color:var(--gray-800);background:var(--white);transition:all .15s;user-select:none;text-align:left}
   @media(max-width:480px){.check-group{grid-template-columns:1fr}}
-  .util-row .radio-group{width:auto;flex:1}
+  .util-row .radio-group{width:auto;flex:1;flex-wrap:wrap}
   .radio-group label:hover,.check-group label:hover{border-color:var(--navy);background:var(--gray-50)}
   .radio-group input[type=radio],.check-group input[type=checkbox]{accent-color:var(--navy);width:14px;height:14px}
   .radio-group label:has(input:checked),.check-group label:has(input:checked){border-color:var(--navy);background:#E0F0F5;color:var(--navy);font-weight:500}
@@ -114,6 +114,7 @@
   .divider-banner h3{font-family:'Plus Jakarta Sans',sans-serif;color:#fff;font-size:16px;font-weight:700}
   .divider-banner p{color:rgba(255,255,255,.6);font-size:12px;margin-top:3px}
   .util-row{display:grid;grid-template-columns:1fr 1fr auto;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--gray-100)}
+  @media(max-width:600px){.util-row{grid-template-columns:1fr;gap:6px}}
   /* util-row2 PASCA PENYALURAN: label | tersedia | kondisi | foto (keberfungsian dihapus) */
   .util-row2{display:grid;grid-template-columns:180px auto auto auto;align-items:center;gap:10px;padding:14px 0;border-bottom:1px solid var(--gray-100)}
   @media(max-width:768px){.util-row2{grid-template-columns:1fr;gap:8px}}
@@ -636,24 +637,24 @@ function makeKondisi3(name) {
 }
 
 function makeFotoUpload(fieldName) {
-  var inp = el('input'); inp.type='file'; inp.accept='image/*'; inp.multiple=true;
+  var prev = el('div', {cls:'foto-preview'});
+  var inp = el('input'); inp.type='file'; inp.accept='image/*,.pdf,.doc,.docx,.xls,.xlsx'; inp.multiple=true;
   inp.style.cssText='position:fixed;top:-9999px;left:-9999px;opacity:0;pointer-events:none';
   document.body.appendChild(inp);
   var btn = el('button', {cls:'upload-btn', type:'button'});
-  btn.textContent = '📷 Upload Foto';
+  btn.textContent = '📎 Upload Foto/Dokumen';
   btn.addEventListener('click', function() { inp.click(); });
-  var prev = el('div', {cls:'foto-preview'});
-  inp.addEventListener('change', function() { previewInto(inp, prev, fieldName); inp.value=''; });
+  inp.addEventListener('change', function() { previewDoc(inp, prev, fieldName); inp.value=''; });
   return {wrap: [btn, prev], inp: inp, fieldName: fieldName};
 }
 function makeUploadBtn(fieldName, previewEl) {
-  var inp = el('input'); inp.type='file'; inp.accept='image/*'; inp.multiple=true;
+  var inp = el('input'); inp.type='file'; inp.accept='image/*,.pdf,.doc,.docx,.xls,.xlsx'; inp.multiple=true;
   inp.style.cssText='position:fixed;top:-9999px;left:-9999px;opacity:0;pointer-events:none';
   document.body.appendChild(inp);
   var btn = el('button', {cls:'upload-btn', type:'button'});
-  btn.textContent = '📷 Upload Foto';
+  btn.textContent = '📎 Upload Foto/Dokumen';
   btn.addEventListener('click', function() { inp.click(); });
-  inp.addEventListener('change', function() { previewInto(inp, previewEl, fieldName); inp.value=''; });
+  inp.addEventListener('change', function() { previewDoc(inp, previewEl, fieldName); inp.value=''; });
   return {btn: btn, inp: inp, fieldName: fieldName};
 }
 function makeDocUploadBtn(previewEl, fieldName) {
@@ -877,16 +878,16 @@ window.addEventListener('load', function() {
       item.groups.forEach(function(grp,gi){
         var sub_el=el('div',{cls:'subsection'});
         // Subsection title with group icon
-        var titleRow=el('div',{style:'display:flex;align-items:center;gap:8px;padding-bottom:8px;border-bottom:1px solid var(--gray-200);margin-bottom:12px'});
+        var titleRow=el('div',{style:'display:flex;align-items:center;gap:8px;padding-bottom:6px;border-bottom:1px solid var(--gray-200);margin-bottom:8px'});
         titleRow.appendChild(el('span',{text:rthGrpIcons[gi]||'🌿',style:'font-size:18px;line-height:1'}));
         titleRow.appendChild(el('div',{cls:'subsection-title',style:'border:none;padding:0;margin:0',text:grp.label}));
         sub_el.appendChild(titleRow);
         // Card grid container
-        var cardGrid=el('div',{style:'display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px'});
+        var cardGrid=el('div',{style:'display:grid;grid-template-columns:repeat(auto-fill,minmax(min(260px,100%),1fr));gap:6px'});
         grp.items.forEach(function(itemName,ii){
           var rname=grp.prefix+'_'+gi+'_'+ii;
           // Card wrapper
-          var card=el('div',{style:'background:var(--white);border:1.5px solid var(--gray-200);border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;transition:box-shadow .2s,border-color .2s'});
+          var card=el('div',{style:'background:var(--white);border:1.5px solid var(--gray-200);border-radius:16px;padding:10px 14px;display:flex;flex-direction:column;gap:8px;transition:box-shadow .2s,border-color .2s'});
           // Card header: number badge + name
           var cardHead=el('div',{style:'display:flex;align-items:flex-start;gap:10px'});
           cardHead.appendChild(el('span',{text:String(ii+1),style:'flex-shrink:0;background:var(--navy);color:#fff;font-family:\'Plus Jakarta Sans\',sans-serif;font-weight:700;font-size:11px;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;line-height:1;margin-top:1px'}));
@@ -910,7 +911,7 @@ window.addEventListener('load', function() {
             var inp=el('input'); inp.type='radio'; inp.name=rname+'_ada'; inp.id=rid; inp.value=opt; inp.style.display='none';
             var lbl=el('label'); lbl.setAttribute('for',rid);
             var isAda=(opt==='Ada');
-            lbl.style.cssText='flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:6px 10px;border:1.5px solid var(--gray-200);border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;background:var(--white);color:var(--gray-600)';
+            lbl.style.cssText='flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;background:var(--white);color:var(--gray-600);min-width:0;overflow:hidden;white-space:nowrap';
             lbl.appendChild(el('span',{text:isAda?'✓':'✗',style:'font-size:13px'}));
             lbl.appendChild(document.createTextNode(opt));
             inp.addEventListener('change',function(){
