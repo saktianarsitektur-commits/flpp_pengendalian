@@ -188,14 +188,14 @@
         <div class="section-header"><span class="section-num">I</span><h3>Tipe Rumah</h3></div>
         <div class="section-body">
           <div class="subsection"><div class="subsection-title">1. Rumah Subsidi</div>
-            <div class="field-row three"><div class="field"><label>1. Tipe Rumah</label><input type="text" id="t1_subsidi_tipe_1" placeholder="mis: Tipe 36"></div><div class="field"><label>Jumlah Unit</label><input type="number" id="t1_subsidi_unit_1"></div><div class="field"><label>Harga (Rp)</label><input type="number" id="t1_subsidi_harga_1"></div></div>
-            <div class="field-row three"><div class="field"><label>2. Tipe Rumah</label><input type="text" id="t1_subsidi_tipe_2" placeholder="mis: Tipe 36"></div><div class="field"><label>Jumlah Unit</label><input type="number" id="t1_subsidi_unit_2"></div><div class="field"><label>Harga (Rp)</label><input type="number" id="t1_subsidi_harga_2"></div></div>
-            <div class="field-row three"><div class="field"><label>3. Tipe Rumah</label><input type="text" id="t1_subsidi_tipe_3" placeholder="mis: Tipe 36"></div><div class="field"><label>Jumlah Unit</label><input type="number" id="t1_subsidi_unit_3"></div><div class="field"><label>Harga (Rp)</label><input type="number" id="t1_subsidi_harga_3"></div></div>
+            <div class="field-row three"><div class="field"><label>1. Tipe Rumah</label><input type="text" id="t1_subsidi_tipe_1" placeholder="Mis = Tipe 36/70"></div><div class="field"><label>Jumlah Unit</label><input type="number" id="t1_subsidi_unit_1"></div><div class="field"><label>Harga (Rp)</label><input type="number" id="t1_subsidi_harga_1"></div></div>
+            <div class="field-row three"><div class="field"><label>2. Tipe Rumah</label><input type="text" id="t1_subsidi_tipe_2" placeholder="Mis = Tipe 36/70"></div><div class="field"><label>Jumlah Unit</label><input type="number" id="t1_subsidi_unit_2"></div><div class="field"><label>Harga (Rp)</label><input type="number" id="t1_subsidi_harga_2"></div></div>
+            <div class="field-row three"><div class="field"><label>3. Tipe Rumah</label><input type="text" id="t1_subsidi_tipe_3" placeholder="Mis = Tipe 36/70"></div><div class="field"><label>Jumlah Unit</label><input type="number" id="t1_subsidi_unit_3"></div><div class="field"><label>Harga (Rp)</label><input type="number" id="t1_subsidi_harga_3"></div></div>
           </div>
           <div class="subsection"><div class="subsection-title">2. Rumah Komersil</div>
-            <div class="field-row three"><div class="field"><label>1. Tipe Rumah</label><input type="text" id="t1_komersil_tipe_1" placeholder="mis: Tipe 36"></div><div class="field"><label>Jumlah Unit</label><input type="number" id="t1_komersil_unit_1"></div><div class="field"><label>Harga (Rp)</label><input type="number" id="t1_komersil_harga_1"></div></div>
-            <div class="field-row three"><div class="field"><label>2. Tipe Rumah</label><input type="text" id="t1_komersil_tipe_2" placeholder="mis: Tipe 36"></div><div class="field"><label>Jumlah Unit</label><input type="number" id="t1_komersil_unit_2"></div><div class="field"><label>Harga (Rp)</label><input type="number" id="t1_komersil_harga_2"></div></div>
-            <div class="field-row three"><div class="field"><label>3. Tipe Rumah</label><input type="text" id="t1_komersil_tipe_3" placeholder="mis: Tipe 36"></div><div class="field"><label>Jumlah Unit</label><input type="number" id="t1_komersil_unit_3"></div><div class="field"><label>Harga (Rp)</label><input type="number" id="t1_komersil_harga_3"></div></div>
+            <div class="field-row three"><div class="field"><label>1. Tipe Rumah</label><input type="text" id="t1_komersil_tipe_1" placeholder="Mis = Tipe 36/70"></div><div class="field"><label>Jumlah Unit</label><input type="number" id="t1_komersil_unit_1"></div><div class="field"><label>Harga (Rp)</label><input type="number" id="t1_komersil_harga_1"></div></div>
+            <div class="field-row three"><div class="field"><label>2. Tipe Rumah</label><input type="text" id="t1_komersil_tipe_2" placeholder="Mis = Tipe 36/70"></div><div class="field"><label>Jumlah Unit</label><input type="number" id="t1_komersil_unit_2"></div><div class="field"><label>Harga (Rp)</label><input type="number" id="t1_komersil_harga_2"></div></div>
+            <div class="field-row three"><div class="field"><label>3. Tipe Rumah</label><input type="text" id="t1_komersil_tipe_3" placeholder="Mis = Tipe 36/70"></div><div class="field"><label>Jumlah Unit</label><input type="number" id="t1_komersil_unit_3"></div><div class="field"><label>Harga (Rp)</label><input type="number" id="t1_komersil_harga_3"></div></div>
           </div>
         </div>
       </div>
@@ -419,17 +419,40 @@ window.addEventListener('load', function() {
   loadDraftIfExists('panel-0');
 
   // ---- DOKUMEN LIST ----
-  var dokumenList=['Gambar Site Plan Perumahan','Brosur Pemasaran (Spesifikasi dan Floor Plan)','As-Built Drawing','Perizinan Bangunan Gedung (PBG)','Sertifikat Layak Fungsi (SLF)','RKS (Rencana Kerja dan Syarat-Syarat)','Perizinan Lingkungan (Amdal/UKL-UPL/SPPL)'];
+  var dokumenGroups=[
+    {tahap:'Tahap Perencanaan', items:[
+      'Gambar Site Plan Perumahan',
+      'DED (Detailed Engineering Design) Perumahan',
+      'Rencana Kerja dan Syarat-syarat (RKS)',
+      'Brosur Pemasaran (Spesifikasi Rumah/Floor Plan)'
+    ]},
+    {tahap:'Tahap Perizinan', items:[
+      'Persetujuan Lingkungan (AMDAL/UKL-UPL/SPPL atau Dokumen Lain Sesuai Ketentuan)',
+      'Izin Mendirikan Bangunan (IMB)/Persetujuan Bangunan Gedung (PBG)'
+    ]},
+    {tahap:'Tahap Pelaksanaan', items:[
+      'As Built Drawing'
+    ]},
+    {tahap:'Tahap Pasca Konstruksi', items:[
+      'Sertifikat Laik Fungsi (SLF)',
+      'Surat Keterangan Kelaikan Fungsi Bangunan Rumah oleh Pengawas Konstruksi/Manajemen Konstruksi'
+    ]}
+  ];
   var dokContainer=document.getElementById('dokumen-list');
-  dokumenList.forEach(function(dok,i){
-    var wrapper=el('div',{cls:'doc-wrapper'});
-    var row=el('div',{cls:'doc-row'});
-    row.appendChild(el('span',{text:dok,style:'flex:1;font-size:13px;font-weight:500;min-width:160px'}));
-    row.appendChild(makeRadioGroup('dok_ada_'+i,['Ada','Tidak Ada']));
-    var prev=el('div',{cls:'doc-preview'});
-    row.appendChild(makeDocUploadBtn(prev,dok));
-    wrapper.appendChild(row); wrapper.appendChild(prev);
-    dokContainer.appendChild(wrapper);
+  var dokIdx=0;
+  dokumenGroups.forEach(function(group){
+    dokContainer.appendChild(el('div',{cls:'subsection-title',text:group.tahap,style:'margin-top:14px'}));
+    group.items.forEach(function(dok){
+      var i=dokIdx++;
+      var wrapper=el('div',{cls:'doc-wrapper'});
+      var row=el('div',{cls:'doc-row'});
+      row.appendChild(el('span',{text:dok,style:'flex:1;font-size:13px;font-weight:500;min-width:160px'}));
+      row.appendChild(makeRadioGroup('dok_ada_'+i,['Ada','Tidak Ada']));
+      var prev=el('div',{cls:'doc-preview'});
+      row.appendChild(makeDocUploadBtn(prev,dok));
+      wrapper.appendChild(row); wrapper.appendChild(prev);
+      dokContainer.appendChild(wrapper);
+    });
   });
 });
 
