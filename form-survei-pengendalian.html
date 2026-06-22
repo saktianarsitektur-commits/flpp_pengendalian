@@ -53,21 +53,25 @@
   .field-row.three{grid-template-columns:1fr 1fr 1fr}
   @media(max-width:600px){.field-row,.field-row.three{grid-template-columns:1fr}}
   .radio-group,.check-group{display:flex;flex-wrap:wrap;gap:8px}
-  .radio-group label,.check-group label{display:flex;align-items:center;gap:7px;padding:7px 16px;border:1.5px solid var(--gray-200);border-radius:999px;cursor:pointer;font-size:13px;color:var(--gray-800);background:var(--white);transition:all .15s;user-select:none}
+  .radio-group{width:100%}
+  .radio-group label{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:7px 16px;border:1.5px solid var(--gray-200);border-radius:999px;cursor:pointer;font-size:13px;color:var(--gray-800);background:var(--white);transition:all .15s;user-select:none;text-align:center}
+  .check-group{width:100%}
+  .check-group label{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:7px 16px;border:1.5px solid var(--gray-200);border-radius:999px;cursor:pointer;font-size:13px;color:var(--gray-800);background:var(--white);transition:all .15s;user-select:none;text-align:center}
+  .util-row .radio-group{width:auto;flex:1}
   .radio-group label:hover,.check-group label:hover{border-color:var(--navy);background:var(--gray-50)}
   .radio-group input[type=radio],.check-group input[type=checkbox]{accent-color:var(--navy);width:14px;height:14px}
   .radio-group label:has(input:checked),.check-group label:has(input:checked){border-color:var(--navy);background:#E0F0F5;color:var(--navy);font-weight:500}
   .kondisi-group{display:flex;flex-wrap:wrap;gap:8px}
-  .kondisi-opt{flex:1;min-width:130px}
+  .kondisi-opt{flex:1;min-width:0}
   .kondisi-opt input{display:none}
   .kondisi-opt label{display:block;text-align:center;padding:10px 8px;border:1.5px solid var(--gray-200);border-radius:999px;cursor:pointer;font-size:12px;font-weight:500;transition:all .15s}
   .kondisi-opt label .dot{display:block;width:10px;height:10px;border-radius:50%;margin:0 auto 6px}
   .kondisi-opt.baik label{color:#065F46}.kondisi-opt.baik .dot{background:#10B981}.kondisi-opt.baik input:checked+label{background:#ECFDF5;border-color:#10B981}
   .kondisi-opt.sedang label{color:#92400E}.kondisi-opt.sedang .dot{background:#F59E0B}.kondisi-opt.sedang input:checked+label{background:#FFFBEB;border-color:#F59E0B}
   .kondisi-opt.buruk label{color:#7F1D1D}.kondisi-opt.buruk .dot{background:#EF4444}.kondisi-opt.buruk input:checked+label{background:#FEF2F2;border-color:#EF4444}
-  .kondisi3-group{display:flex;gap:10px;flex-wrap:wrap}
+  .kondisi3-group{display:flex;gap:8px;flex-wrap:wrap;width:100%}
   .kondisi3-group input[type=radio]{display:none}
-  .kondisi3-group .k3-label{display:flex;flex-direction:column;align-items:center;padding:10px 20px;border:1.5px solid var(--gray-200);border-radius:999px;cursor:pointer;font-size:13px;font-weight:500;color:var(--gray-600);transition:all .15s;min-width:140px;text-align:center;background:var(--white)}
+  .kondisi3-group .k3-label{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;padding:10px 12px;border:1.5px solid var(--gray-200);border-radius:999px;cursor:pointer;font-size:13px;font-weight:500;color:var(--gray-600);transition:all .15s;text-align:center;background:var(--white)}
   .kondisi3-group .k3-dot{display:block;width:10px;height:10px;border-radius:50%;margin:0 auto 6px}
   .kondisi3-group .k3-label:hover{border-color:var(--navy)}
   .kondisi3-group input[type=radio]:checked + .k3-label.k3-baik{background:#ECFDF5;border-color:#10B981;color:#065F46;font-weight:700}
@@ -108,7 +112,7 @@
   .divider-badge{background:var(--gold);color:var(--navy);font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:13px;padding:4px 12px;border-radius:999px}
   .divider-banner h3{font-family:'Plus Jakarta Sans',sans-serif;color:#fff;font-size:16px;font-weight:700}
   .divider-banner p{color:rgba(255,255,255,.6);font-size:12px;margin-top:3px}
-  .util-row{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--gray-100)}
+  .util-row{display:grid;grid-template-columns:1fr 1fr auto;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--gray-100)}
   /* util-row2 PASCA PENYALURAN: label | tersedia | kondisi | foto (keberfungsian dihapus) */
   .util-row2{display:grid;grid-template-columns:180px auto auto auto;align-items:center;gap:10px;padding:14px 0;border-bottom:1px solid var(--gray-100)}
   @media(max-width:768px){.util-row2{grid-template-columns:1fr;gap:8px}}
@@ -776,6 +780,7 @@ function checkDraftForPanel(idx) {
   loadDraftIfExists(panelId);
 }
 
+
 function switchTab(idx) {
   document.querySelectorAll('.tab-btn').forEach(function(b,i){b.classList.toggle('active',i===idx);});
   document.querySelectorAll('.form-panel').forEach(function(p,i){p.classList.toggle('active',i===idx);});
@@ -982,6 +987,7 @@ window.addEventListener('load', function() {
     var body=el('div',{cls:'section-body'});
     var hasUtilOrCheckFoto=(item.type==='util')||( item.fields && item.fields.some(function(f){return f.type==='check_foto';}));
     if(item.type==='util'){
+      body.className='section-body util-section-body';
       item.fields.forEach(function(f){
         var row=el('div',{cls:'util-row'});
         row.appendChild(el('span',{text:f.label,style:'font-size:13px;font-weight:500'}));
@@ -989,6 +995,7 @@ window.addEventListener('load', function() {
         var prev=el('div',{cls:'foto-preview-inline'}); var uObj=makeUploadBtn(f.name+'_foto',prev);
         row.appendChild(uObj.btn); body.appendChild(row); body.appendChild(prev);
       });
+
     } else if(item.type==='rth'){
       var rthK2=[{val:'Baik / Berfungsi',color:'#10B981'},{val:'Sedang / Ada Gangguan',color:'#F59E0B'},{val:'Buruk / Tidak Berfungsi',color:'#EF4444'}];
       item.groups.forEach(function(grp,gi){
@@ -1200,6 +1207,8 @@ window.addEventListener('load', function() {
   });
 
   checkDraftForPanel(0);
+
+  // === EQUALIZER GLOBAL: samakan lebar tombol per .radio-group di seluruh form ===
 
 }); // end load
 
