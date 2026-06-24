@@ -227,7 +227,7 @@
               </div>
               <div class="geo-status" id="geoStatus_t1_koordinat"></div>
             </div>
-            <div class="field"><label>Luas Perumahan (m²)</label><input type="number"></div>
+            <div class="field"><label>Luas Perumahan (m²)</label><input type="text" inputmode="numeric" class="numfmt"></div>
           </div>
         </div>
       </div>
@@ -235,14 +235,14 @@
         <div class="section-header"><span class="section-num">I</span><h3>Tipe Rumah</h3></div>
         <div class="section-body">
           <div class="subsection"><div class="subsection-title">1. Rumah Subsidi</div>
-            <div class="field-row three"><div class="field"><label>1. Tipe Rumah</label><input type="text" placeholder="Mis = Tipe 36/70"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div>
-            <div class="field-row three"><div class="field"><label>2. Tipe Rumah</label><input type="text" placeholder="Mis = Tipe 36/70"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div>
-            <div class="field-row three"><div class="field"><label>3. Tipe Rumah</label><input type="text" placeholder="Mis = Tipe 36/70"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div>
+            <div class="field-row three"><div class="field"><label>1. Tipe Rumah</label><input type="text" placeholder="Mis = Tipe 36/70"></div><div class="field"><label>Jumlah Unit</label><input type="text" inputmode="numeric" class="numfmt"></div><div class="field"><label>Harga (Rp)</label><input type="text" inputmode="numeric" class="numfmt"></div></div>
+            <div class="field-row three"><div class="field"><label>2. Tipe Rumah</label><input type="text" placeholder="Mis = Tipe 36/70"></div><div class="field"><label>Jumlah Unit</label><input type="text" inputmode="numeric" class="numfmt"></div><div class="field"><label>Harga (Rp)</label><input type="text" inputmode="numeric" class="numfmt"></div></div>
+            <div class="field-row three"><div class="field"><label>3. Tipe Rumah</label><input type="text" placeholder="Mis = Tipe 36/70"></div><div class="field"><label>Jumlah Unit</label><input type="text" inputmode="numeric" class="numfmt"></div><div class="field"><label>Harga (Rp)</label><input type="text" inputmode="numeric" class="numfmt"></div></div>
           </div>
           <div class="subsection"><div class="subsection-title">2. Rumah Komersil</div>
-            <div class="field-row three"><div class="field"><label>1. Tipe Rumah</label><input type="text" placeholder="Mis = Tipe 36/70"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div>
-            <div class="field-row three"><div class="field"><label>2. Tipe Rumah</label><input type="text" placeholder="Mis = Tipe 36/70"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div>
-            <div class="field-row three"><div class="field"><label>3. Tipe Rumah</label><input type="text" placeholder="Mis = Tipe 36/70"></div><div class="field"><label>Jumlah Unit</label><input type="number"></div><div class="field"><label>Harga (Rp)</label><input type="number"></div></div>
+            <div class="field-row three"><div class="field"><label>1. Tipe Rumah</label><input type="text" placeholder="Mis = Tipe 36/70"></div><div class="field"><label>Jumlah Unit</label><input type="text" inputmode="numeric" class="numfmt"></div><div class="field"><label>Harga (Rp)</label><input type="text" inputmode="numeric" class="numfmt"></div></div>
+            <div class="field-row three"><div class="field"><label>2. Tipe Rumah</label><input type="text" placeholder="Mis = Tipe 36/70"></div><div class="field"><label>Jumlah Unit</label><input type="text" inputmode="numeric" class="numfmt"></div><div class="field"><label>Harga (Rp)</label><input type="text" inputmode="numeric" class="numfmt"></div></div>
+            <div class="field-row three"><div class="field"><label>3. Tipe Rumah</label><input type="text" placeholder="Mis = Tipe 36/70"></div><div class="field"><label>Jumlah Unit</label><input type="text" inputmode="numeric" class="numfmt"></div><div class="field"><label>Harga (Rp)</label><input type="text" inputmode="numeric" class="numfmt"></div></div>
           </div>
         </div>
       </div>
@@ -259,20 +259,20 @@
           <div id="status_rumah_detail" style="display:none">
             <div class="subsection"><div class="subsection-title">1. Rumah Komersil</div>
               <div class="field-row five">
-                <div class="field"><label>Kavling</label><input type="number" id="status_komersil_kavling"></div>
-                <div class="field"><label>Pembangunan</label><input type="number" id="status_komersil_pembangunan"></div>
-                <div class="field"><label>Ready Stock</label><input type="number" id="status_komersil_readystock"></div>
-                <div class="field"><label>Dipesan</label><input type="number" id="status_komersil_dipesan"></div>
-                <div class="field"><label>Terjual</label><input type="number" id="status_komersil_terjual"></div>
+                <div class="field"><label>Kavling</label><input type="text" inputmode="numeric" class="numfmt" id="status_komersil_kavling"></div>
+                <div class="field"><label>Pembangunan</label><input type="text" inputmode="numeric" class="numfmt" id="status_komersil_pembangunan"></div>
+                <div class="field"><label>Ready Stock</label><input type="text" inputmode="numeric" class="numfmt" id="status_komersil_readystock"></div>
+                <div class="field"><label>Dipesan</label><input type="text" inputmode="numeric" class="numfmt" id="status_komersil_dipesan"></div>
+                <div class="field"><label>Terjual</label><input type="text" inputmode="numeric" class="numfmt" id="status_komersil_terjual"></div>
               </div>
             </div>
             <div class="subsection"><div class="subsection-title">2. Rumah Subsidi</div>
               <div class="field-row five">
-                <div class="field"><label>Kavling</label><input type="number" id="status_subsidi_kavling"></div>
-                <div class="field"><label>Pembangunan</label><input type="number" id="status_subsidi_pembangunan"></div>
-                <div class="field"><label>Ready Stock</label><input type="number" id="status_subsidi_readystock"></div>
-                <div class="field"><label>Proses Bank</label><input type="number" id="status_subsidi_prosesbank"></div>
-                <div class="field"><label>Terjual</label><input type="number" id="status_subsidi_terjual"></div>
+                <div class="field"><label>Kavling</label><input type="text" inputmode="numeric" class="numfmt" id="status_subsidi_kavling"></div>
+                <div class="field"><label>Pembangunan</label><input type="text" inputmode="numeric" class="numfmt" id="status_subsidi_pembangunan"></div>
+                <div class="field"><label>Ready Stock</label><input type="text" inputmode="numeric" class="numfmt" id="status_subsidi_readystock"></div>
+                <div class="field"><label>Proses Bank</label><input type="text" inputmode="numeric" class="numfmt" id="status_subsidi_prosesbank"></div>
+                <div class="field"><label>Terjual</label><input type="text" inputmode="numeric" class="numfmt" id="status_subsidi_terjual"></div>
               </div>
             </div>
           </div>
@@ -419,9 +419,9 @@
         <div class="section-header"><span class="section-num">2.0</span><h3>Tipe Unit Rumah</h3></div>
         <div class="section-body">
           <div class="field-row three">
-            <div class="field"><label>Luas Tanah (m²)</label><input type="number"></div>
-            <div class="field"><label>Luas Bangunan (m²)</label><input type="number"></div>
-            <div class="field"><label>Jumlah Kamar</label><input type="number"></div>
+            <div class="field"><label>Luas Tanah (m²)</label><input type="text" inputmode="numeric" class="numfmt"></div>
+            <div class="field"><label>Luas Bangunan (m²)</label><input type="text" inputmode="numeric" class="numfmt"></div>
+            <div class="field"><label>Jumlah Kamar</label><input type="text" inputmode="numeric" class="numfmt"></div>
           </div>
           <div class="field">
             <label>Koordinat Titik Rumah</label>
@@ -432,12 +432,12 @@
             <div class="geo-status" id="geoStatus_t3_koordinat"></div>
           </div>
           <div class="field-row">
-            <div class="field"><label>Harga Rumah (Rp)</label><input type="number"></div>
-            <div class="field"><label>Tenor Kredit (tahun)</label><input type="number"></div>
+            <div class="field"><label>Harga Rumah (Rp)</label><input type="text" inputmode="numeric" class="numfmt"></div>
+            <div class="field"><label>Tenor Kredit (tahun)</label><input type="text" inputmode="numeric" class="numfmt"></div>
           </div>
           <div class="field-row">
-            <div class="field"><label>DP Awal (Rp)</label><input type="number"></div>
-            <div class="field"><label>Cicilan per Bulan (Rp)</label><input type="number"></div>
+            <div class="field"><label>DP Awal (Rp)</label><input type="text" inputmode="numeric" class="numfmt"></div>
+            <div class="field"><label>Cicilan per Bulan (Rp)</label><input type="text" inputmode="numeric" class="numfmt"></div>
           </div>
         </div>
       </div>
@@ -1495,7 +1495,9 @@ function restoreDraft(panelId, data) {
   if (!panel) return;
 
   panel.querySelectorAll('input[type=text],input[type=date],input[type=time],input[type=number],input[type=tel],textarea').forEach(function(inp) {
-    if (inp.id && data[inp.id] !== undefined) inp.value = data[inp.id];
+    if (inp.id && data[inp.id] !== undefined) {
+      inp.value = inp.classList.contains('numfmt') ? formatRibuan_toDisplay(data[inp.id]) : data[inp.id];
+    }
   });
 
   panel.querySelectorAll('select').forEach(function(sel) {
@@ -1538,10 +1540,66 @@ function clearDraft(panelId) {
   if (ts)    ts.textContent = '';
 }
 
+/* ===== FORMAT RIBUAN UNTUK ISIAN ANGKA (1.000 / 1.234,56) ===== */
+function formatRibuan_toRaw(val) {
+  if (val === undefined || val === null) return '';
+  var s = String(val).trim();
+  if (s === '') return '';
+  s = s.replace(/\./g, '').replace(',', '.');
+  return s;
+}
+function formatRibuan_toDisplay(raw) {
+  if (raw === undefined || raw === null) return '';
+  var s = String(raw).trim();
+  if (s === '') return '';
+  s = s.replace(/[^0-9.,]/g, '');
+  var sepIdx = s.indexOf(',') > -1 ? s.indexOf(',') : s.indexOf('.');
+  var intPart = sepIdx > -1 ? s.slice(0, sepIdx) : s;
+  var decPart = sepIdx > -1 ? s.slice(sepIdx + 1).replace(/[.,]/g, '').slice(0, 2) : null;
+  intPart = intPart.replace(/[^0-9]/g, '').replace(/^0+(?=\d)/, '');
+  var grouped = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  return grouped + (decPart !== null ? ',' + decPart : '');
+}
+function formatRibuan_onInput(el) {
+  var cursorPos = el.selectionStart;
+  var raw = el.value;
+  var digitsBeforeCursor = 0;
+  for (var i = 0; i < cursorPos; i++) { if (/[0-9]/.test(raw[i])) digitsBeforeCursor++; }
+
+  var cleaned = raw.replace(/[^0-9,]/g, '');
+  var commaIdx = cleaned.indexOf(',');
+  var intPart, decPart = null;
+  if (commaIdx > -1) {
+    intPart = cleaned.slice(0, commaIdx);
+    decPart = cleaned.slice(commaIdx + 1).replace(/,/g, '').slice(0, 2);
+  } else {
+    intPart = cleaned;
+  }
+  intPart = intPart.replace(/^0+(?=\d)/, '');
+  var grouped = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  var newValue = grouped + (decPart !== null ? ',' + decPart : (commaIdx > -1 ? ',' : ''));
+  el.value = newValue;
+
+  var count = 0, pos = newValue.length;
+  if (digitsBeforeCursor === 0) { pos = 0; }
+  else {
+    for (var j = 0; j < newValue.length; j++) {
+      if (/[0-9]/.test(newValue[j])) count++;
+      if (count === digitsBeforeCursor) { pos = j + 1; break; }
+    }
+  }
+  el.setSelectionRange(pos, pos);
+}
+document.addEventListener('input', function(e) {
+  if (e.target && e.target.classList && e.target.classList.contains('numfmt')) {
+    formatRibuan_onInput(e.target);
+  }
+});
+
 function collectData(panelId) {
   var panel = document.getElementById(panelId);
   var data = { Timestamp: new Date().toLocaleString('id-ID') };
-  panel.querySelectorAll('input[type=text],input[type=date],input[type=time],input[type=number],input[type=tel],textarea,select').forEach(function(e){ if(e.id) data[e.id]=e.value; });
+  panel.querySelectorAll('input[type=text],input[type=date],input[type=time],input[type=number],input[type=tel],textarea,select').forEach(function(e){ if(e.id) data[e.id]= e.classList.contains('numfmt') ? formatRibuan_toRaw(e.value) : e.value; });
   var rNames = new Set();
   panel.querySelectorAll('input[type=radio]').forEach(function(e){ rNames.add(e.name); });
   rNames.forEach(function(n){ var c=panel.querySelector('input[type=radio][name="'+n+'"]:checked'); data[n]=c?c.value:''; });
