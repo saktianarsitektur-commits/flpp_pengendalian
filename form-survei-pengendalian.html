@@ -142,6 +142,20 @@
   .geo-status.err{color:var(--red)}
   .geo-status.busy{color:var(--gray-600)}
 
+  /* ===== CATATAN BOX (muncul saat Tidak Sesuai dipilih) ===== */
+  .catatan-box{display:none;margin-top:8px;animation:fadeSlide .2s ease}
+  .catatan-box.visible{display:block}
+  .catatan-box textarea{padding:9px 16px;border:1.5px solid var(--red);border-radius:16px;font-size:13px;font-family:'Inter',sans-serif;color:var(--gray-800);background:#FFF5F5;outline:none;width:100%;resize:vertical;min-height:70px;transition:border-color .15s}
+  .catatan-box textarea:focus{border-color:#B91C1C;box-shadow:0 0 0 3px rgba(220,38,38,.12)}
+  .catatan-box .catatan-label{font-size:11px;font-weight:700;color:var(--red);margin-bottom:4px;display:flex;align-items:center;gap:4px}
+  @keyframes fadeSlide{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+
+  /* ===== CATATAN TAMBAHAN BOX per section penyaluran ===== */
+  .catatan-tambahan-wrap{background:var(--gray-50);border:1.5px solid var(--gold);border-radius:18px;padding:14px 16px;margin-top:14px}
+  .catatan-tambahan-wrap .ct-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;color:var(--navy);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+  .catatan-tambahan-wrap textarea{padding:9px 16px;border:1.5px solid var(--gold);border-radius:16px;font-size:13px;font-family:'Inter',sans-serif;color:var(--gray-800);background:var(--white);outline:none;width:100%;resize:vertical;min-height:70px;transition:border-color .15s}
+  .catatan-tambahan-wrap textarea:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(14,91,115,.12)}
+
   .footer-nav{
     position:fixed;left:0;right:0;bottom:0;z-index:150;
     background:var(--white);border-top:1.5px solid var(--gray-200);
@@ -450,14 +464,14 @@
         <div class="section-header"><span class="section-num">3.0</span><h3>Keterhunian Perumahan FLPP</h3></div>
         <div class="section-body">
           <div class="field"><label>Jenis Program Penerima Manfaat</label><div class="check-group"><label><input type="checkbox" value="FLPP"> FLPP</label><label><input type="checkbox" value="SBUM"> SBUM</label></div></div>
-          <div class="field"><label>Sticker/Plat KPR Bersubsidi</label><div class="radio-group"><label><input type="radio" name="sticker" value="Tersedia"> Tersedia</label><label><input type="radio" name="sticker" value="Tidak Tersedia"> Tidak Tersedia</label></div></div>
-          <div class="field"><label>Sertifikat Rumah</label><div class="radio-group"><label><input type="radio" name="sertif" value="Tersedia"> Tersedia</label><label><input type="radio" name="sertif" value="Tidak Tersedia"> Tidak Tersedia</label></div></div>
+          <div class="field"><label>Sticker/Plat KPR Bersubsidi</label><div class="radio-group"><label><input type="radio" name="sticker" value="Tersedia"> Tersedia</label><label><input type="radio" name="sticker" value="Tidak Tersedia"> Tidak Tersedia</label></div><div class="catatan-box" id="catatan_box_sticker"><div class="catatan-label">✏️ Keterangan (deskripsi kondisi dilapangan)</div><textarea id="catatan_sticker" name="catatan_sticker" placeholder="Jelaskan alasan tidak tersedia..."></textarea></div></div>
+          <div class="field"><label>Sertifikat Rumah</label><div class="radio-group"><label><input type="radio" name="sertif" value="Tersedia"> Tersedia</label><label><input type="radio" name="sertif" value="Tidak Tersedia"> Tidak Tersedia</label></div><div class="catatan-box" id="catatan_box_sertif"><div class="catatan-label">✏️ Keterangan (deskripsi kondisi dilapangan)</div><textarea id="catatan_sertif" name="catatan_sertif" placeholder="Jelaskan alasan tidak tersedia..."></textarea></div></div>
           <div class="field-row">
-            <div class="field"><label>PBG</label><div class="radio-group"><label><input type="radio" name="pbg" value="Tersedia"> Tersedia</label><label><input type="radio" name="pbg" value="Tidak Tersedia"> Tidak Tersedia</label></div></div>
+            <div class="field"><label>PBG</label><div class="radio-group"><label><input type="radio" name="pbg" value="Tersedia"> Tersedia</label><label><input type="radio" name="pbg" value="Tidak Tersedia"> Tidak Tersedia</label></div><div class="catatan-box" id="catatan_box_pbg"><div class="catatan-label">✏️ Keterangan (deskripsi kondisi dilapangan)</div><textarea id="catatan_pbg" name="catatan_pbg" placeholder="Jelaskan alasan tidak tersedia..."></textarea></div></div>
             <div class="field"><label>Nomor PBG</label><input type="text"></div>
           </div>
           <div class="field-row">
-            <div class="field"><label>SLF</label><div class="radio-group"><label><input type="radio" name="slf" value="Tersedia"> Tersedia</label><label><input type="radio" name="slf" value="Tidak Tersedia"> Tidak Tersedia</label></div></div>
+            <div class="field"><label>SLF</label><div class="radio-group"><label><input type="radio" name="slf" value="Tersedia"> Tersedia</label><label><input type="radio" name="slf" value="Tidak Tersedia"> Tidak Tersedia</label></div><div class="catatan-box" id="catatan_box_slf"><div class="catatan-label">✏️ Keterangan (deskripsi kondisi dilapangan)</div><textarea id="catatan_slf" name="catatan_slf" placeholder="Jelaskan alasan tidak tersedia..."></textarea></div></div>
             <div class="field"><label>Nomor SLF</label><input type="text"></div>
           </div>
           <div class="field"><label>Jumlah Penghuni</label><div class="radio-group">
@@ -1173,6 +1187,17 @@ window.addEventListener('load', function() {
           cardGrid.appendChild(card);
         });
         sub_el.appendChild(cardGrid);
+        // Keterangan textbox per group RTH
+        var rthKetWrap = el('div', {cls:'catatan-tambahan-wrap', style:'margin-top:14px'});
+        var rthKetTitle = el('div', {cls:'ct-title'});
+        rthKetTitle.innerHTML = '📝 Keterangan';
+        var rthKetTa = el('textarea');
+        rthKetTa.name = 'ket_psu_rth_' + grp.prefix;
+        rthKetTa.id = 'ket_psu_rth_' + grp.prefix;
+        rthKetTa.placeholder = 'Keterangan untuk ' + grp.label + ' (deskripsi kondisi dilapangan)...';
+        rthKetWrap.appendChild(rthKetTitle);
+        rthKetWrap.appendChild(rthKetTa);
+        sub_el.appendChild(rthKetWrap);
         // Foto upload
         var fo=makeFotoUpload('PSU_RTH_'+grp.prefix); var ff=el('div',{cls:'field',style:'margin-top:14px'}); ff.appendChild(el('label',{text:'📷 Upload Foto — '+grp.label,style:'font-size:12px;font-weight:600;color:var(--gray-600)'})); ff.appendChild(fo.wrap[0]); ff.appendChild(fo.wrap[1]); sub_el.appendChild(ff);
         body.appendChild(sub_el);
@@ -1181,15 +1206,18 @@ window.addEventListener('load', function() {
       item.subs.forEach(function(sub,ssi){
         var sub_el=el('div',{cls:'subsection'});
         sub_el.appendChild(el('div',{cls:'subsection-title',text:sub.label}));
+        var psuMatWidget = sub.types.indexOf('Lainnya') !== -1
+          ? makeCheckGroupWithOther('psu_mat_'+si+'_'+ssi, sub.types, 'Sebutkan jenis/material lainnya...')
+          : makeCheckGroup('psu_mat_'+si+'_'+ssi, sub.types);
         if(sub.hasFoto){
-          sub_el.appendChild(makeField('Jenis/Material',makeCheckGroup('psu_mat_'+si+'_'+ssi,sub.types)));
+          sub_el.appendChild(makeField('Jenis/Material', psuMatWidget));
           var kGrp=el('div',{cls:'kondisi-group'});
           kondisiOpts.forEach(function(k,ki){ var rid='psu_k_'+si+'_'+ssi+'_'+ki; var inp=el('input'); inp.type='radio'; inp.name='psu_k_'+si+'_'+ssi; inp.id=rid; inp.value=k.label; var dot=el('span',{cls:'dot'}); var lbl=el('label'); lbl.setAttribute('for',rid); lbl.appendChild(dot); lbl.appendChild(document.createTextNode(k.label)); var opt=el('div',{cls:'kondisi-opt '+k.cls},[inp,lbl]); kGrp.appendChild(opt); });
           sub_el.appendChild(makeField('Kondisi',kGrp));
           sub_el.appendChild(makeField('Catatan',el('input',{type:'text',placeholder:'Catatan tambahan...'})));
           var fs=makeFotoUpload('PSU_Fas_'+si+'_'+ssi+'_'+sub.label); var fsf=el('div',{cls:'field'}); fsf.appendChild(el('label',{text:'Upload Foto'})); fsf.appendChild(fs.wrap[0]); fsf.appendChild(fs.wrap[1]); sub_el.appendChild(fsf);
         } else {
-          sub_el.appendChild(makeField('Jenis/Material',makeCheckGroup('psu_mat_'+si+'_'+ssi,sub.types)));
+          sub_el.appendChild(makeField('Jenis/Material', psuMatWidget));
           var kGrp=el('div',{cls:'kondisi-group'});
           kondisiOpts.forEach(function(k,ki){ var rid='psu_k_'+si+'_'+ssi+'_'+ki; var inp=el('input'); inp.type='radio'; inp.name='psu_k_'+si+'_'+ssi; inp.id=rid; inp.value=k.label; var dot=el('span',{cls:'dot'}); var lbl=el('label'); lbl.setAttribute('for',rid); lbl.appendChild(dot); lbl.appendChild(document.createTextNode(k.label)); var opt=el('div',{cls:'kondisi-opt '+k.cls},[inp,lbl]); kGrp.appendChild(opt); });
           sub_el.appendChild(makeField('Kondisi',kGrp));
@@ -1270,6 +1298,25 @@ window.addEventListener('load', function() {
         row.appendChild(makeRadioGroup(f.name,f.opts));
         var prev=el('div',{cls:'foto-preview-inline'}); var uObj=makeUploadBtn(f.name+'_foto',prev);
         row.appendChild(uObj.btn); body.appendChild(row); body.appendChild(prev);
+        // Catatan box muncul saat Tidak Tersedia dipilih
+        var tsBox=el('div',{cls:'catatan-box'});
+        tsBox.id='catatan_box_ts_py_'+f.name;
+        var tsLbl=el('div',{cls:'catatan-label'});
+        tsLbl.innerHTML='✏️ Keterangan (deskripsi kondisi dilapangan)';
+        var tsTa=el('textarea');
+        tsTa.id='catatan_ts_py_'+f.name;
+        tsTa.name='catatan_ts_py_'+f.name;
+        tsTa.placeholder='Jelaskan alasan tidak tersedia...';
+        tsBox.appendChild(tsLbl); tsBox.appendChild(tsTa);
+        body.appendChild(tsBox);
+        (function(radioName, box){
+          body.querySelectorAll('input[type=radio][name="'+radioName+'"]').forEach(function(r){
+            r.addEventListener('change',function(){
+              if(r.checked && r.value==='Tidak Tersedia') box.classList.add('visible');
+              else if(r.checked){ box.classList.remove('visible'); var ta2=box.querySelector('textarea'); if(ta2) ta2.value=''; }
+            });
+          });
+        })(f.name, tsBox);
       });
 
     } else if(item.type==='rth'){
@@ -1296,6 +1343,15 @@ window.addEventListener('load', function() {
         });
         tbl.appendChild(tbody); sub_el.appendChild(tbl);
         var fo=makeFotoUpload('py_RTH_'+grp.prefix); var ff=el('div',{cls:'field',style:'margin-top:10px'}); ff.appendChild(el('label',{text:'Upload Foto — '+grp.label})); ff.appendChild(fo.wrap[0]); ff.appendChild(fo.wrap[1]); sub_el.appendChild(ff);
+        // Keterangan textbox per sub-section RTH
+        var pyRthKetWrap=el('div',{cls:'catatan-tambahan-wrap',style:'margin-top:12px'});
+        var pyRthKetTitle=el('div',{cls:'ct-title'}); pyRthKetTitle.innerHTML='📝 Keterangan';
+        var pyRthKetTa=el('textarea');
+        pyRthKetTa.id='ket_py_rth_'+grp.prefix;
+        pyRthKetTa.name='ket_py_rth_'+grp.prefix;
+        pyRthKetTa.placeholder='Keterangan untuk '+grp.label+' (deskripsi kondisi dilapangan)...';
+        pyRthKetWrap.appendChild(pyRthKetTitle); pyRthKetWrap.appendChild(pyRthKetTa);
+        sub_el.appendChild(pyRthKetWrap);
         body.appendChild(sub_el);
       });
     } else if(item.type==='komponen'){
@@ -1311,16 +1367,22 @@ window.addEventListener('load', function() {
       if(item.paramInline){
         var listWrap=el('div',{style:'display:grid;gap:10px'});
         item.rows.forEach(function(row,ri){
-          var card=el('div',{style:'border:1.5px solid var(--gray-200);border-radius:18px;padding:14px 16px;display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;background:var(--white)'});
+          var card=el('div',{style:'border:1.5px solid var(--gray-200);border-radius:18px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;background:var(--white)'});
+          var topRow=el('div',{style:'display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap'});
           var info=el('div',{style:'flex:1;min-width:220px'});
           info.appendChild(el('div',{text:(ri+1)+'. '+row.dokumen,style:"font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:13px;color:var(--navy)"}));
           if(row.catatan) info.appendChild(el('div',{text:row.catatan,style:'color:var(--gray-400);font-size:11px;margin-top:4px;font-style:italic'}));
           if(row.parameter) info.appendChild(el('div',{text:'Parameter (Acuan): '+row.parameter,style:'color:var(--gray-600);font-size:12px;margin-top:5px;line-height:1.4'}));
-          card.appendChild(info);
+          topRow.appendChild(info);
           var optWrap=el('div',{cls:'radio-group',style:'flex-shrink:0'});
           var lblYa=el('label'); var inpYa=el('input'); inpYa.type='radio'; inpYa.name=row.name; inpYa.value='Sesuai'; inpYa.style.accentColor='var(--green)'; lblYa.appendChild(inpYa); lblYa.appendChild(document.createTextNode('Sesuai')); optWrap.appendChild(lblYa);
           var lblTidak=el('label'); var inpTidak=el('input'); inpTidak.type='radio'; inpTidak.name=row.name; inpTidak.value='Tidak Sesuai'; inpTidak.style.accentColor='var(--red)'; lblTidak.appendChild(inpTidak); lblTidak.appendChild(document.createTextNode('Tidak Sesuai')); optWrap.appendChild(lblTidak);
-          card.appendChild(optWrap);
+          topRow.appendChild(optWrap);
+          card.appendChild(topRow);
+          // Catatan box di bawah pilihan Sesuai/Tidak Sesuai
+          var cBox = makeCatatanBoxInline(row.name);
+          card.appendChild(cBox);
+          attachTidakSesuaiInlineListener(row.name, cBox, optWrap);
           listWrap.appendChild(card);
         });
         body.appendChild(listWrap);
@@ -1354,7 +1416,13 @@ window.addEventListener('load', function() {
       var foK=makeFotoUpload('py_komponen_'+item.num); var ffK=el('div',{cls:'field',style:'margin-top:14px'}); ffK.appendChild(el('label',{text:'Upload Foto Dokumentasi'})); ffK.appendChild(foK.wrap[0]); ffK.appendChild(foK.wrap[1]); body.appendChild(ffK);
     } else {
       item.fields.forEach(function(f){
-        if(f.type==='check') body.appendChild(makeField(f.label,makeCheckGroup(f.name,f.opts)));
+        if(f.type==='check'){
+          var hasLainnya2 = f.opts && f.opts.indexOf('Lainnya') !== -1;
+          var checkWidget2 = hasLainnya2
+            ? makeCheckGroupWithOther(f.name, f.opts, 'Sebutkan ' + f.label.toLowerCase() + ' lainnya...')
+            : makeCheckGroup(f.name, f.opts);
+          body.appendChild(makeField(f.label, checkWidget2));
+        }
         else if(f.type==='check_foto'){
           var wrap=el('div',{cls:'check-foto-wrap'}); wrap.appendChild(makeCheckGroupWithOther(f.name,f.opts,'Sebutkan '+f.label.toLowerCase()+' lainnya...'));
           var prev=el('div',{cls:'foto-preview',style:'margin-top:8px'}); var uObj=makeUploadBtn(f.name+'_foto',prev); wrap.appendChild(uObj.btn);
@@ -1365,6 +1433,50 @@ window.addEventListener('load', function() {
     }
     sec.appendChild(hdr); sec.appendChild(body); pyContainer.appendChild(sec);
   });
+
+  // ---- Tambahan: Catatan "Tidak Tersedia" untuk section 8 Dinding (py_dinding_angkur) ----
+  // dan section 10 Jaringan Utilitas Bangunan (util-row radios)
+  setTimeout(function() {
+    var pyPanel = document.getElementById('panel-1');
+    if (!pyPanel) return;
+
+    function makeTidakTersediaBox(radioName) {
+      var existingBox = pyPanel.querySelector('#catatan_box_ts_' + radioName);
+      if (existingBox) return;
+      var inp = pyPanel.querySelector('input[type=radio][name="' + radioName + '"][value="Tidak Tersedia"]');
+      if (!inp) return;
+      var container = inp.closest('.util-row') || inp.closest('[style*="border:1.5px solid"]') || inp.closest('.radio-group');
+      if (!container) return;
+      // cari parent yang bisa menerima box catatan (section-body atau util-row)
+      var parentEl = inp.closest('.util-row') || container.parentElement;
+      // buat box catatan di bawah radio group
+      var box = el('div', {cls:'catatan-box'});
+      box.id = 'catatan_box_ts_' + radioName;
+      var lbl = el('div', {cls:'catatan-label'});
+      lbl.innerHTML = '✏️ Keterangan (deskripsi kondisi dilapangan)';
+      var ta = el('textarea');
+      ta.id = 'catatan_ts_' + radioName;
+      ta.name = 'catatan_ts_' + radioName;
+      ta.placeholder = 'Jelaskan alasan tidak tersedia...';
+      box.appendChild(lbl); box.appendChild(ta);
+      // Masukkan setelah util-row jika ada, atau setelah container
+      if (inp.closest('.util-row')) {
+        var utilRow = inp.closest('.util-row');
+        utilRow.parentElement.insertBefore(box, utilRow.nextSibling);
+      } else {
+        container.appendChild(box);
+      }
+      pyPanel.querySelectorAll('input[type=radio][name="' + radioName + '"]').forEach(function(r) {
+        r.addEventListener('change', function() {
+          if (r.checked && r.value === 'Tidak Tersedia') box.classList.add('visible');
+          else if (r.checked) { box.classList.remove('visible'); var ta2 = box.querySelector('textarea'); if(ta2) ta2.value = ''; }
+        });
+      });
+    }
+
+    // Section 8 Dinding: py_dinding_angkur
+    makeTidakTersediaBox('py_dinding_angkur');
+  }, 120);
 
   // ================================================================
   // PASCA FISIK SECTIONS — Keberfungsian DIHAPUS, digantikan Kondisi
@@ -1437,8 +1549,32 @@ window.addEventListener('load', function() {
         // Ketersediaan
         var secK = el('div', {style:'display:flex;flex-direction:column;gap:6px'});
         secK.appendChild(el('span', {text:'Ketersediaan', style:'font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:.04em'}));
-        secK.appendChild(makeRadioGroup(f.name, f.opts));
+        var ketersediaanRadioGroup = makeRadioGroup(f.name, f.opts);
+        secK.appendChild(ketersediaanRadioGroup);
+        // Catatan uraian jika Tidak Tersedia dipilih
+        var tsBox = el('div', {cls:'catatan-box'});
+        tsBox.id = 'catatan_box_pf_ts_' + f.name;
+        var tsLbl = el('div', {cls:'catatan-label'});
+        tsLbl.innerHTML = '✏️ Keterangan (deskripsi kondisi dilapangan)';
+        var tsTa = el('textarea');
+        tsTa.id = 'catatan_pf_ts_' + f.name;
+        tsTa.name = 'catatan_pf_ts_' + f.name;
+        tsTa.placeholder = 'Jelaskan alasan tidak tersedia...';
+        tsBox.appendChild(tsLbl); tsBox.appendChild(tsTa);
+        secK.appendChild(tsBox);
         card.appendChild(secK);
+        // Pasang listener setelah card masuk DOM (defer)
+        (function(radioName, box) {
+          setTimeout(function() {
+            var radios = document.querySelectorAll('input[type=radio][name="' + radioName + '"]');
+            radios.forEach(function(r) {
+              r.addEventListener('change', function() {
+                if (r.checked && r.value === 'Tidak Tersedia') box.classList.add('visible');
+                else if (r.checked) { box.classList.remove('visible'); var ta2=box.querySelector('textarea'); if(ta2) ta2.value=''; }
+              });
+            });
+          }, 150);
+        })(f.name, tsBox);
 
         // Kondisi 3 dot — vertikal agar teks tidak terpotong
         var secC = el('div', {style:'display:flex;flex-direction:column;gap:6px'});
@@ -1490,6 +1626,17 @@ window.addEventListener('load', function() {
     }
 
     sec.appendChild(hdr); sec.appendChild(body);
+    // Change 6: Tambahkan textbox catatan tambahan di setiap section komponen fisik pasca penyaluran
+    var pfCatatanWrap = el('div', {cls:'catatan-tambahan-wrap'});
+    var pfCatatanTitle = el('div', {cls:'ct-title'});
+    pfCatatanTitle.innerHTML = '📝 Keterangan';
+    var pfCatatanTa = el('textarea');
+    pfCatatanTa.id = 'catatan_tambahan_pf_' + item.num.replace('.','_');
+    pfCatatanTa.name = pfCatatanTa.id;
+    pfCatatanTa.placeholder = 'Keterangan untuk ' + item.label + ' (deskripsi kondisi dilapangan)...';
+    pfCatatanWrap.appendChild(pfCatatanTitle);
+    pfCatatanWrap.appendChild(pfCatatanTa);
+    body.appendChild(pfCatatanWrap);
     pfContainer.appendChild(sec);
   });
 
@@ -1505,6 +1652,221 @@ window.addEventListener('load', function() {
   }
 
   // === EQUALIZER GLOBAL: samakan lebar tombol per .radio-group di seluruh form ===
+
+  // ================================================================
+  // CATATAN BOX — muncul otomatis saat "Tidak Sesuai" dipilih
+  // ================================================================
+
+  // Helper: buat catatan box inline (di dalam card, tidak perlu container)
+  function makeCatatanBoxInline(inputId) {
+    var box = el('div', {cls: 'catatan-box'});
+    box.id = 'catatan_box_' + inputId;
+    var lbl = el('div', {cls: 'catatan-label'});
+    lbl.innerHTML = '✏️ Catatan <span style="color:var(--red)">*</span> (wajib diisi)';
+    var ta = el('textarea');
+    ta.id = 'catatan_' + inputId;
+    ta.name = 'catatan_' + inputId;
+    ta.placeholder = 'Jelaskan ketidaksesuaian yang ditemukan...';
+    ta.setAttribute('data-required-when-visible', '1');
+    box.appendChild(lbl);
+    box.appendChild(ta);
+    return box;
+  }
+
+  // Helper: pasang listener ke radio group dan tampilkan/sembunyikan catatan box
+  function attachTidakSesuaiInlineListener(radioName, box, radioGroupEl) {
+    var radios = radioGroupEl.querySelectorAll('input[type=radio][name="' + radioName + '"]');
+    radios.forEach(function(r) {
+      r.addEventListener('change', function() {
+        if (r.checked && r.value === 'Tidak Sesuai') {
+          box.classList.add('visible');
+        } else if (r.checked) {
+          box.classList.remove('visible');
+          var ta = box.querySelector('textarea');
+          if (ta) ta.value = '';
+        }
+      });
+    });
+  }
+
+  // Helper: buat catatan box DOM
+  function makeCatatanBox(inputId) {
+    var box = el('div', {cls: 'catatan-box'});
+    box.id = 'catatan_box_' + inputId;
+    var lbl = el('div', {cls: 'catatan-label'});
+    lbl.innerHTML = '✏️ Catatan <span style="color:var(--red)">*</span> (wajib diisi)';
+    var ta = el('textarea');
+    ta.id = 'catatan_' + inputId;
+    ta.name = 'catatan_' + inputId;
+    ta.placeholder = 'Jelaskan ketidaksesuaian yang ditemukan...';
+    ta.setAttribute('data-required-when-visible', '1');
+    box.appendChild(lbl);
+    box.appendChild(ta);
+    return box;
+  }
+
+  // Helper: pasang listener pada pasangan radio Sesuai/Tidak Sesuai
+  function attachTidakSesuaiListener(radioName, containerEl, uniqueId) {
+    var box = makeCatatanBox(uniqueId || radioName);
+    containerEl.appendChild(box);
+    var radios = containerEl.querySelectorAll('input[type=radio][name="' + radioName + '"]');
+    radios.forEach(function(r) {
+      r.addEventListener('change', function() {
+        if (r.checked && r.value === 'Tidak Sesuai') {
+          box.classList.add('visible');
+        } else if (r.checked) {
+          box.classList.remove('visible');
+          var ta = box.querySelector('textarea');
+          if (ta) ta.value = '';
+        }
+      });
+    });
+  }
+
+  // ---- Keterhunian: Sticker, Sertifikat, PBG, SLF — Tidak Tersedia ----
+  ['sticker','sertif','pbg','slf'].forEach(function(rname) {
+    var box = document.getElementById('catatan_box_' + rname);
+    if (!box) return;
+    document.querySelectorAll('input[type=radio][name="' + rname + '"]').forEach(function(r) {
+      r.addEventListener('change', function() {
+        if (r.checked && r.value === 'Tidak Tersedia') box.classList.add('visible');
+        else if (r.checked) { box.classList.remove('visible'); var ta = box.querySelector('textarea'); if (ta) ta.value = ''; }
+      });
+    });
+  });
+
+  // ---- 1. TAB OBJEK PERUMAHAN: dokumen dok_sesuai_* ----
+  // Dokumen dibuat secara dinamis dengan radio name "dok_sesuai_N"
+  // Kita pasang listener ke seluruh radio Tidak Sesuai di panel-0
+  var panel0 = document.getElementById('panel-0');
+  if (panel0) {
+    // Ambil semua nama radio unik yang mengandung "dok_sesuai"
+    var dokSesuaiNames = new Set();
+    panel0.querySelectorAll('input[type=radio]').forEach(function(r) {
+      if (r.name && r.name.indexOf('dok_sesuai') === 0) dokSesuaiNames.add(r.name);
+    });
+    dokSesuaiNames.forEach(function(rname) {
+      var grp = panel0.querySelector('.radio-group input[name="' + rname + '"]');
+      var container = grp ? grp.closest('.doc-wrapper') || grp.closest('.radio-group').parentElement : null;
+      if (container) attachTidakSesuaiListener(rname, container, rname);
+    });
+    // Pasang juga untuk status_sikumbang (sudah ada di HTML statis)
+    var sikumbangGrp = document.getElementById('status_sikumbang_group');
+    if (sikumbangGrp) {
+      // Box catatan di bawah radio group status_sikumbang
+      var sikBox = makeCatatanBox('status_sikumbang');
+      sikumbangGrp.parentElement.insertBefore(sikBox, sikumbangGrp.nextSibling);
+      sikumbangGrp.querySelectorAll('input[type=radio]').forEach(function(r) {
+        r.addEventListener('change', function() {
+          if (r.checked && r.value === 'Tidak Sesuai') sikBox.classList.add('visible');
+          else if (r.checked) { sikBox.classList.remove('visible'); var ta=sikBox.querySelector('textarea'); if(ta) ta.value=''; }
+        });
+      });
+    }
+  }
+
+  // ---- 2. TAB TAHAP PENYALURAN: semua "Tidak Sesuai" + Catatan Tambahan per section ----
+
+  // Helper: buat blok Catatan Tambahan (kotak emas di bawah section)
+  function makeCatatanTambahan(sectionNum, sectionLabel) {
+    var wrap = el('div', {cls: 'catatan-tambahan-wrap'});
+    var title = el('div', {cls: 'ct-title'});
+    title.innerHTML = '📝 Keterangan';
+    var ta = el('textarea');
+    ta.id = 'catatan_tambahan_py_' + sectionNum.replace('.','_');
+    ta.name = ta.id;
+    ta.placeholder = 'Keterangan untuk ' + sectionLabel + ' (deskripsi kondisi dilapangan)...';
+    wrap.appendChild(title);
+    wrap.appendChild(ta);
+    return wrap;
+  }
+
+  // Setelah penyaluranItems dirender, pasang listener & Catatan Tambahan
+  // Label sections penyaluran sesuai urutan render:
+  var pySections = document.querySelectorAll('#penyaluran-sections .section');
+  var pyLabels = [
+    {num:'1.0', label:'Pondasi'},
+    {num:'2.0', label:'Sloof'},
+    {num:'3.0', label:'Kolom'},
+    {num:'4.0', label:'Ring Balok'},
+    {num:'5.0', label:'Rangka Atap'},
+    {num:'6.0', label:'Penutup Atap dan Plafon'},
+    {num:'7.0', label:'Lantai'},
+    {num:'8.0', label:'Dinding'},
+    {num:'9.0', label:'Rumah Layak Huni'},
+    {num:'10.0', label:'Jaringan Utilitas Bangunan'},
+    {num:'11.0', label:'Penghijauan Dalam Kavling'}
+  ];
+
+  pySections.forEach(function(sec, idx) {
+    var info = pyLabels[idx] || {num: String(idx+1)+'.0', label: 'Komponen'};
+    var body = sec.querySelector('.section-body');
+    if (!body) return;
+
+    // a) Catatan wajib di setiap pilihan "Tidak Sesuai"
+    // Kumpulkan radio names unik dalam section ini
+    var radioNames = new Set();
+    body.querySelectorAll('input[type=radio]').forEach(function(r) { if(r.name) radioNames.add(r.name); });
+    radioNames.forEach(function(rname) {
+      // Cek apakah ada opsi 'Tidak Sesuai' di group ini
+      var hasTidakSesuai = !!body.querySelector('input[type=radio][name="' + rname + '"][value="Tidak Sesuai"]');
+      if (!hasTidakSesuai) return;
+
+      // Hindari duplikat: jika catatan box sudah ada di mana saja di body untuk rname ini, skip
+      if (body.querySelector('#catatan_box_' + rname)) return;
+
+      // Cari container paling dekat dengan radio group ini
+      var sample = body.querySelector('input[type=radio][name="' + rname + '"]');
+      if (!sample) return;
+
+      // Untuk komponen tabel (card paramInline), catatan box setelah card
+      var card = sample.closest('[style*="border:1.5px solid"]') || sample.closest('.radio-group');
+      if (!card) return;
+
+      var box = makeCatatanBox(rname);
+      card.appendChild(box);
+
+      body.querySelectorAll('input[type=radio][name="' + rname + '"]').forEach(function(r) {
+        r.addEventListener('change', function() {
+          if (r.checked && r.value === 'Tidak Sesuai') {
+            box.classList.add('visible');
+          } else if (r.checked) {
+            box.classList.remove('visible');
+            var ta = box.querySelector('textarea'); if (ta) ta.value = '';
+          }
+        });
+      });
+    });
+
+    // b) Blok Catatan Tambahan di bawah setiap section
+    if (!body.querySelector('.catatan-tambahan-wrap')) {
+      body.appendChild(makeCatatanTambahan(info.num, info.label));
+    }
+  });
+
+  // Pasang listener juga untuk radio "Tidak Sesuai" di dokumen panel-0 yang mungkin belum terpasang
+  // (dinamis dari dokumenGroups, dirender setelah load)
+  setTimeout(function() {
+    var p0 = document.getElementById('panel-0');
+    if (!p0) return;
+    var done = new Set();
+    p0.querySelectorAll('input[type=radio][value="Tidak Sesuai"]').forEach(function(r) {
+      if (done.has(r.name)) return; done.add(r.name);
+      var boxId = 'catatan_box_' + r.name;
+      if (p0.querySelector('#' + boxId)) return; // sudah dipasang
+      var grp = r.closest('.radio-group') || r.closest('.doc-row') || r.parentElement;
+      if (!grp) return;
+      var box = makeCatatanBox(r.name);
+      grp.appendChild(box);
+      p0.querySelectorAll('input[type=radio][name="' + r.name + '"]').forEach(function(rb) {
+        rb.addEventListener('change', function() {
+          if (rb.checked && rb.value === 'Tidak Sesuai') box.classList.add('visible');
+          else if (rb.checked) { box.classList.remove('visible'); var ta=box.querySelector('textarea'); if(ta) ta.value=''; }
+        });
+      });
+    });
+    syncWrapperHeight(currentTabIdx);
+  }, 80);
 
 }); // end load
 
