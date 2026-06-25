@@ -1209,19 +1209,13 @@ window.addEventListener('load', function() {
         var psuMatWidget = sub.types.indexOf('Lainnya') !== -1
           ? makeCheckGroupWithOther('psu_mat_'+si+'_'+ssi, sub.types, 'Sebutkan jenis/material lainnya...')
           : makeCheckGroup('psu_mat_'+si+'_'+ssi, sub.types);
+        sub_el.appendChild(makeField('Jenis/Material', psuMatWidget));
+        var kGrpEl=el('div',{cls:'kondisi-group'});
+        kondisiOpts.forEach(function(k,ki){ var rid='psu_k_'+si+'_'+ssi+'_'+ki; var inp=el('input'); inp.type='radio'; inp.name='psu_k_'+si+'_'+ssi; inp.id=rid; inp.value=k.label; var dot=el('span',{cls:'dot'}); var lbl=el('label'); lbl.setAttribute('for',rid); lbl.appendChild(dot); lbl.appendChild(document.createTextNode(k.label)); var opt=el('div',{cls:'kondisi-opt '+k.cls},[inp,lbl]); kGrpEl.appendChild(opt); });
+        sub_el.appendChild(makeField('Kondisi',kGrpEl));
+        sub_el.appendChild(makeField('Keterangan',el('textarea',{placeholder:'Keterangan (deskripsi kondisi dilapangan)...'})));
         if(sub.hasFoto){
-          sub_el.appendChild(makeField('Jenis/Material', psuMatWidget));
-          var kGrp=el('div',{cls:'kondisi-group'});
-          kondisiOpts.forEach(function(k,ki){ var rid='psu_k_'+si+'_'+ssi+'_'+ki; var inp=el('input'); inp.type='radio'; inp.name='psu_k_'+si+'_'+ssi; inp.id=rid; inp.value=k.label; var dot=el('span',{cls:'dot'}); var lbl=el('label'); lbl.setAttribute('for',rid); lbl.appendChild(dot); lbl.appendChild(document.createTextNode(k.label)); var opt=el('div',{cls:'kondisi-opt '+k.cls},[inp,lbl]); kGrp.appendChild(opt); });
-          sub_el.appendChild(makeField('Kondisi',kGrp));
-          sub_el.appendChild(makeField('Catatan',el('input',{type:'text',placeholder:'Catatan tambahan...'})));
           var fs=makeFotoUpload('PSU_Fas_'+si+'_'+ssi+'_'+sub.label); var fsf=el('div',{cls:'field'}); fsf.appendChild(el('label',{text:'Upload Foto'})); fsf.appendChild(fs.wrap[0]); fsf.appendChild(fs.wrap[1]); sub_el.appendChild(fsf);
-        } else {
-          sub_el.appendChild(makeField('Jenis/Material', psuMatWidget));
-          var kGrp=el('div',{cls:'kondisi-group'});
-          kondisiOpts.forEach(function(k,ki){ var rid='psu_k_'+si+'_'+ssi+'_'+ki; var inp=el('input'); inp.type='radio'; inp.name='psu_k_'+si+'_'+ssi; inp.id=rid; inp.value=k.label; var dot=el('span',{cls:'dot'}); var lbl=el('label'); lbl.setAttribute('for',rid); lbl.appendChild(dot); lbl.appendChild(document.createTextNode(k.label)); var opt=el('div',{cls:'kondisi-opt '+k.cls},[inp,lbl]); kGrp.appendChild(opt); });
-          sub_el.appendChild(makeField('Kondisi',kGrp));
-          sub_el.appendChild(makeField('Catatan',el('input',{type:'text',placeholder:'Catatan tambahan...'})));
         }
         body.appendChild(sub_el);
       });
