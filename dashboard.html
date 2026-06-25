@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Pengendalian Perumahan FLPP</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap');
+
+:root {
+  --navy:#0B3D52; --navy2:#0E5B73; --teal:#1A8FA5;
+  --gold:#C8A84B; --gold-lt:#F0DFA0;
+  --cream:#F4F0E4; --white:#FFFFFF;
+  --g50:#F7F4EC; --g100:#EDE8D8; --g200:#D8D2BE; --g400:#9A9280; --g600:#5A5244; --g800:#2C2820;
+  --green:#059669; --green-lt:#D1FAE5;
+  --amber:#D97706; --amber-lt:#FEF3C7;
+  --red:#DC2626;   --red-lt:#FEE2E2;
+  --blue:#2563EB;  --blue-lt:#DBEAFE;
+  --radius:16px; --radius-sm:10px;
+  --shadow:0 4px 24px rgba(0,0,0,.09);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cream);color:var(--g800);min-height:100vh}
+
+/* ── HEADER ── */
+.app-header{background:var(--navy);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:200;box-shadow:0 2px 16px rgba(0,0,0,.3)}
+.app-header h1{font-size:15px;font-weight:800;color:#fff;letter-spacing:.01em}
+.app-header span{font-size:11px;color:var(--gold-lt);font-weight:500;margin-top:1px;display:block}
+.badge-live{background:var(--teal);color:#fff;font-size:10px;font-weight:700;padding:3px 9px;border-radius:99px;letter-spacing:.06em;text-transform:uppercase}
+
+/* ── NAV ── */
+.nav-bar{background:var(--navy2);display:flex;gap:0;overflow-x:auto;scrollbar-width:none;padding:0 28px}
+.nav-bar::-webkit-scrollbar{display:none}
+.nav-btn{padding:12px 18px;border:none;background:none;color:rgba(255,255,255,.6);font-family:inherit;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:all .2s}
+.nav-btn:hover{color:#fff}
+.nav-btn.active{color:var(--gold-lt);border-bottom-color:var(--gold)}
+
+/* ── MAIN ── */
+.main{max-width:1200px;margin:0 auto;padding:28px 24px 60px}
+.page{display:none}.page.active{display:block}
+
+/* ── SECTION TITLE ── */
+.sec-title{font-size:11px;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px}
+
+/* ── KPI STRIP ── */
+.kpi-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:28px}
+.kpi{background:var(--white);border-radius:var(--radius);padding:20px 18px;box-shadow:var(--shadow);border-top:4px solid var(--teal)}
+.kpi.gold{border-top-color:var(--gold)}
+.kpi.green{border-top-color:var(--green)}
+.kpi.amber{border-top-color:var(--amber)}
+.kpi.red{border-top-color:var(--red)}
+.kpi-val{font-size:28px;font-weight:800;color:var(--navy);line-height:1}
+.kpi-label{font-size:11px;color:var(--g400);font-weight:600;text-transform:uppercase;letter-spacing:.07em;margin-top:6px}
+.kpi-sub{font-size:12px;color:var(--g600);margin-top:4px}
+
+/* ── CARD ── */
+.card{background:var(--white);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);margin-bottom:20px}
+.card-title{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.card-title .ico{font-size:16px}
+
+/* ── GRID ── */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+@media(max-width:900px){.grid-2,.grid-3{grid-template-columns:1fr}}
+
+/* ── TABLE ── */
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:var(--g50);padding:10px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--g400);border-bottom:2px solid var(--g100);white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid var(--g50);vertical-align:middle;color:var(--g800)}
+tr:hover td{background:var(--g50)}
+
+/* ── PILLS ── */
+.pill{display:inline-block;padding:3px 10px;border-radius:99px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.pill-green{background:var(--green-lt);color:#065F46}
+.pill-amber{background:var(--amber-lt);color:#92400E}
+.pill-red{background:var(--red-lt);color:#7F1D1D}
+.pill-blue{background:var(--blue-lt);color:#1E40AF}
+.pill-gray{background:var(--g100);color:var(--g600)}
+
+/* ── BAR CHART ── */
+.bar-chart{display:flex;flex-direction:column;gap:10px}
+.bar-row{display:flex;align-items:center;gap:10px}
+.bar-label{font-size:11px;color:var(--g600);font-weight:600;min-width:140px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-track{flex:1;background:var(--g100);border-radius:99px;height:14px;overflow:hidden}
+.bar-fill{height:100%;border-radius:99px;transition:width .5s ease}
+.bar-val{font-size:11px;font-family:'DM Mono',monospace;color:var(--g600);min-width:36px;text-align:right;flex-shrink:0}
+
+/* ── DONUT (CSS) ── */
+.donut-wrap{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.donut{width:120px;height:120px;border-radius:50%;flex-shrink:0;position:relative;display:flex;align-items:center;justify-content:center}
+.donut-center{font-size:22px;font-weight:800;color:var(--navy);z-index:1}
+.donut-legend{display:flex;flex-direction:column;gap:8px}
+.legend-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--g600)}
+.legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+
+/* ── FILTER ── */
+.filter-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+.filter-select{padding:8px 14px;border:1.5px solid var(--g200);border-radius:99px;font-family:inherit;font-size:12px;color:var(--g800);background:var(--white);cursor:pointer;outline:none;transition:border-color .15s}
+.filter-select:focus{border-color:var(--navy)}
+
+/* ── PERUMAHAN CARD ── */
+.p-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.p-card{background:var(--white);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);border-left:5px solid var(--teal);cursor:pointer;transition:transform .15s,box-shadow .15s}
+.p-card:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.12)}
+.p-card-name{font-size:14px;font-weight:800;color:var(--navy);margin-bottom:4px}
+.p-card-id{font-size:10px;font-family:'DM Mono',monospace;color:var(--teal);margin-bottom:10px}
+.p-card-row{display:flex;justify-content:space-between;font-size:11px;color:var(--g600);padding:4px 0;border-bottom:1px solid var(--g50)}
+.p-card-row:last-child{border-bottom:none}
+.p-card-row span{font-weight:700;color:var(--g800)}
+
+/* ── METER ── */
+.meter-wrap{display:flex;flex-direction:column;gap:12px}
+.meter-item{}
+.meter-head{display:flex;justify-content:space-between;font-size:11px;color:var(--g600);margin-bottom:5px;font-weight:600}
+.meter-track{background:var(--g100);border-radius:99px;height:10px;overflow:hidden}
+.meter-fill{height:100%;border-radius:99px}
+.fill-green{background:var(--green)}
+.fill-amber{background:var(--amber)}
+.fill-red{background:var(--red)}
+.fill-blue{background:var(--blue)}
+.fill-teal{background:var(--teal)}
+
+/* ── STATUS GRID ── */
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat-cell{background:var(--g50);border-radius:var(--radius-sm);padding:12px;text-align:center}
+.stat-cell .n{font-size:20px;font-weight:800;color:var(--navy)}
+.stat-cell .l{font-size:10px;color:var(--g400);font-weight:600;text-transform:uppercase;margin-top:2px}
+
+/* ── PENGHUNI TABLE ── */
+.unit-card{background:var(--g50);border-radius:var(--radius-sm);padding:14px;margin-bottom:10px;border-left:4px solid var(--teal)}
+.unit-card.buruk{border-left-color:var(--red)}
+.unit-card.sedang{border-left-color:var(--amber)}
+.unit-name{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:6px}
+.unit-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+.unit-field{font-size:11px;color:var(--g600)}.unit-field span{color:var(--g800);font-weight:600}
+
+/* ── RESPONSIVE ── */
+@media(max-width:600px){.kpi-strip{grid-template-columns:1fr 1fr}.main{padding:16px 14px 60px}}
+
+/* ── REPORT MODAL ── */
+.report-overlay{display:none;position:fixed;inset:0;background:rgba(11,61,82,.55);z-index:500;align-items:flex-start;justify-content:center;overflow-y:auto;padding:30px 16px}
+.report-overlay.active{display:flex}
+.report-sheet{background:#fff;width:100%;max-width:800px;border-radius:var(--radius);box-shadow:0 20px 60px rgba(0,0,0,.3);padding:36px 40px;position:relative}
+.report-toolbar{position:sticky;top:0;display:flex;justify-content:flex-end;gap:10px;margin:-36px -40px 24px;padding:14px 20px;background:var(--g50);border-radius:var(--radius) var(--radius) 0 0;border-bottom:1px solid var(--g100)}
+.report-btn{border:none;padding:8px 16px;border-radius:99px;font-family:inherit;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:.03em}
+.report-btn.print{background:var(--navy);color:#fff}
+.report-btn.close{background:var(--g100);color:var(--g600)}
+.report-head{text-align:center;border-bottom:3px solid var(--navy);padding-bottom:16px;margin-bottom:20px}
+.report-head h2{font-size:18px;color:var(--navy);font-weight:800}
+.report-head .sub{font-size:11px;color:var(--g400);margin-top:4px;text-transform:uppercase;letter-spacing:.06em}
+.report-sec{margin-bottom:22px}
+.report-sec h3{font-size:12px;font-weight:800;color:var(--navy2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--g100)}
+.report-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px}
+.report-field{font-size:12px;color:var(--g600);padding:5px 0;border-bottom:1px dashed var(--g100);display:flex;justify-content:space-between;gap:10px}
+.report-field b{color:var(--g800);font-weight:700;text-align:right}
+.report-empty{font-size:12px;color:var(--g400);font-style:italic;padding:8px 0}
+.report-mini-table{width:100%;border-collapse:collapse;font-size:11px;margin-top:6px}
+.report-mini-table th{background:var(--g50);padding:6px 8px;text-align:left;font-size:9px;color:var(--g400);text-transform:uppercase}
+.report-mini-table td{padding:6px 8px;border-bottom:1px solid var(--g50)}
+.report-footer{margin-top:24px;padding-top:14px;border-top:1px solid var(--g100);font-size:10px;color:var(--g400);text-align:center}
+
+@media print{
+  body *{visibility:hidden}
+  .report-overlay, .report-overlay *{visibility:visible}
+  .report-overlay{position:absolute;inset:0;background:#fff;padding:0;display:block !important}
+  .report-sheet{box-shadow:none;max-width:100%;padding:20px 30px}
+  .report-toolbar{display:none}
+}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div>
+    <h1>Dashboard Pengendalian Perumahan FLPP</h1>
+    <span id="data-status">Sistem Monitoring & Evaluasi · Juni 2026</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <button id="btn-sync-now" onclick="syncFromGoogleSheets(true)"
+      style="background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);padding:7px 14px;border-radius:99px;font-family:inherit;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:.03em">
+      🔄 Sync Sekarang
+    </button>
+    <button id="btn-update" onclick="document.getElementById('file-input').click()"
+      style="background:var(--gold);color:var(--navy);border:none;padding:7px 14px;border-radius:99px;font-family:inherit;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:.03em">
+      📤 Upload Excel
+    </button>
+    <input type="file" id="file-input" accept=".xlsx,.xls" style="display:none" onchange="handleExcelUpload(event)">
+    <span class="badge-live" id="live-badge">Live</span>
+  </div>
+</header>
+
+<nav class="nav-bar">
+  <button class="nav-btn active" onclick="showPage('overview')">📊 Ringkasan</button>
+  <button class="nav-btn" onclick="showPage('perumahan')">🏘️ Perumahan</button>
+  <button class="nav-btn" onclick="showPage('psu')">🌿 Kondisi PSU</button>
+  <button class="nav-btn" onclick="showPage('penyaluran')">🏗️ Penyaluran</button>
+  <button class="nav-btn" onclick="showPage('pasca')">👤 Pasca Penyaluran</button>
+</nav>
+
+<main class="main">
+
+<!-- ════════════════ PAGE: OVERVIEW ════════════════ -->
+<div class="page active" id="page-overview">
+  <div class="kpi-strip" id="kpi-strip"></div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="ico">📦</span> Unit Tersedia per Perumahan</div>
+      <div class="bar-chart" id="bar-unit"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="ico">🏠</span> Status Hunian Pasca Penyaluran</div>
+      <div class="bar-chart" id="bar-status-huni"></div>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="ico">💼</span> Profil Pekerjaan Penghuni</div>
+      <div class="bar-chart" id="bar-kerja"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="ico">💰</span> Distribusi Penghasilan Penghuni</div>
+      <div class="bar-chart" id="bar-gaji"></div>
+    </div>
+  </div>
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-title"><span class="ico">🧱</span> Kondisi Lantai</div>
+      <div id="bar-lantai" class="bar-chart"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="ico">🧱</span> Kondisi Dinding</div>
+      <div id="bar-dinding" class="bar-chart"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="ico">🏚️</span> Kondisi Atap</div>
+      <div id="bar-atap" class="bar-chart"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ PAGE: PERUMAHAN ════════════════ -->
+<div class="page" id="page-perumahan">
+  <div class="sec-title">Daftar Perumahan FLPP</div>
+  <div class="p-cards" id="p-cards"></div>
+</div>
+
+<!-- ════════════════ PAGE: PSU ════════════════ -->
+<div class="page" id="page-psu">
+  <div class="filter-bar">
+    <select class="filter-select" id="psu-filter" onchange="renderPSU()">
+      <option value="">Semua Perumahan</option>
+    </select>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="ico">🛠️</span> Ketersediaan Jaringan & Fasilitas</div>
+      <div class="bar-chart" id="psu-bar-net"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="ico">🌳</span> Kondisi Ruang Terbuka Hijau</div>
+      <div class="bar-chart" id="psu-bar-rth"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="ico">📋</span> Detail Kondisi PSU per Perumahan</div>
+    <div class="tbl-wrap">
+      <table id="psu-table">
+        <thead><tr>
+          <th>Perumahan</th><th>Drainase</th><th>Air Bersih</th>
+          <th>Air Limbah</th><th>Sampah</th><th>Listrik</th>
+          <th>Penerangan</th><th>RTH Hijau</th><th>RTH Biru</th><th>Surveyor</th>
+        </tr></thead>
+        <tbody id="psu-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ PAGE: PENYALURAN ════════════════ -->
+<div class="page" id="page-penyaluran">
+  <div class="filter-bar">
+    <select class="filter-select" id="salur-filter" onchange="renderSalur()">
+      <option value="">Semua Perumahan</option>
+    </select>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="ico">🏗️</span> Jenis Pondasi & Rangka</div>
+      <div id="salur-bar-struct" class="bar-chart"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="ico">🪟</span> Material Atap & Lantai</div>
+      <div id="salur-bar-mat" class="bar-chart"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="ico">⚡</span> Ketersediaan Utilitas</div>
+    <div class="bar-chart" id="salur-bar-util"></div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="ico">📋</span> Detail Komponen Bangunan</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Perumahan</th><th>Pondasi</th><th>Rangka Atap</th><th>Atap Penutup</th><th>Plafon</th><th>Lantai</th><th>Dinding</th><th>Mortar</th></tr></thead>
+        <tbody id="salur-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ PAGE: PASCA ════════════════ -->
+<div class="page" id="page-pasca">
+  <div class="filter-bar">
+    <select class="filter-select" id="pasca-filter" onchange="renderPasca()">
+      <option value="">Semua Perumahan</option>
+    </select>
+  </div>
+  <div class="kpi-strip" id="pasca-kpi"></div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="ico">🏠</span> Status Hunian</div>
+      <div class="bar-chart" id="pasca-bar-huni"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="ico">📜</span> Kelengkapan Dokumen</div>
+      <div class="bar-chart" id="pasca-bar-dok"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="ico">👤</span> Daftar Unit Penghuni</div>
+    <div class="filter-bar" style="margin-bottom:14px">
+      <select class="filter-select" id="pasca-cond-filter" onchange="renderPascaUnits()">
+        <option value="">Semua Kondisi</option>
+        <option value="Baik">Kondisi Baik</option>
+        <option value="Sedang">Kondisi Sedang</option>
+        <option value="Buruk">Kondisi Buruk</option>
+      </select>
+    </div>
+    <div id="pasca-units"></div>
+  </div>
+</div>
+
+</main>
+
+<!-- ════════════════ REPORT MODAL ════════════════ -->
+<div class="report-overlay" id="report-overlay">
+  <div class="report-sheet">
+    <div class="report-toolbar">
+      <button class="report-btn print" onclick="window.print()">🖨️ Cetak / Simpan PDF</button>
+      <button class="report-btn close" onclick="closeReport()">✕ Tutup</button>
+    </div>
+    <div id="report-content"></div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════
+let DB = {"objek": [{"Timestamp": "24/6/2026, 09.45.41", "t1_id_sikumbang": "CBN0310042022T001", "t1_nama_perumahan": "Keandra Park", "t1_nama_pt": "PT TULUS ASIH", "t1_asosiasi": "REI", "t1_kontraktor": "PT TULUS ASIH", "t1_alamat": "JAWA BARAT, KOTA CIREBON, Harjamukti, Larangan", "t1_koordinat": "-6.234313, 106.844059", "t1_luas_perumahan": 165000, "t1_subsidi_tipe_1": "36/70", "t1_subsidi_unit_1": 140, "t1_subsidi_harga_1": 166000000, "t1_subsidi_tipe_2": "21/70", "t1_subsidi_unit_2": 150, "t1_subsidi_harga_2": 155000000, "t1_komersil_tipe_1": "36/70", "t1_komersil_unit_1": 50, "t1_komersil_harga_1": 300000000, "status_komersil_kavling": 100, "status_komersil_pembangunan": 10, "status_komersil_readystock": 10, "status_komersil_dipesan": 10, "status_komersil_terjual": 10, "status_subsidi_kavling": 400, "status_subsidi_pembangunan": 10, "status_subsidi_readystock": 100, "status_subsidi_prosesbank": 150, "status_subsidi_terjual": 50, "dok_ada_7": "Tidak Ada"}, {"Timestamp": "25/6/2026, 08.15.00", "t1_id_sikumbang": "JKT0101012023T001", "t1_nama_perumahan": "Griya Sejahtera Mandiri", "t1_nama_pt": "PT MAJU BERSAMA PROPERTI", "t1_asosiasi": "REI", "t1_kontraktor": "PT KARYA BANGUN NUSANTARA", "t1_alamat": "JAWA BARAT, KOTA BEKASI, Mustika Jaya, Pedurenan", "t1_koordinat": "-6.285432, 107.012345", "t1_luas_perumahan": 85000, "t1_subsidi_unit_1": 140, "t1_subsidi_unit_2": 80, "t1_subsidi_unit_3": 60, "t1_komersil_unit_1": 30, "t1_komersil_unit_2": 20, "status_komersil_kavling": 30, "status_komersil_pembangunan": 5, "status_komersil_readystock": 10, "status_komersil_dipesan": 8, "status_komersil_terjual": 7, "status_subsidi_kavling": 280, "status_subsidi_pembangunan": 15, "status_subsidi_readystock": 20, "status_subsidi_prosesbank": 30, "status_subsidi_terjual": 215}, {"Timestamp": "25/6/2026, 09.30.00", "t1_id_sikumbang": "TGR0202022024T002", "t1_nama_perumahan": "Perumahan Harmoni Indah", "t1_nama_pt": "PT HARMONI GRIYA SENTOSA", "t1_asosiasi": "APERSI", "t1_kontraktor": "PT BINA CIPTA UTAMA", "t1_alamat": "JAWA BARAT, KABUPATEN BOGOR, Cibinong, Karadenan", "t1_koordinat": "-6.475123, 106.858900", "t1_luas_perumahan": 120000, "t1_subsidi_unit_1": 200, "t1_subsidi_unit_2": 100, "t1_subsidi_unit_3": 50, "t1_komersil_unit_1": 40, "t1_komersil_unit_2": 15, "status_komersil_kavling": 40, "status_komersil_pembangunan": 5, "status_komersil_readystock": 10, "status_komersil_dipesan": 8, "status_komersil_terjual": 17, "status_subsidi_kavling": 350, "status_subsidi_pembangunan": 15, "status_subsidi_readystock": 20, "status_subsidi_prosesbank": 30, "status_subsidi_terjual": 285}, {"Timestamp": "25/6/2026, 10.45.00", "t1_id_sikumbang": "BGR0303032024T003", "t1_nama_perumahan": "Cluster Bukit Asri", "t1_nama_pt": "PT BANGUN ASRI LESTARI", "t1_asosiasi": "REI", "t1_kontraktor": "PT JAYA KONSTRUKSI MANDIRI", "t1_alamat": "JAWA BARAT, KABUPATEN BOGOR, Gunung Putri, Bojong Kulur", "t1_koordinat": "-6.401256, 106.953781", "t1_luas_perumahan": 95000, "t1_subsidi_unit_1": 150, "t1_subsidi_unit_2": 90, "t1_subsidi_unit_3": 40, "t1_komersil_unit_1": 25, "t1_komersil_unit_2": 10, "t1_komersil_unit_3": 5, "status_komersil_kavling": 25, "status_komersil_pembangunan": 5, "status_komersil_readystock": 10, "status_komersil_dipesan": 8, "status_komersil_terjual": 2, "status_subsidi_kavling": 280, "status_subsidi_pembangunan": 15, "status_subsidi_readystock": 20, "status_subsidi_prosesbank": 30, "status_subsidi_terjual": 215}, {"Timestamp": "25/6/2026, 11.20.00", "t1_id_sikumbang": "TNG0404042024T004", "t1_nama_perumahan": "Taman Melati Permai", "t1_nama_pt": "PT MELATI PROPERTI INDONESIA", "t1_asosiasi": "APERSI", "t1_kontraktor": "PT PRIMA BANGUN SEJAHTERA", "t1_alamat": "BANTEN, KOTA TANGERANG SELATAN, Ciputat Timur, Pisangan", "t1_koordinat": "-6.315678, 106.764532", "t1_luas_perumahan": 70000, "t1_subsidi_unit_1": 180, "t1_subsidi_unit_2": 70, "t1_subsidi_unit_3": 60, "t1_komersil_unit_1": 35, "status_komersil_kavling": 35, "status_komersil_pembangunan": 5, "status_komersil_readystock": 10, "status_komersil_dipesan": 8, "status_komersil_terjual": 12, "status_subsidi_kavling": 310, "status_subsidi_pembangunan": 15, "status_subsidi_readystock": 20, "status_subsidi_prosesbank": 30, "status_subsidi_terjual": 245}, {"Timestamp": "25/6/2026, 13.00.00", "t1_id_sikumbang": "DPK0505052024T005", "t1_nama_perumahan": "Residensial Green Park", "t1_nama_pt": "PT GREEN LAND DEVELOPMENT", "t1_asosiasi": "REI", "t1_kontraktor": "PT SEJAHTERA KONSTRUKSI", "t1_alamat": "JAWA BARAT, KOTA DEPOK, Sukmajaya, Abadijaya", "t1_koordinat": "-6.398012, 106.832456", "t1_luas_perumahan": 55000, "t1_subsidi_unit_1": 120, "t1_subsidi_unit_2": 80, "t1_subsidi_unit_3": 50, "t1_komersil_unit_1": 30, "t1_komersil_unit_2": 20, "status_komersil_kavling": 30, "status_komersil_pembangunan": 5, "status_komersil_readystock": 10, "status_komersil_dipesan": 8, "status_komersil_terjual": 7, "status_subsidi_kavling": 250, "status_subsidi_pembangunan": 15, "status_subsidi_readystock": 20, "status_subsidi_prosesbank": 30, "status_subsidi_terjual": 185}], "psu": [{"p1_id_sikumbang": "JKT0101012023T001", "p1_nama_perumahan": "Griya Sejahtera Mandiri", "prov_panel1": "JAWA BARAT", "kab_panel1": "KOTA BEKASI", "psu_k_0_0": "Ada", "psu_k_0_1": "Baik", "psu_k_1_0": "Ada", "psu_k_1_1": "Baik", "psu_k_2_0": "Ada", "psu_k_3_0": "Ada", "psu_k_4_0": "Ada", "psu_k_5_0": "Ada", "psu_k_6_0": "Ada", "psu_k_7_3": "Ada", "psu_k_7_4": "Ada", "psu_rth_hijau_0_0_ada": "Ada", "psu_rth_hijau_0_0_kondisi": "Baik", "psu_rth_nonhijau_1_4_kondisi": "Sedang", "psu_rth_biru_2_5_kondisi": "Sedang", "Nama Surveyor": "Budi Santoso"}, {"p1_id_sikumbang": "TGR0202022024T002", "p1_nama_perumahan": "Perumahan Harmoni Indah", "prov_panel1": "JAWA BARAT", "kab_panel1": "KABUPATEN BOGOR", "psu_k_0_0": "Ada", "psu_k_0_1": "Baik", "psu_k_1_0": "Ada", "psu_k_1_1": "Baik", "psu_k_2_0": "Ada", "psu_k_3_0": "Ada", "psu_k_4_0": "Ada", "psu_k_5_0": "Ada", "psu_k_6_0": "Ada", "psu_k_7_3": "Tidak Ada", "psu_k_7_4": "Tidak Ada", "psu_rth_hijau_0_6_ada": "Tidak Ada", "psu_rth_nonhijau_1_5_ada": "Tidak Ada", "psu_rth_nonhijau_1_4_kondisi": "Sedang", "psu_rth_biru_2_5_kondisi": "Sedang", "Nama Surveyor": "Dewi Rahayu"}, {"p1_id_sikumbang": "BGR0303032024T003", "p1_nama_perumahan": "Cluster Bukit Asri", "prov_panel1": "JAWA BARAT", "kab_panel1": "KABUPATEN BOGOR", "psu_k_0_0": "Ada", "psu_k_0_1": "Sedang", "psu_k_1_0": "Ada", "psu_k_1_1": "Sedang", "psu_k_2_0": "Ada", "psu_k_3_0": "Ada", "psu_k_4_0": "Ada", "psu_k_5_0": "Ada", "psu_k_6_0": "Ada", "psu_k_7_3": "Ada", "psu_k_7_4": "Tidak Ada", "psu_rth_hijau_0_3_ada": "Tidak Ada", "psu_rth_nonhijau_1_4_kondisi": "Sedang", "psu_rth_biru_2_6_ada": "Tidak Ada", "Nama Surveyor": "Eko Prasetyo"}, {"p1_id_sikumbang": "TNG0404042024T004", "p1_nama_perumahan": "Taman Melati Permai", "prov_panel1": "BANTEN", "kab_panel1": "KOTA TANGERANG SELATAN", "psu_k_0_0": "Ada", "psu_k_0_1": "Baik", "psu_k_1_0": "Ada", "psu_k_1_1": "Baik", "psu_k_2_0": "Ada", "psu_k_3_0": "Ada", "psu_k_4_0": "Ada", "psu_k_5_0": "Ada", "psu_k_6_0": "Ada", "psu_k_7_3": "Tidak Ada", "psu_k_7_4": "Ada", "psu_rth_nonhijau_1_2_ada": "Tidak Ada", "psu_rth_nonhijau_1_4_kondisi": "Sedang", "psu_rth_biru_2_5_kondisi": "Sedang", "Nama Surveyor": "Fitri Handayani"}, {"p1_id_sikumbang": "DPK0505052024T005", "p1_nama_perumahan": "Residensial Green Park", "prov_panel1": "JAWA BARAT", "kab_panel1": "KOTA DEPOK", "psu_k_0_0": "Ada", "psu_k_0_1": "Sedang", "psu_k_1_0": "Ada", "psu_k_1_1": "Sedang", "psu_k_2_0": "Ada", "psu_k_3_0": "Ada", "psu_k_4_0": "Ada", "psu_k_5_0": "Ada", "psu_k_6_0": "Ada", "psu_k_7_3": "Ada", "psu_k_7_4": "Tidak Ada", "psu_rth_biru_2_2_ada": "Tidak Ada", "psu_rth_nonhijau_1_4_kondisi": "Sedang", "Nama Surveyor": "Galih Wicaksono"}], "salur": [{"p2_nama_perumahan": "Griya Sejahtera Mandiri", "py_pondasi_jenis": "Batu Kali", "py_rangka_jenis": "Beton Bertulang", "py_atap_penutup": "Genteng Metal", "py_atap_plafon": "Gypsum Board", "py_lantai_tipe": "Keramik", "py_dinding_tipe": "Bata Merah", "py_pondasi_mortar": "K-175", "py_util_air": "Ada", "py_util_listrik": "Ada", "py_util_sanitasi": "Ada", "py_util_fiber": "Ada", "py_util_kebakaran": "Tidak Ada", "py_util_airlimbah": "Ada"}, {"p2_nama_perumahan": "Perumahan Harmoni Indah", "py_pondasi_jenis": "Batu Kali", "py_rangka_jenis": "Beton Bertulang", "py_atap_penutup": "Genteng Beton", "py_atap_plafon": "GRC Board", "py_lantai_tipe": "Keramik", "py_dinding_tipe": "Batako", "py_pondasi_mortar": "K-175", "py_util_air": "Ada", "py_util_listrik": "Ada", "py_util_sanitasi": "Ada", "py_util_fiber": "Tidak Ada", "py_util_kebakaran": "Tidak Ada", "py_util_airlimbah": "Ada"}, {"p2_nama_perumahan": "Cluster Bukit Asri", "py_pondasi_jenis": "Beton Bertulang", "py_rangka_jenis": "Baja Ringan", "py_atap_penutup": "Genteng Metal", "py_atap_plafon": "Gypsum Board", "py_lantai_tipe": "Homogeneous Tile", "py_dinding_tipe": "Bata Merah", "py_pondasi_mortar": "K-200", "py_util_air": "Ada", "py_util_listrik": "Ada", "py_util_sanitasi": "Ada", "py_util_fiber": "Ada", "py_util_kebakaran": "Tidak Ada", "py_util_airlimbah": "Ada"}, {"p2_nama_perumahan": "Taman Melati Permai", "py_pondasi_jenis": "Batu Kali", "py_rangka_jenis": "Beton Bertulang", "py_atap_penutup": "Genteng Beton", "py_atap_plafon": "GRC Board", "py_lantai_tipe": "Keramik", "py_dinding_tipe": "Batako", "py_pondasi_mortar": "K-175", "py_util_air": "Ada", "py_util_listrik": "Ada", "py_util_sanitasi": "Ada", "py_util_fiber": "Tidak Ada", "py_util_kebakaran": "Tidak Ada", "py_util_airlimbah": "Ada"}, {"p2_nama_perumahan": "Residensial Green Park", "py_pondasi_jenis": "Beton Bertulang", "py_rangka_jenis": "Baja Ringan", "py_atap_penutup": "Genteng Metal", "py_atap_plafon": "Gypsum Board", "py_lantai_tipe": "Homogeneous Tile", "py_dinding_tipe": "Bata Merah", "py_pondasi_mortar": "K-200", "py_util_air": "Ada", "py_util_listrik": "Ada", "py_util_sanitasi": "Ada", "py_util_fiber": "Ada", "py_util_kebakaran": "Tidak Ada", "py_util_airlimbah": "Ada"}], "pasca": [{"p3_id_sikumbang":"JKT0101012023T001","p3_nama_perumahan":"Griya Sejahtera Mandiri","jk_penghuni":"Laki-laki","kawin_penghuni":"Kawin","kerja_penghuni":"Swasta","gaji_penghuni":"2-5 Juta","sticker":"Tersedia","sertif":"Tersedia","pbg":"Tersedia","slf":"Tersedia","penghuni":"3-4 Orang","status_huni":"Dihuni Sendiri","tahun_huni":2023,"pf_lantai_kondisi":"Baik","pf_dinding_kondisi":"Baik","pf_atap_kondisi":"Baik","info_kpr":"Ya","tahu_pkp":"Ya"},{"p3_id_sikumbang":"TGR0202022024T002","p3_nama_perumahan":"Perumahan Harmoni Indah","jk_penghuni":"Perempuan","kawin_penghuni":"Kawin","kerja_penghuni":"ASN/BUMN/BUMD","gaji_penghuni":"5-6 Juta","sticker":"Tersedia","sertif":"Tersedia","pbg":"Tersedia","slf":"Tidak Tersedia","penghuni":"2 Orang","status_huni":"Dihuni Sendiri","tahun_huni":2024,"pf_lantai_kondisi":"Baik","pf_dinding_kondisi":"Sedang","pf_atap_kondisi":"Baik","info_kpr":"Ya","tahu_pkp":"Ya"},{"p3_id_sikumbang":"BGR0303032024T003","p3_nama_perumahan":"Cluster Bukit Asri","jk_penghuni":"Laki-laki","kawin_penghuni":"Kawin","kerja_penghuni":"Wiraswasta","gaji_penghuni":"2-5 Juta","sticker":"Tersedia","sertif":"Tersedia","pbg":"Tersedia","slf":"Tersedia","penghuni":"3-4 Orang","status_huni":"Dihuni Sendiri","tahun_huni":2024,"pf_lantai_kondisi":"Sedang","pf_dinding_kondisi":"Baik","pf_atap_kondisi":"Baik","info_kpr":"Ya","tahu_pkp":"Ya"},{"p3_id_sikumbang":"TNG0404042024T004","p3_nama_perumahan":"Taman Melati Permai","jk_penghuni":"Perempuan","kawin_penghuni":"Kawin","kerja_penghuni":"Swasta","gaji_penghuni":"2-5 Juta","sticker":"Tersedia","sertif":"Tersedia","pbg":"Tersedia","slf":"Tidak Tersedia","penghuni":"2 Orang","status_huni":"Dihuni Sendiri","tahun_huni":2024,"pf_lantai_kondisi":"Baik","pf_dinding_kondisi":"Baik","pf_atap_kondisi":"Sedang","info_kpr":"Ya","tahu_pkp":"Ya"},{"p3_id_sikumbang":"DPK0505052024T005","p3_nama_perumahan":"Residensial Green Park","jk_penghuni":"Laki-laki","kawin_penghuni":"Kawin","kerja_penghuni":"Swasta","gaji_penghuni":"5-6 Juta","sticker":"Tersedia","sertif":"Tersedia","pbg":"Tersedia","slf":"Tersedia","penghuni":"3-4 Orang","status_huni":"Dihuni Sendiri","tahun_huni":2025,"pf_lantai_kondisi":"Baik","pf_dinding_kondisi":"Sedang","pf_atap_kondisi":"Baik","info_kpr":"Ya","tahu_pkp":"Ya"},{"p3_id_sikumbang":"JKT0101012023T001","p3_nama_perumahan":"Griya Sejahtera Mandiri","jk_penghuni":"Laki-laki","kawin_penghuni":"Kawin","kerja_penghuni":"Swasta","gaji_penghuni":"2-5 Juta","sticker":"Tersedia","sertif":"Tersedia","pbg":"Tersedia","slf":"Tersedia","penghuni":"3-4 Orang","status_huni":"Dihuni Sendiri","tahun_huni":2023,"pf_lantai_kondisi":"Baik","pf_dinding_kondisi":"Baik","pf_atap_kondisi":"Baik","info_kpr":"Ya","tahu_pkp":"Ya"},{"p3_id_sikumbang":"JKT0101012023T001","p3_nama_perumahan":"Griya Sejahtera Mandiri","jk_penghuni":"Perempuan","kawin_penghuni":"Kawin","kerja_penghuni":"ASN/BUMN/BUMD","gaji_penghuni":"5-6 Juta","sticker":"Tersedia","sertif":"Tersedia","pbg":"Tersedia","slf":"Tidak Tersedia","penghuni":"2 Orang","status_huni":"Dihuni Sendiri","tahun_huni":2023,"pf_lantai_kondisi":"Baik","pf_dinding_kondisi":"Sedang","pf_atap_kondisi":"Baik","info_kpr":"Ya","tahu_pkp":"Ya"},{"p3_id_sikumbang":"JKT0101012023T001","p3_nama_perumahan":"Griya Sejahtera Mandiri","jk_penghuni":"Laki-laki","kawin_penghuni":"Kawin","kerja_penghuni":"Wiraswasta","gaji_penghuni":"2-5 Juta","sticker":"Tersedia","sertif":"Tersedia","pbg":"Tersedia","slf":"Tersedia","penghuni":"3-4 Orang","status_huni":"Disewakan","tahun_huni":2023,"pf_lantai_kondisi":"Sedang","pf_dinding_kondisi":"Baik","pf_atap_kondisi":"Sedang","info_kpr":"Ya","tahu_pkp":"Tidak"},{"p3_id_sikumbang":"JKT0101012023T001","p3_nama_perumahan":"Griya Sejahtera Mandiri","jk_penghuni":"Laki-laki","kawin_penghuni":"Belum Kawin","kerja_penghuni":"Swasta","gaji_penghuni":"2-5 Juta","sticker":"Tidak Tersedia","sertif":"Tersedia","pbg":"Tersedia","slf":"Tidak Tersedia","penghuni":"1 Orang","status_huni":"Tidak Dihuni Terawat","tahun_huni":2024,"pf_lantai_kondisi":"Baik","pf_dinding_kondisi":"Baik","pf_atap_kondisi":"Baik","info_kpr":"Ya","tahu_pkp":"Ya"},{"p3_id_sikumbang":"TGR0202022024T002","p3_nama_perumahan":"Perumahan Harmoni Indah","jk_penghuni":"Laki-laki","kawin_penghuni":"Kawin","kerja_penghuni":"Swasta","gaji_penghuni":"5-6 Juta","sticker":"Tersedia","sertif":"Tersedia","pbg":"Tersedia","slf":"Tersedia","penghuni":"3-4 Orang","status_huni":"Dihuni Sendiri","tahun_huni":2024,"pf_lantai_kondisi":"Baik","pf_dinding_kondisi":"Baik","pf_atap_kondisi":"Baik","info_kpr":"Ya","tahu_pkp":"Ya"},{"p3_id_sikumbang":"TGR0202022024T002","p3_nama_perumahan":"Perumahan Harmoni Indah","jk_penghuni":"Perempuan","kawin_penghuni":"Kawin","kerja_penghuni":"Informal","gaji_penghuni":"< 2 Juta","sticker":"Tersedia","sertif":"Tersedia","pbg":"Tersedia","slf":"Tidak Tersedia","penghuni":"3-4 Orang","status_huni":"Dihuni Sendiri","tahun_huni":2024,"pf_lantai_kondisi":"Sedang","pf_dinding_kondisi":"Sedang","pf_atap_kondisi":"Sedang","info_kpr":"Tidak","tahu_pkp":"Tidak"},{"p3_id_sikumbang":"TGR0202022024T002","p3_nama_perumahan":"Perumahan Harmoni Indah","jk_penghuni":"Laki-laki","kawin_penghuni":"Kawin","kerja_penghuni":"ASN/BUMN/BUMD","gaji_penghuni":"6-7 Juta","sticker":"Tersedia","sertif":"Tersedia","pbg":"Tersedia","slf":"Tersedia","penghuni":"2 Orang","status_huni":"Dihuni Sendiri","tahun_huni":2024,"pf_lantai_kondisi":"Baik","pf_dinding_kondisi":"Baik","pf_atap_kondisi":"Baik","info_kpr":"Ya","tahu_pkp":"Ya"},{"p3_id_sikumbang":"TGR0202022024T002","p3_nama_perumahan":"Perumahan Harmoni Indah","jk_penghuni":"Perempuan","kawin_penghuni":"Kawin","kerja_penghuni":"Wiraswasta","gaji_penghuni":"2-5 Juta","sticker":"Tidak Tersedia","sertif":"Tidak Tersedia","pbg":"Tersedia","slf":"Tidak Tersedia","penghuni":"2 Orang","status_huni":"Bebas Sewa","tahun_huni":2024,"pf_lantai_kondisi":"Buruk","pf_dinding_kondisi":"Buruk","pf_atap_kondisi":"Buruk","info_kpr":"Tidak","tahu_pkp":"Tidak"},{"p3_id_sikumbang":"BGR0303032024T003","p3_nama_perumahan":"Cluster Bukit Asri","jk_penghuni":"Laki-laki","kawin_penghuni":"Kawin","kerja_penghuni":"TNI/POLRI","gaji_penghuni":"5-6 Juta","sticker":"Tersedia","sertif":"Tersedia","pbg":"Tersedia","slf":"Tersedia","penghuni":"3-4 Orang","status_huni":"Dihuni Sendiri","tahun_huni":2024,"pf_lantai_kondisi":"Baik","pf_dinding_kondisi":"Baik","pf_atap_kondisi":"Baik","info_kpr":"Ya","tahu_pkp":"Ya"},{"p3_id_sikumbang":"BGR0303032024T003","p3_nama_perumahan":"Cluster Bukit Asri","jk_penghuni":"Perempuan","kawin_penghuni":"Kawin","kerja_penghuni":"Swasta","gaji_penghuni":"2-5 Juta","sticker":"Tersedia","sertif":"Tersedia","pbg":"Tersedia","slf":"Tidak Tersedia","penghuni":"2 Orang","status_huni":"Dihuni Sendiri","tahun_huni":2024,"pf_lantai_kondisi":"Baik","pf_dinding_kondisi":"Sedang","pf_atap_kondisi":"Baik","info_kpr":"Ya","tahu_pkp":"Ya"},{"p3_id_sikumbang":"BGR0303032024T003","p3_nama_perumahan":"Cluster Bukit Asri","jk_penghuni":"Laki-laki","kawin_penghuni":"Kawin","kerja_penghuni":"Wiraswasta","gaji_penghuni":"2-5 Juta","sticker":"Tersedia","sertif":"Tersedia","pbg":"Tersedia","slf":"Tersedia","penghuni":"3-4 Orang","status_huni":"Dihuni Sendiri","tahun_huni":2024,"pf_lantai_kondisi":"Sedang","pf_dinding_kondisi":"Baik","pf_atap_kondisi":"Sedang","info_kpr":"Ya","tahu_pkp":"Ya"},{"p3_id_sikumbang":"BGR0303032024T003","p3_nama_perumahan":"Cluster Bukit Asri","jk_penghuni":"Laki-laki","kawin_penghuni":"Kawin","kerja_penghuni":"Informal","gaji_penghuni":"< 2 Juta","sticker":"Tidak Tersedia","sertif":"Tidak Tersedia","pbg":"Tersedia","slf":"Tidak Tersedia","penghuni":"1 Orang","status_huni":"Dijual","tahun_huni":2024,"pf_lantai_kondisi":"Buruk","pf_dinding_kondisi":"Sedang","pf_atap_kondisi":"Buruk","info_kpr":"Tidak","tahu_pkp":"Tidak"},{"p3_id_sikumbang":"TNG0404042024T004","p3_nama_perumahan":"Taman Melati Permai","jk_penghuni":"Perempuan","kawin_penghuni":"Kawin","kerja_penghuni":"ASN/BUMN/BUMD","gaji_penghuni":"5-6 Juta","sticker":"Tersedia","sertif":"Tersedia","pbg":"Tersedia","slf":"Tersedia","penghuni":"2 Orang","status_huni":"Dihuni Sendiri","tahun_huni":2024,"pf_lantai_kondisi":"Baik","pf_dinding_kondisi":"Baik","pf_atap_kondisi":"Baik","info_kpr":"Ya","tahu_pkp":"Ya"},{"p3_id_sikumbang":"TNG0404042024T004","p3_nama_perumahan":"Taman Melati Permai","jk_penghuni":"Laki-laki","kawin_penghuni":"Kawin","kerja_penghuni":"Swasta","gaji_penghuni":"2-5 Juta","sticker":"Tersedia","sertif":"Tersedia","pbg":"Tersedia","slf":"Tersedia","penghuni":"3-4 Orang","status_huni":"Dihuni Sendiri","tahun_huni":2024,"pf_lantai_kondisi":"Baik","pf_dinding_kondisi":"Baik","pf_atap_kondisi":"Baik","info_kpr":"Ya","tahu_pkp":"Ya"},{"p3_id_sikumbang":"TNG0404042024T004","p3_nama_perumahan":"Taman Melati Permai","jk_penghuni":"Laki-laki","kawin_penghuni":"Kawin","kerja_penghuni":"Wiraswasta","gaji_penghuni":"2-5 Juta","sticker":"Tersedia","sertif":"Tersedia","pbg":"Tersedia","slf":"Tidak Tersedia","penghuni":"3-4 Orang","status_huni":"Disewakan","tahun_huni":2024,"pf_lantai_kondisi":"Sedang","pf_dinding_kondisi":"Sedang","pf_atap_kondisi":"Sedang","info_kpr":"Ya","tahu_pkp":"Tidak"},{"p3_id_sikumbang":"TNG0404042024T004","p3_nama_perumahan":"Taman Melati Permai","jk_penghuni":"Perempuan","kawin_penghuni":"Belum Kawin","kerja_penghuni":"Swasta","gaji_penghuni":"2-5 Juta","sticker":"Tidak Tersedia","sertif":"Tidak Tersedia","pbg":"Tersedia","slf":"Tidak Tersedia","penghuni":"1 Orang","status_huni":"Tidak Dihuni Tidak Terawat","tahun_huni":2025,"pf_lantai_kondisi":"Buruk","pf_dinding_kondisi":"Buruk","pf_atap_kondisi":"Buruk","info_kpr":"Tidak","tahu_pkp":"Tidak"},{"p3_id_sikumbang":"DPK0505052024T005","p3_nama_perumahan":"Residensial Green Park","jk_penghuni":"Laki-laki","kawin_penghuni":"Kawin","kerja_penghuni":"Swasta","gaji_penghuni":"5-6 Juta","sticker":"Tersedia","sertif":"Tersedia","pbg":"Tersedia","slf":"Tersedia","penghuni":"3-4 Orang","status_huni":"Dihuni Sendiri","tahun_huni":2025,"pf_lantai_kondisi":"Baik","pf_dinding_kondisi":"Baik","pf_atap_kondisi":"Baik","info_kpr":"Ya","tahu_pkp":"Ya"},{"p3_id_sikumbang":"DPK0505052024T005","p3_nama_perumahan":"Residensial Green Park","jk_penghuni":"Perempuan","kawin_penghuni":"Kawin","kerja_penghuni":"ASN/BUMN/BUMD","gaji_penghuni":"6-7 Juta","sticker":"Tersedia","sertif":"Tersedia","pbg":"Tersedia","slf":"Tersedia","penghuni":"2 Orang","status_huni":"Dihuni Sendiri","tahun_huni":2025,"pf_lantai_kondisi":"Baik","pf_dinding_kondisi":"Baik","pf_atap_kondisi":"Baik","info_kpr":"Ya","tahu_pkp":"Ya"},{"p3_id_sikumbang":"DPK0505052024T005","p3_nama_perumahan":"Residensial Green Park","jk_penghuni":"Laki-laki","kawin_penghuni":"Kawin","kerja_penghuni":"Wiraswasta","gaji_penghuni":"2-5 Juta","sticker":"Tersedia","sertif":"Tersedia","pbg":"Tersedia","slf":"Tidak Tersedia","penghuni":"3-4 Orang","status_huni":"Dihuni Sendiri","tahun_huni":2025,"pf_lantai_kondisi":"Sedang","pf_dinding_kondisi":"Baik","pf_atap_kondisi":"Baik","info_kpr":"Ya","tahu_pkp":"Ya"},{"p3_id_sikumbang":"DPK0505052024T005","p3_nama_perumahan":"Residensial Green Park","jk_penghuni":"Laki-laki","kawin_penghuni":"Kawin","kerja_penghuni":"Informal","gaji_penghuni":"2-5 Juta","sticker":"Tersedia","sertif":"Tidak Tersedia","pbg":"Tersedia","slf":"Tidak Tersedia","penghuni":"> 4 Orang","status_huni":"Disewakan","tahun_huni":2025,"pf_lantai_kondisi":"Sedang","pf_dinding_kondisi":"Sedang","pf_atap_kondisi":"Sedang","info_kpr":"Tidak","tahu_pkp":"Tidak"}]};
+
+// ═══════════════════════════════════════════════════════════════
+// ⚙️ KONFIGURASI AUTO-SYNC DARI GOOGLE SHEETS
+// ═══════════════════════════════════════════════════════════════
+// Cara mendapatkan link CSV untuk tiap sheet:
+// 1. Buka Google Sheets sumber data (spreadsheet hasil Google Form).
+// 2. File > Bagikan > Publikasikan ke web (Share > Publish to web).
+// 3. Di dropdown pertama, pilih SHEET SPESIFIK (bukan "Seluruh dokumen"),
+//    contoh: "Data Objek Perumahan - Pengemba".
+// 4. Di dropdown kedua, pilih format "Comma-separated values (.csv)".
+// 5. Klik Publikasikan, lalu salin link yang muncul.
+// 6. Tempel link tersebut ke salah satu nilai di bawah ini.
+// 7. Ulangi untuk ke-4 sheet (objek, psu, salur, pasca).
+//
+// Selama urls di bawah masih placeholder ("PASTE_LINK..."), dashboard akan
+// tetap pakai data contoh statis dan auto-sync TIDAK aktif.
+const AUTO_SYNC_CONFIG = {
+  enabled: true,            // ganti ke false untuk mematikan auto-sync sepenuhnya
+  intervalSeconds: 30,      // seberapa sering dashboard mengecek data baru (detik)
+  urls: {
+    objek: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ4v29MLz0sO7sVk_IaZB7G7obeky-LRwMykygPSV2uSq-7Q4kK_czjckaVsV54uwCCircrSr7WJ0-U/pub?gid=659382550&single=true&output=csv,
+    psu:   'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ4v29MLz0sO7sVk_IaZB7G7obeky-LRwMykygPSV2uSq-7Q4kK_czjckaVsV54uwCCircrSr7WJ0-U/pub?gid=1119471667&single=true&output=csv',
+    salur: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ4v29MLz0sO7sVk_IaZB7G7obeky-LRwMykygPSV2uSq-7Q4kK_czjckaVsV54uwCCircrSr7WJ0-U/pub?gid=414687521&single=true&output=csv',
+    pasca: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ4v29MLz0sO7sVk_IaZB7G7obeky-LRwMykygPSV2uSq-7Q4kK_czjckaVsV54uwCCircrSr7WJ0-U/pub?gid=1875471927&single=true&output=csv',
+  }
+};
+
+let syncTimer = null;
+let lastSyncSuccess = false;
+
+function isAutoSyncConfigured() {
+  return Object.values(AUTO_SYNC_CONFIG.urls).every(u => typeof u === 'string' && !u.startsWith('PASTE_'));
+}
+
+function fetchSheetAsObjects(url) {
+  return new Promise((resolve, reject) => {
+    Papa.parse(url, {
+      download: true,
+      header: true,
+      dynamicTyping: true,
+      skipEmptyLines: true,
+      complete: (res) => resolve(res.data),
+      error: (err) => reject(err),
+    });
+  });
+}
+
+async function syncFromGoogleSheets(isManual) {
+  const statusEl = document.getElementById('data-status');
+  const badgeEl = document.getElementById('live-badge');
+  if (!isAutoSyncConfigured()) {
+    statusEl.textContent = 'Mode demo (link Google Sheets belum diatur) · klik "Upload Excel" untuk muat data sendiri';
+    badgeEl.textContent = 'Demo';
+    badgeEl.style.background = 'var(--g400)';
+    return;
+  }
+
+  if (isManual) statusEl.textContent = 'Menyinkronkan data dari Google Sheets...';
+  badgeEl.textContent = 'Syncing';
+  badgeEl.style.background = 'var(--amber)';
+
+  try {
+    const [objek, psu, salur, pasca] = await Promise.all([
+      fetchSheetAsObjects(AUTO_SYNC_CONFIG.urls.objek),
+      fetchSheetAsObjects(AUTO_SYNC_CONFIG.urls.psu),
+      fetchSheetAsObjects(AUTO_SYNC_CONFIG.urls.salur),
+      fetchSheetAsObjects(AUTO_SYNC_CONFIG.urls.pasca),
+    ]);
+
+    DB = { objek, psu, salur, pasca };
+    refreshAllViews();
+
+    const now = new Date();
+    statusEl.textContent = `Auto-sync aktif · update terakhir ${now.toLocaleTimeString('id-ID')} · ${DB.objek.length} perumahan, ${DB.pasca.length} unit pasca`;
+    badgeEl.textContent = 'Live';
+    badgeEl.style.background = 'var(--teal)';
+    lastSyncSuccess = true;
+  } catch (err) {
+    console.error('Gagal sync dari Google Sheets:', err);
+    badgeEl.textContent = 'Error';
+    badgeEl.style.background = 'var(--red)';
+    if (!lastSyncSuccess) {
+      statusEl.textContent = 'Gagal sync dari Google Sheets — periksa link CSV di AUTO_SYNC_CONFIG. Menampilkan data demo.';
+    } else {
+      statusEl.textContent = 'Sync terakhir gagal (data sebelumnya tetap ditampilkan). Akan dicoba lagi otomatis.';
+    }
+  }
+}
+
+function startAutoSync() {
+  if (!AUTO_SYNC_CONFIG.enabled) return;
+  syncFromGoogleSheets(false);
+  if (syncTimer) clearInterval(syncTimer);
+  syncTimer = setInterval(() => syncFromGoogleSheets(false), AUTO_SYNC_CONFIG.intervalSeconds * 1000);
+}
+
+// ═══════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════
+const fmt = n => n?.toLocaleString('id-ID') ?? '-';
+const pill = (v) => {
+  if(v==='Baik'||v==='Ada'||v==='Sesuai'||v==='Tersedia'||v==='Ya') return `<span class="pill pill-green">${v}</span>`;
+  if(v==='Sedang') return `<span class="pill pill-amber">${v}</span>`;
+  if(v==='Buruk'||v==='Tidak Ada'||v==='Tidak Sesuai'||v==='Tidak Tersedia'||v==='Tidak') return `<span class="pill pill-red">${v}</span>`;
+  return `<span class="pill pill-gray">${v??'-'}</span>`;
+};
+
+function count(arr, field) {
+  const m = {};
+  arr.forEach(r => { const v = r[field]??'N/A'; m[v]=(m[v]||0)+1; });
+  return m;
+}
+
+function barChart(el, data, colorFn, total) {
+  const max = Math.max(...Object.values(data));
+  el.innerHTML = Object.entries(data).sort((a,b)=>b[1]-a[1]).map(([k,v])=>{
+    const pct = total ? (v/total*100).toFixed(0) : (v/max*100).toFixed(0);
+    const color = colorFn ? colorFn(k) : 'var(--teal)';
+    const label = total ? `${v} (${pct}%)` : v;
+    return `<div class="bar-row">
+      <div class="bar-label" title="${k}">${k}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${color}"></div></div>
+      <div class="bar-val">${label}</div>
+    </div>`;
+  }).join('');
+}
+
+function kondisiColor(k) {
+  if(k==='Baik') return 'var(--green)';
+  if(k==='Sedang') return 'var(--amber)';
+  if(k==='Buruk') return 'var(--red)';
+  return 'var(--teal)';
+}
+
+// ═══════════════════════════════════════
+// OVERVIEW
+// ═══════════════════════════════════════
+function renderOverview() {
+  const pasca = DB.pasca;
+  const totalPerumahan = DB.objek.length;
+  const totalSubsidi = DB.objek.reduce((s,r)=>{
+    return s+(r.t1_subsidi_unit_1||0)+(r.t1_subsidi_unit_2||0)+(r.t1_subsidi_unit_3||0);
+  },0);
+  const totalTerjual = DB.objek.reduce((s,r)=>s+(r.status_subsidi_terjual||0),0);
+  const totalPasca = pasca.length;
+  const huniSendiri = pasca.filter(r=>r.status_huni==='Dihuni Sendiri').length;
+
+  document.getElementById('kpi-strip').innerHTML = `
+    <div class="kpi"><div class="kpi-val">${totalPerumahan}</div><div class="kpi-label">Perumahan</div><div class="kpi-sub">Data tersurvei</div></div>
+    <div class="kpi gold"><div class="kpi-val">${fmt(totalSubsidi)}</div><div class="kpi-label">Total Unit Subsidi</div><div class="kpi-sub">Semua perumahan</div></div>
+    <div class="kpi green"><div class="kpi-val">${fmt(totalTerjual)}</div><div class="kpi-label">Unit Terjual</div><div class="kpi-sub">${(totalTerjual/totalSubsidi*100).toFixed(0)}% dari total</div></div>
+    <div class="kpi"><div class="kpi-val">${totalPasca}</div><div class="kpi-label">Unit Disurvei Pasca</div><div class="kpi-sub">Penghuni terdaftar</div></div>
+    <div class="kpi amber"><div class="kpi-val">${huniSendiri}</div><div class="kpi-label">Dihuni Sendiri</div><div class="kpi-sub">${(huniSendiri/totalPasca*100).toFixed(0)}% dari survei</div></div>
+  `;
+
+  // bar unit per perumahan
+  const unitData = {};
+  DB.objek.forEach(r => {
+    const nm = r.t1_nama_perumahan;
+    unitData[nm] = (r.t1_subsidi_unit_1||0)+(r.t1_subsidi_unit_2||0)+(r.t1_subsidi_unit_3||0);
+  });
+  barChart(document.getElementById('bar-unit'), unitData, ()=>'var(--navy2)');
+
+  // status huni
+  barChart(document.getElementById('bar-status-huni'), count(pasca,'status_huni'), k=>{
+    if(k==='Dihuni Sendiri') return 'var(--green)';
+    if(k==='Disewakan'||k==='Bebas Sewa') return 'var(--amber)';
+    return 'var(--red)';
+  }, pasca.length);
+
+  // kerja
+  barChart(document.getElementById('bar-kerja'), count(pasca,'kerja_penghuni'), ()=>'var(--teal)', pasca.length);
+
+  // gaji
+  const gajiOrder = ['< 2 Juta','2-5 Juta','5-6 Juta','6-7 Juta','7-8 Juta','> 8 Juta'];
+  const gajiData = count(pasca,'gaji_penghuni');
+  const gajiOrdered = {};
+  gajiOrder.forEach(k => { if(gajiData[k]) gajiOrdered[k] = gajiData[k]; });
+  barChart(document.getElementById('bar-gaji'), gajiOrdered, ()=>'var(--gold)', pasca.length);
+
+  // kondisi
+  const lantaiC = count(pasca,'pf_lantai_kondisi');
+  const dindingC = count(pasca,'pf_dinding_kondisi');
+  const atapC = count(pasca,'pf_atap_kondisi');
+  barChart(document.getElementById('bar-lantai'), lantaiC, kondisiColor, pasca.length);
+  barChart(document.getElementById('bar-dinding'), dindingC, kondisiColor, pasca.length);
+  barChart(document.getElementById('bar-atap'), atapC, kondisiColor, pasca.length);
+}
+
+// ═══════════════════════════════════════
+// PERUMAHAN
+// ═══════════════════════════════════════
+function renderPerumahan() {
+  const cards = DB.objek.map((r,i) => {
+    const totalSubsidi = (r.t1_subsidi_unit_1||0)+(r.t1_subsidi_unit_2||0)+(r.t1_subsidi_unit_3||0);
+    const totalKomersil = (r.t1_komersil_unit_1||0)+(r.t1_komersil_unit_2||0)+(r.t1_komersil_unit_3||0);
+    const terjualPct = totalSubsidi ? ((r.status_subsidi_terjual||0)/totalSubsidi*100).toFixed(0) : 0;
+    return `<div class="p-card" onclick="showReport(${i})">
+      <div class="p-card-name">${r.t1_nama_perumahan}</div>
+      <div class="p-card-id">${r.t1_id_sikumbang}</div>
+      <div class="p-card-row">PT <span>${r.t1_nama_pt}</span></div>
+      <div class="p-card-row">Asosiasi <span>${r.t1_asosiasi}</span></div>
+      <div class="p-card-row">Lokasi <span>${r.t1_alamat?.split(',').slice(0,2).join(',')}</span></div>
+      <div class="p-card-row">Luas <span>${fmt(r.t1_luas_perumahan)} m²</span></div>
+      <div class="p-card-row">Unit Subsidi <span>${fmt(totalSubsidi)}</span></div>
+      <div class="p-card-row">Unit Komersil <span>${fmt(totalKomersil)}</span></div>
+      <div class="p-card-row">Terjual Subsidi <span>${fmt(r.status_subsidi_terjual)} (${terjualPct}%)</span></div>
+      <div class="p-card-row">Proses Bank <span>${fmt(r.status_subsidi_prosesbank)}</span></div>
+      <div style="text-align:center;margin-top:10px;font-size:10px;color:var(--teal);font-weight:700;text-transform:uppercase;letter-spacing:.05em">📄 Klik untuk Lihat Laporan</div>
+    </div>`;
+  });
+  document.getElementById('p-cards').innerHTML = cards.join('');
+}
+
+// ═══════════════════════════════════════
+// PSU
+// ═══════════════════════════════════════
+function renderPSU() {
+  const filter = document.getElementById('psu-filter').value;
+  let data = DB.psu;
+  if(filter) data = data.filter(r=>r.p1_nama_perumahan===filter);
+
+  // Ketersediaan jaringan (aggregate)
+  const net = {
+    'Drainase': data.filter(r=>r.psu_k_0_0==='Ada').length,
+    'Air Bersih': data.filter(r=>r.psu_k_1_0==='Ada').length,
+    'Air Limbah': data.filter(r=>r.psu_k_2_0==='Ada').length,
+    'Sampah': data.filter(r=>r.psu_k_3_0==='Ada').length,
+    'Listrik': data.filter(r=>r.psu_k_4_0==='Ada').length,
+    'Penerangan Jalan': data.filter(r=>r.psu_k_5_0==='Ada').length,
+    'Telekomunikasi': data.filter(r=>r.psu_k_6_0==='Ada').length,
+  };
+  barChart(document.getElementById('psu-bar-net'), net, ()=>'var(--teal)', data.length||1);
+
+  // RTH kondisi
+  const rthBaik = data.filter(r=>r.psu_rth_hijau_0_0_kondisi==='Baik').length;
+  const rthSedang = data.filter(r=>r.psu_rth_nonhijau_1_4_kondisi==='Sedang').length;
+  const rthData = {'RTH Hijau Baik': rthBaik, 'RTH Non-Hijau Sedang': rthSedang};
+  barChart(document.getElementById('psu-bar-rth'), rthData, k=>k.includes('Baik')?'var(--green)':'var(--amber)', data.length||1);
+
+  // Table
+  document.getElementById('psu-tbody').innerHTML = data.map(r=>`<tr>
+    <td><b>${r.p1_nama_perumahan}</b><br><small style="color:var(--g400)">${r.kab_panel1}</small></td>
+    <td>${pill(r.psu_k_0_1||r.psu_k_0_0)}</td>
+    <td>${pill(r.psu_k_1_1||r.psu_k_1_0)}</td>
+    <td>${pill(r.psu_k_2_0)}</td>
+    <td>${pill(r.psu_k_3_0)}</td>
+    <td>${pill(r.psu_k_4_0)}</td>
+    <td>${pill(r.psu_k_5_0)}</td>
+    <td>${pill(r.psu_rth_hijau_0_0_ada||'Ada')}</td>
+    <td>${pill(r.psu_rth_biru_2_2_ada||'Ada')}</td>
+    <td style="color:var(--g600);font-size:11px">${r['Nama Surveyor']}</td>
+  </tr>`).join('');
+}
+
+function initPSUFilter() {
+  const sel = document.getElementById('psu-filter');
+  sel.innerHTML = '<option value="">Semua Perumahan</option>';
+  [...new Set(DB.psu.map(r=>r.p1_nama_perumahan))].forEach(nm => {
+    const o = document.createElement('option');
+    o.value = nm; o.textContent = nm;
+    sel.appendChild(o);
+  });
+}
+
+// ═══════════════════════════════════════
+// PENYALURAN
+// ═══════════════════════════════════════
+function renderSalur() {
+  const filter = document.getElementById('salur-filter').value;
+  let data = DB.salur;
+  if(filter) data = data.filter(r=>r.p2_nama_perumahan===filter);
+
+  barChart(document.getElementById('salur-bar-struct'), {
+    'Batu Kali': data.filter(r=>r.py_pondasi_jenis==='Batu Kali').length,
+    'Beton Bertulang': data.filter(r=>r.py_pondasi_jenis==='Beton Bertulang').length,
+    'Rangka Beton': data.filter(r=>r.py_rangka_jenis==='Beton Bertulang').length,
+    'Rangka Baja Ringan': data.filter(r=>r.py_rangka_jenis==='Baja Ringan').length,
+  }, ()=>'var(--navy2)', data.length||1);
+
+  barChart(document.getElementById('salur-bar-mat'), {
+    'Genteng Metal': data.filter(r=>r.py_atap_penutup==='Genteng Metal').length,
+    'Genteng Beton': data.filter(r=>r.py_atap_penutup==='Genteng Beton').length,
+    'Keramik': data.filter(r=>r.py_lantai_tipe==='Keramik').length,
+    'Homogeneous Tile': data.filter(r=>r.py_lantai_tipe==='Homogeneous Tile').length,
+    'Bata Merah': data.filter(r=>r.py_dinding_tipe==='Bata Merah').length,
+    'Batako': data.filter(r=>r.py_dinding_tipe==='Batako').length,
+  }, ()=>'var(--teal)', data.length||1);
+
+  barChart(document.getElementById('salur-bar-util'), {
+    'Air Bersih': data.filter(r=>r.py_util_air==='Ada').length,
+    'Listrik': data.filter(r=>r.py_util_listrik==='Ada').length,
+    'Sanitasi': data.filter(r=>r.py_util_sanitasi==='Ada').length,
+    'Fiber Optik': data.filter(r=>r.py_util_fiber==='Ada').length,
+    'Air Limbah': data.filter(r=>r.py_util_airlimbah==='Ada').length,
+    'Kebakaran': data.filter(r=>r.py_util_kebakaran==='Ada').length,
+  }, k=>k==='Kebakaran'?'var(--red)':k==='Fiber Optik'?'var(--amber)':'var(--green)', data.length||1);
+
+  document.getElementById('salur-tbody').innerHTML = data.map(r=>`<tr>
+    <td><b>${r.p2_nama_perumahan}</b></td>
+    <td>${r.py_pondasi_jenis}</td>
+    <td>${r.py_rangka_jenis}</td>
+    <td>${r.py_atap_penutup}</td>
+    <td>${r.py_atap_plafon}</td>
+    <td>${r.py_lantai_tipe}</td>
+    <td>${r.py_dinding_tipe}</td>
+    <td><span class="pill pill-blue">${r.py_pondasi_mortar}</span></td>
+  </tr>`).join('');
+}
+
+function initSalurFilter() {
+  const sel = document.getElementById('salur-filter');
+  sel.innerHTML = '<option value="">Semua Perumahan</option>';
+  [...new Set(DB.salur.map(r=>r.p2_nama_perumahan))].forEach(nm => {
+    const o = document.createElement('option');
+    o.value = nm; o.textContent = nm;
+    sel.appendChild(o);
+  });
+}
+
+// ═══════════════════════════════════════
+// PASCA
+// ═══════════════════════════════════════
+function getPascaFiltered() {
+  const filter = document.getElementById('pasca-filter').value;
+  let data = DB.pasca;
+  if(filter) data = data.filter(r=>r.p3_nama_perumahan===filter);
+  return data;
+}
+
+function renderPasca() {
+  const data = getPascaFiltered();
+  const n = data.length;
+  const huniSendiri = data.filter(r=>r.status_huni==='Dihuni Sendiri').length;
+  const buruk = data.filter(r=>r.pf_lantai_kondisi==='Buruk'||r.pf_dinding_kondisi==='Buruk'||r.pf_atap_kondisi==='Buruk').length;
+  const slfAda = data.filter(r=>r.slf==='Tersedia').length;
+  const tahuKPR = data.filter(r=>r.info_kpr==='Ya').length;
+
+  document.getElementById('pasca-kpi').innerHTML = `
+    <div class="kpi"><div class="kpi-val">${n}</div><div class="kpi-label">Unit Disurvei</div></div>
+    <div class="kpi green"><div class="kpi-val">${huniSendiri}</div><div class="kpi-label">Dihuni Sendiri</div><div class="kpi-sub">${(huniSendiri/n*100).toFixed(0)}%</div></div>
+    <div class="kpi red"><div class="kpi-val">${buruk}</div><div class="kpi-label">Kondisi Buruk</div><div class="kpi-sub">${(buruk/n*100).toFixed(0)}%</div></div>
+    <div class="kpi amber"><div class="kpi-val">${slfAda}</div><div class="kpi-label">SLF Tersedia</div><div class="kpi-sub">${(slfAda/n*100).toFixed(0)}%</div></div>
+    <div class="kpi gold"><div class="kpi-val">${tahuKPR}</div><div class="kpi-label">Tahu Info KPR</div><div class="kpi-sub">${(tahuKPR/n*100).toFixed(0)}%</div></div>
+  `;
+
+  barChart(document.getElementById('pasca-bar-huni'), count(data,'status_huni'), k=>{
+    if(k==='Dihuni Sendiri') return 'var(--green)';
+    if(k==='Disewakan'||k==='Bebas Sewa') return 'var(--amber)';
+    return 'var(--red)';
+  }, n);
+
+  barChart(document.getElementById('pasca-bar-dok'), {
+    'Sticker KPR': data.filter(r=>r.sticker==='Tersedia').length,
+    'Sertifikat': data.filter(r=>r.sertif==='Tersedia').length,
+    'PBG': data.filter(r=>r.pbg==='Tersedia').length,
+    'SLF': data.filter(r=>r.slf==='Tersedia').length,
+  }, ()=>'var(--teal)', n);
+
+  renderPascaUnits();
+}
+
+function renderPascaUnits() {
+  const data = getPascaFiltered();
+  const condFilter = document.getElementById('pasca-cond-filter').value;
+  let units = data;
+  if(condFilter) {
+    units = data.filter(r=>r.pf_lantai_kondisi===condFilter||r.pf_dinding_kondisi===condFilter||r.pf_atap_kondisi===condFilter);
+  }
+
+  document.getElementById('pasca-units').innerHTML = units.map((r,i)=>{
+    const worst = [r.pf_lantai_kondisi,r.pf_dinding_kondisi,r.pf_atap_kondisi];
+    const cls = worst.includes('Buruk')?'buruk':worst.includes('Sedang')?'sedang':'';
+    return `<div class="unit-card ${cls}">
+      <div class="unit-name">🏠 ${r.p3_nama_perumahan} · Unit #${i+1} · ${r.status_huni}</div>
+      <div class="unit-grid">
+        <div class="unit-field">Penghuni: <span>${r.jk_penghuni}, ${r.kawin_penghuni}</span></div>
+        <div class="unit-field">Pekerjaan: <span>${r.kerja_penghuni}</span></div>
+        <div class="unit-field">Penghasilan: <span>${r.gaji_penghuni}</span></div>
+        <div class="unit-field">Jumlah Penghuni: <span>${r.penghuni}</span></div>
+        <div class="unit-field">Lantai: ${pill(r.pf_lantai_kondisi)}</div>
+        <div class="unit-field">Dinding: ${pill(r.pf_dinding_kondisi)}</div>
+        <div class="unit-field">Atap: ${pill(r.pf_atap_kondisi)}</div>
+        <div class="unit-field">SLF: ${pill(r.slf)}</div>
+        <div class="unit-field">Info KPR: ${pill(r.info_kpr)}</div>
+        <div class="unit-field">Tahun Huni: <span>${r.tahun_huni||'-'}</span></div>
+      </div>
+    </div>`;
+  }).join('') || '<div style="color:var(--g400);font-size:13px;padding:20px 0;text-align:center">Tidak ada data untuk filter ini</div>';
+}
+
+function initPascaFilter() {
+  const sel = document.getElementById('pasca-filter');
+  sel.innerHTML = '<option value="">Semua Perumahan</option>';
+  [...new Set(DB.pasca.map(r=>r.p3_nama_perumahan))].forEach(nm => {
+    const o = document.createElement('option');
+    o.value = nm; o.textContent = nm;
+    sel.appendChild(o);
+  });
+}
+
+// ═══════════════════════════════════════
+// IMPORT DATA DARI EXCEL (.xlsx)
+// ═══════════════════════════════════════
+const SHEET_MAP = {
+  objek: 'Data Objek Perumahan - Pengemba',
+  psu:   'Kondisi PSU',
+  salur: 'Tahap Penyaluran',
+  pasca: 'Pasca Penyaluran',
+};
+
+function sheetToRows(workbook, sheetName) {
+  const ws = workbook.Sheets[sheetName];
+  if (!ws) return null;
+  // defval:null supaya kolom kosong tetap muncul sebagai null, bukan ter-skip
+  return XLSX.utils.sheet_to_json(ws, { defval: null, raw: true });
+}
+
+function refreshAllViews() {
+  renderOverview();
+  renderPerumahan();
+  initPSUFilter();   renderPSU();
+  initSalurFilter(); renderSalur();
+  initPascaFilter(); renderPasca();
+}
+
+function handleExcelUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const statusEl = document.getElementById('data-status');
+  statusEl.textContent = `Membaca ${file.name}...`;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: 'array', cellDates: false });
+
+      const newDB = {};
+      let missing = [];
+      Object.entries(SHEET_MAP).forEach(([key, sheetName]) => {
+        const rows = sheetToRows(workbook, sheetName);
+        if (rows === null) { missing.push(sheetName); return; }
+        newDB[key] = rows;
+      });
+
+      if (missing.length) {
+        alert('Sheet berikut tidak ditemukan di file Excel:\n' + missing.join('\n') +
+              '\n\nPastikan nama sheet di file Excel sama persis seperti template.');
+        statusEl.textContent = 'Gagal membaca file — nama sheet tidak cocok.';
+        return;
+      }
+
+      DB = newDB;
+      refreshAllViews();
+
+      const now = new Date();
+      statusEl.textContent = `Data terupdate · ${now.toLocaleDateString('id-ID')} ${now.toLocaleTimeString('id-ID')} · ${file.name}`;
+    } catch (err) {
+      console.error(err);
+      alert('Gagal membaca file Excel. Pastikan formatnya .xlsx dan strukturnya sesuai template.\n\n' + err.message);
+      statusEl.textContent = 'Gagal memproses file.';
+    } finally {
+      event.target.value = ''; // reset input supaya bisa upload file yang sama lagi
+    }
+  };
+  reader.onerror = () => {
+    alert('Gagal membaca file.');
+    statusEl.textContent = 'Gagal membaca file.';
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+// ═══════════════════════════════════════
+// LAPORAN PER PERUMAHAN
+// ═══════════════════════════════════════
+function showReport(idx) {
+  const obj = DB.objek[idx];
+  if (!obj) return;
+  const nama = obj.t1_nama_perumahan;
+
+  const psu = DB.psu.find(r => r.p1_nama_perumahan === nama);
+  const salur = DB.salur.find(r => r.p2_nama_perumahan === nama);
+  const pascaUnits = DB.pasca.filter(r => r.p3_nama_perumahan === nama);
+
+  const totalSubsidi = (obj.t1_subsidi_unit_1||0)+(obj.t1_subsidi_unit_2||0)+(obj.t1_subsidi_unit_3||0);
+  const totalKomersil = (obj.t1_komersil_unit_1||0)+(obj.t1_komersil_unit_2||0)+(obj.t1_komersil_unit_3||0);
+
+  const field = (label, val) => `<div class="report-field"><span>${label}</span><b>${val ?? '-'}</b></div>`;
+
+  // ── Bagian Objek Perumahan ──
+  let html = `
+    <div class="report-head">
+      <h2>Laporan Survei Perumahan FLPP</h2>
+      <div class="sub">${nama} · ${obj.t1_id_sikumbang || '-'}</div>
+    </div>
+
+    <div class="report-sec">
+      <h3>1. Data Objek Perumahan</h3>
+      <div class="report-grid">
+        ${field('Nama Pengembang (PT)', obj.t1_nama_pt)}
+        ${field('Kontraktor', obj.t1_kontraktor)}
+        ${field('Asosiasi', obj.t1_asosiasi)}
+        ${field('Alamat', obj.t1_alamat)}
+        ${field('Luas Perumahan', fmt(obj.t1_luas_perumahan)+' m²')}
+        ${field('Koordinat', obj.t1_koordinat)}
+        ${field('Total Unit Subsidi', fmt(totalSubsidi))}
+        ${field('Total Unit Komersil', fmt(totalKomersil))}
+        ${field('Unit Subsidi Terjual', fmt(obj.status_subsidi_terjual))}
+        ${field('Unit Subsidi Proses Bank', fmt(obj.status_subsidi_prosesbank))}
+        ${field('Unit Subsidi Ready Stock', fmt(obj.status_subsidi_readystock))}
+        ${field('Unit Komersil Terjual', fmt(obj.status_komersil_terjual))}
+      </div>
+    </div>`;
+
+  // ── Bagian PSU ──
+  html += `<div class="report-sec"><h3>2. Kondisi PSU (Prasarana, Sarana, Utilitas)</h3>`;
+  if (psu) {
+    html += `<div class="report-grid">
+      ${field('Drainase', psu.psu_k_0_0)}
+      ${field('Air Bersih', psu.psu_k_1_0)}
+      ${field('Air Limbah', psu.psu_k_2_0)}
+      ${field('Sampah', psu.psu_k_3_0)}
+      ${field('Listrik', psu.psu_k_4_0)}
+      ${field('Penerangan Jalan', psu.psu_k_5_0)}
+      ${field('Telekomunikasi', psu.psu_k_6_0)}
+      ${field('RTH Hijau', psu.psu_rth_hijau_0_0_kondisi)}
+      ${field('Surveyor', psu['Nama Surveyor'])}
+    </div>`;
+  } else {
+    html += `<div class="report-empty">Belum ada data survei PSU untuk perumahan ini.</div>`;
+  }
+  html += `</div>`;
+
+  // ── Bagian Penyaluran / Konstruksi ──
+  html += `<div class="report-sec"><h3>3. Komponen Konstruksi & Utilitas (Tahap Penyaluran)</h3>`;
+  if (salur) {
+    html += `<div class="report-grid">
+      ${field('Jenis Pondasi', salur.py_pondasi_jenis)}
+      ${field('Mortar Pondasi', salur.py_pondasi_mortar)}
+      ${field('Jenis Rangka', salur.py_rangka_jenis)}
+      ${field('Atap Penutup', salur.py_atap_penutup)}
+      ${field('Atap Plafon', salur.py_atap_plafon)}
+      ${field('Tipe Lantai', salur.py_lantai_tipe)}
+      ${field('Tipe Dinding', salur.py_dinding_tipe)}
+      ${field('Utilitas Air', salur.py_util_air)}
+      ${field('Utilitas Listrik', salur.py_util_listrik)}
+      ${field('Utilitas Sanitasi', salur.py_util_sanitasi)}
+      ${field('Utilitas Fiber Optik', salur.py_util_fiber)}
+      ${field('Utilitas Kebakaran', salur.py_util_kebakaran)}
+    </div>`;
+  } else {
+    html += `<div class="report-empty">Belum ada data tahap penyaluran untuk perumahan ini.</div>`;
+  }
+  html += `</div>`;
+
+  // ── Bagian Pasca Penyaluran ──
+  html += `<div class="report-sec"><h3>4. Pasca Penyaluran (${pascaUnits.length} Unit Disurvei)</h3>`;
+  if (pascaUnits.length) {
+    const huniSendiri = pascaUnits.filter(r=>r.status_huni==='Dihuni Sendiri').length;
+    const kondisiBuruk = pascaUnits.filter(r=>r.pf_lantai_kondisi==='Buruk'||r.pf_dinding_kondisi==='Buruk'||r.pf_atap_kondisi==='Buruk').length;
+    html += `<div class="report-grid">
+      ${field('Dihuni Sendiri', `${huniSendiri} (${(huniSendiri/pascaUnits.length*100).toFixed(0)}%)`)}
+      ${field('Kondisi Buruk (lantai/dinding/atap)', `${kondisiBuruk} (${(kondisiBuruk/pascaUnits.length*100).toFixed(0)}%)`)}
+    </div>
+    <table class="report-mini-table">
+      <thead><tr><th>#</th><th>Status Huni</th><th>Pekerjaan</th><th>Lantai</th><th>Dinding</th><th>Atap</th><th>SLF</th></tr></thead>
+      <tbody>
+        ${pascaUnits.map((r,i)=>`<tr>
+          <td>${i+1}</td><td>${r.status_huni||'-'}</td><td>${r.kerja_penghuni||'-'}</td>
+          <td>${r.pf_lantai_kondisi||'-'}</td><td>${r.pf_dinding_kondisi||'-'}</td>
+          <td>${r.pf_atap_kondisi||'-'}</td><td>${r.slf||'-'}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table>`;
+  } else {
+    html += `<div class="report-empty">Belum ada data pasca penyaluran untuk perumahan ini.</div>`;
+  }
+  html += `</div>`;
+
+  html += `<div class="report-footer">Dicetak dari Dashboard Pengendalian Perumahan FLPP · ${new Date().toLocaleString('id-ID')}</div>`;
+
+  document.getElementById('report-content').innerHTML = html;
+  document.getElementById('report-overlay').classList.add('active');
+}
+
+function closeReport() {
+  document.getElementById('report-overlay').classList.remove('active');
+}
+
+// ═══════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+refreshAllViews();   // render data demo dulu supaya dashboard tidak kosong
+startAutoSync();     // lalu coba sync dari Google Sheets (jika sudah dikonfigurasi)
+</script>
+</body>
+</html>
