@@ -346,6 +346,99 @@
   }
   .info-box p { font-size: 12px; color: var(--gray-600); line-height: 1.45; }
 
+  /* ── DASHBOARD CTA ── */
+  .dashboard-cta-section {
+    margin-top: 40px;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+    border-radius: 24px;
+    padding: 36px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(11,35,66,.18);
+  }
+  .dashboard-cta-section::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 240px; height: 240px;
+    border: 40px solid rgba(200,146,42,.10);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .dashboard-cta-section::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: -40px;
+    width: 160px; height: 160px;
+    background: rgba(200,146,42,.07);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .dashboard-cta-text { position: relative; z-index: 1; }
+  .dashboard-cta-label {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .dashboard-cta-label::before {
+    content: '';
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: var(--gold-light);
+    border-radius: 50%;
+  }
+  .dashboard-cta-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 20px; font-weight: 800; color: #fff;
+    margin-bottom: 6px;
+    line-height: 1.25;
+  }
+  .dashboard-cta-desc {
+    font-size: 13px; color: rgba(255,255,255,.60);
+    line-height: 1.55;
+  }
+  .dashboard-cta-btn {
+    position: relative; z-index: 1;
+    display: inline-flex; align-items: center; gap: 12px;
+    background: var(--gold);
+    color: var(--navy);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px; font-weight: 800;
+    padding: 14px 28px;
+    border-radius: 999px;
+    text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+    box-shadow: 0 4px 20px rgba(200,146,42,.35);
+    transition: background .2s, transform .2s, box-shadow .2s;
+  }
+  .dashboard-cta-btn:hover {
+    background: var(--gold-light);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(200,146,42,.45);
+  }
+  .dashboard-cta-btn-icon {
+    width: 30px; height: 30px;
+    background: rgba(11,35,66,.15);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+  }
+  @media(max-width: 640px) {
+    .dashboard-cta-section {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 28px 24px;
+    }
+    .dashboard-cta-btn { width: 100%; justify-content: center; }
+  }
+
   /* ── FOOTER ── */
   footer {
     background: var(--navy-deep);
@@ -432,6 +525,19 @@
       </div>
     </div>
 
+  </div>
+
+  <!-- DASHBOARD CTA -->
+  <div class="dashboard-cta-section">
+    <div class="dashboard-cta-text">
+      <div class="dashboard-cta-label">Admin &amp; Manajemen</div>
+      <div class="dashboard-cta-title">🖥️ Masuk ke Dashboard</div>
+      <div class="dashboard-cta-desc">Lihat rekap data, kelola pengajuan, dan pantau progres survei perumahan FLPP secara menyeluruh.</div>
+    </div>
+    <a class="dashboard-cta-btn" href="dashboard.html">
+      <span>Buka Dashboard</span>
+      <div class="dashboard-cta-btn-icon">&#8594;</div>
+    </a>
   </div>
 
 </main>
