@@ -46,7 +46,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cream);color:va
 .nav-btn.active{color:var(--gold-lt);border-bottom-color:var(--gold)}
 
 /* MAIN */
-.main{max-width:1220px;margin:0 ;padding:24px 20px 80px}
+.main{max-width:1220px;margin:0 auto;padding:24px 20px 80px}
 .page{display:none}.page.active{display:block}
 
 /* SECTION TITLE */
@@ -175,6 +175,64 @@ tr:hover td{background:var(--g50)}
 .empty-state .ico{font-size:40px;margin-bottom:12px}
 .empty-state p{font-size:13px}
 
+/* BERITA ACARA TAB */
+.ba-layout{display:grid;grid-template-columns:340px 1fr;gap:20px;align-items:flex-start}
+@media(max-width:900px){.ba-layout{grid-template-columns:1fr}}
+.ba-sidebar{position:sticky;top:80px}
+.ba-form-section{margin-bottom:18px}
+.ba-form-section h4{font-size:11px;font-weight:700;color:var(--navy2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;padding-bottom:6px;border-bottom:1.5px solid var(--g100)}
+.ba-field{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
+.ba-field label{font-size:11px;font-weight:600;color:var(--g600)}
+.ba-field input,.ba-field select,.ba-field textarea{padding:8px 13px;border:1.5px solid var(--g200);border-radius:10px;font-family:inherit;font-size:12px;color:var(--g800);background:var(--white);outline:none;transition:border-color .15s;width:100%}
+.ba-field input:focus,.ba-field select:focus,.ba-field textarea:focus{border-color:var(--navy2);box-shadow:0 0 0 3px rgba(14,91,115,.09)}
+.ba-field textarea{resize:vertical;min-height:72px;line-height:1.5}
+.ba-field-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ba-gen-btn{width:100%;padding:12px;background:var(--navy);color:#fff;border:none;border-radius:12px;font-family:inherit;font-size:13px;font-weight:800;cursor:pointer;transition:all .15s;letter-spacing:.02em;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:4px}
+.ba-gen-btn:hover{background:var(--navy2);transform:translateY(-1px);box-shadow:0 6px 20px rgba(11,61,82,.25)}
+.ba-gen-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none}
+.ba-preview{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.ba-preview-toolbar{background:var(--g50);padding:12px 18px;border-bottom:1px solid var(--g100);display:flex;align-items:center;justify-content:space-between}
+.ba-preview-toolbar span{font-size:12px;font-weight:700;color:var(--navy)}
+.ba-preview-content{padding:28px 32px;font-size:12px;line-height:1.7;color:#222;min-height:400px;font-family:'Times New Roman',serif}
+.ba-doc-header{display:flex;align-items:flex-start;gap:16px;margin-bottom:10px;padding-bottom:12px;border-bottom:2.5px solid #000}
+.ba-logo{width:70px;height:70px;background:#1a4d6e;display:flex;align-items:center;justify-content:center;font-size:28px;border-radius:4px;flex-shrink:0;color:#fff}
+.ba-header-text{flex:1;text-align:center}
+.ba-header-text .h1{font-size:10px;font-weight:400;font-family:'Times New Roman',serif;text-transform:uppercase;letter-spacing:.03em}
+.ba-header-text .h2{font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:.01em;margin:2px 0}
+.ba-header-text .h3{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.01em}
+.ba-header-text .h4{font-size:10px;font-weight:400;margin-top:4px}
+.ba-center{text-align:center;margin:14px 0;font-weight:700}
+.ba-center .judul{font-size:13px;text-transform:uppercase}
+.ba-center .sub{font-size:12px;text-transform:uppercase}
+.ba-center .lokasi{font-size:12px;text-transform:uppercase;margin-top:4px}
+.ba-opening{text-align:justify;margin:14px 0}
+.ba-opening ul{margin:6px 0 6px 20px;list-style:none;padding:0}
+.ba-opening ul li{display:flex;gap:0;margin-bottom:2px}
+.ba-opening ul li .no{width:24px;flex-shrink:0}
+.ba-opening ul li .label{width:160px;flex-shrink:0}
+.ba-tbl{width:100%;border-collapse:collapse;margin:8px 0;font-size:11px}
+.ba-tbl th{background:#1a4d6e;color:#fff;padding:6px 10px;text-align:center;font-size:11px}
+.ba-tbl td{border:1px solid #555;padding:6px 10px;vertical-align:top}
+.ba-tbl .hdr-row td{background:#dde8ef;font-weight:700;font-size:11px}
+.ba-section-title{font-weight:700;margin:14px 0 4px;font-size:12px}
+.ba-catatan{margin:8px 0}
+.ba-catatan .line{border-bottom:1px solid #555;margin-bottom:10px;min-height:18px}
+.ba-ttd-area{text-align:right;margin:20px 0 12px}
+.ba-ttd-tbl{width:100%;border-collapse:collapse;font-size:11px}
+.ba-ttd-tbl th{background:#1a4d6e;color:#fff;padding:6px 8px;text-align:center}
+.ba-ttd-tbl td{border:1px solid #555;padding:10px 8px;vertical-align:top;text-align:center;min-height:60px}
+.ba-ttd-tbl .grp-row td{background:#dde8ef;font-weight:700;text-align:left;font-size:11px}
+.ba-rekomendasi{margin:10px 0}
+.ba-rekomendasi ol{margin:4px 0 4px 20px}
+.ba-rekomendasi ol li{border-bottom:1px solid #aaa;min-height:20px;margin-bottom:6px;padding-bottom:2px}
+.ba-no-data{color:var(--g400);font-style:italic;text-align:center;padding:40px 20px;font-family:inherit;font-size:13px}
+.ba-ttd-group{margin-bottom:12px}
+.ba-ttd-group-title{font-size:11px;font-weight:700;color:var(--navy);margin-bottom:6px;padding:4px 0;border-bottom:1px solid var(--g100)}
+.ba-ttd-input-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:4px}
+.ba-ttd-input-row input{padding:5px 8px;border:1.5px solid var(--g200);border-radius:8px;font-family:inherit;font-size:11px;color:var(--g800);background:var(--white);outline:none;width:100%}
+.ba-ttd-input-row input:focus{border-color:var(--navy2)}
+.ba-ttd-input-row input::placeholder{color:var(--g400);font-size:10px}
+
 @media print{
   body *{visibility:hidden}
   .report-overlay,.report-overlay *{visibility:visible}
@@ -226,6 +284,7 @@ tr:hover td{background:var(--g50)}
   <button class="nav-btn" data-page="psu" onclick="showPage('psu',this)">🌿 Kondisi PSU</button>
   <button class="nav-btn" data-page="penyaluran" onclick="showPage('penyaluran',this)">🏗️ Penyaluran</button>
   <button class="nav-btn" data-page="pasca" onclick="showPage('pasca',this)">👤 Pasca Penyaluran</button>
+  <button class="nav-btn" data-page="beritaacara" onclick="showPage('beritaacara',this)">📝 Berita Acara</button>
 </nav>
 
 <main class="main">
@@ -488,6 +547,138 @@ tr:hover td{background:var(--g50)}
       </select>
     </div>
     <div id="pasca-units"></div>
+  </div>
+</div>
+
+<!-- ══ BERITA ACARA ══ -->
+<div class="page" id="page-beritaacara">
+  <div class="sec-title">Buat Berita Acara Hasil Survei FLPP</div>
+  <div class="ba-layout">
+    <!-- SIDEBAR FORM -->
+    <div class="ba-sidebar card" style="padding:20px">
+
+      <!-- Pilih Perumahan -->
+      <div class="ba-form-section">
+        <h4>📌 Pilih Perumahan</h4>
+        <div class="ba-field">
+          <label>Perumahan</label>
+          <select id="ba-sel-perumahan" onchange="baOnPerumahanChange()">
+            <option value="">-- Pilih dari data --</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Data Pelaksanaan -->
+      <div class="ba-form-section">
+        <h4>📅 Tanggal & Waktu</h4>
+        <div class="ba-field-row">
+          <div class="ba-field"><label>Hari</label><input type="text" id="ba-hari" placeholder="Senin"></div>
+          <div class="ba-field"><label>Tanggal</label><input type="date" id="ba-tanggal"></div>
+        </div>
+        <div class="ba-field-row">
+          <div class="ba-field"><label>Bulan</label><input type="text" id="ba-bulan" placeholder="Juni"></div>
+          <div class="ba-field"><label>Tahun</label><input type="text" id="ba-tahun" placeholder="2026"></div>
+        </div>
+        <div class="ba-field"><label>Kota Tempat (untuk TTD)</label><input type="text" id="ba-kota-ttd" placeholder="Jakarta"></div>
+        <div class="ba-field"><label>Tanggal TTD</label><input type="date" id="ba-tanggal-ttd"></div>
+      </div>
+
+      <!-- Identitas Perumahan -->
+      <div class="ba-form-section">
+        <h4>🏘️ Identitas Perumahan</h4>
+        <div class="ba-field"><label>Nama Perumahan</label><input type="text" id="ba-nama-perumahan"></div>
+        <div class="ba-field"><label>Nama Pengembang</label><input type="text" id="ba-nama-pt"></div>
+        <div class="ba-field"><label>Alamat Perumahan</label><input type="text" id="ba-alamat"></div>
+        <div class="ba-field-row">
+          <div class="ba-field"><label>Kabupaten/Kota</label><input type="text" id="ba-kab"></div>
+          <div class="ba-field"><label>Provinsi</label><input type="text" id="ba-prov"></div>
+        </div>
+        <div class="ba-field"><label>Koordinat Lokasi</label><input type="text" id="ba-koordinat"></div>
+      </div>
+
+      <!-- Keterangan Kondisi -->
+      <div class="ba-form-section">
+        <h4>📋 Keterangan Kondisi</h4>
+        <div class="ba-field"><label>Kondisi Dokumen Data Dukung</label><textarea id="ba-ket-dok" placeholder="Misal: Dokumen lengkap dan sesuai, terdapat catatan pada..."></textarea></div>
+        <div class="ba-field"><label>Kondisi PSU</label><textarea id="ba-ket-psu" placeholder="Misal: Jalan dan drainase dalam kondisi baik..."></textarea></div>
+        <div class="ba-field"><label>Jml Unit Penyaluran Diperiksa</label><input type="text" id="ba-unit-salur" placeholder="5 (20)"></div>
+        <div class="ba-field"><label>Kondisi Fisik Penyaluran</label><textarea id="ba-ket-salur" placeholder="Misal: Pondasi sesuai standar, sloof dan kolom baik..."></textarea></div>
+        <div class="ba-field"><label>Jml Unit Pasca Diperiksa</label><input type="text" id="ba-unit-pasca" placeholder="5 (25)"></div>
+        <div class="ba-field"><label>Kondisi Fisik Pasca Penyaluran</label><textarea id="ba-ket-pasca" placeholder="Misal: Kondisi bangunan umumnya baik, status hunian..."></textarea></div>
+      </div>
+
+      <!-- Rekomendasi -->
+      <div class="ba-form-section">
+        <h4>💡 Catatan & Rekomendasi</h4>
+        <div class="ba-field"><label>Rekomendasi 1</label><input type="text" id="ba-rek-1"></div>
+        <div class="ba-field"><label>Rekomendasi 2</label><input type="text" id="ba-rek-2"></div>
+        <div class="ba-field"><label>Rekomendasi 3</label><input type="text" id="ba-rek-3"></div>
+        <div class="ba-field"><label>Rekomendasi 4</label><input type="text" id="ba-rek-4"></div>
+        <div class="ba-field"><label>Rekomendasi 5</label><input type="text" id="ba-rek-5"></div>
+        <div class="ba-field"><label>Rekomendasi 6</label><input type="text" id="ba-rek-6"></div>
+      </div>
+
+      <!-- Peserta TTD -->
+      <div class="ba-form-section">
+        <h4>✍️ Peserta Penandatangan</h4>
+        <p style="font-size:10px;color:var(--g400);margin-bottom:10px">Isi nama, no. telepon, jabatan untuk setiap perwakilan (maks. 3 per kelompok)</p>
+
+        <div class="ba-ttd-group">
+          <div class="ba-ttd-group-title">Perwakilan Pemerintah Daerah</div>
+          <div class="ba-ttd-input-row"><input id="ba-pemda-1-nama" placeholder="Nama"><input id="ba-pemda-1-telp" placeholder="No. Telp"><input id="ba-pemda-1-jabatan" placeholder="Jabatan"></div>
+          <div class="ba-ttd-input-row"><input id="ba-pemda-2-nama" placeholder="Nama"><input id="ba-pemda-2-telp" placeholder="No. Telp"><input id="ba-pemda-2-jabatan" placeholder="Jabatan"></div>
+          <div class="ba-ttd-input-row"><input id="ba-pemda-3-nama" placeholder="Nama"><input id="ba-pemda-3-telp" placeholder="No. Telp"><input id="ba-pemda-3-jabatan" placeholder="Jabatan"></div>
+        </div>
+        <div class="ba-ttd-group">
+          <div class="ba-ttd-group-title">Perwakilan BP Tapera</div>
+          <div class="ba-ttd-input-row"><input id="ba-tapera-1-nama" placeholder="Nama"><input id="ba-tapera-1-telp" placeholder="No. Telp"><input id="ba-tapera-1-jabatan" placeholder="Jabatan"></div>
+          <div class="ba-ttd-input-row"><input id="ba-tapera-2-nama" placeholder="Nama"><input id="ba-tapera-2-telp" placeholder="No. Telp"><input id="ba-tapera-2-jabatan" placeholder="Jabatan"></div>
+          <div class="ba-ttd-input-row"><input id="ba-tapera-3-nama" placeholder="Nama"><input id="ba-tapera-3-telp" placeholder="No. Telp"><input id="ba-tapera-3-jabatan" placeholder="Jabatan"></div>
+        </div>
+        <div class="ba-ttd-group">
+          <div class="ba-ttd-group-title">Perwakilan Pengembang Perumahan</div>
+          <div class="ba-ttd-input-row"><input id="ba-dev-1-nama" placeholder="Nama"><input id="ba-dev-1-telp" placeholder="No. Telp"><input id="ba-dev-1-jabatan" placeholder="Jabatan"></div>
+          <div class="ba-ttd-input-row"><input id="ba-dev-2-nama" placeholder="Nama"><input id="ba-dev-2-telp" placeholder="No. Telp"><input id="ba-dev-2-jabatan" placeholder="Jabatan"></div>
+          <div class="ba-ttd-input-row"><input id="ba-dev-3-nama" placeholder="Nama"><input id="ba-dev-3-telp" placeholder="No. Telp"><input id="ba-dev-3-jabatan" placeholder="Jabatan"></div>
+        </div>
+        <div class="ba-ttd-group">
+          <div class="ba-ttd-group-title">Perwakilan Bank Penyalur KPR FLPP</div>
+          <div class="ba-ttd-input-row"><input id="ba-bank-1-nama" placeholder="Nama"><input id="ba-bank-1-telp" placeholder="No. Telp"><input id="ba-bank-1-jabatan" placeholder="Jabatan"></div>
+          <div class="ba-ttd-input-row"><input id="ba-bank-2-nama" placeholder="Nama"><input id="ba-bank-2-telp" placeholder="No. Telp"><input id="ba-bank-2-jabatan" placeholder="Jabatan"></div>
+          <div class="ba-ttd-input-row"><input id="ba-bank-3-nama" placeholder="Nama"><input id="ba-bank-3-telp" placeholder="No. Telp"><input id="ba-bank-3-jabatan" placeholder="Jabatan"></div>
+        </div>
+        <div class="ba-ttd-group">
+          <div class="ba-ttd-group-title">Perwakilan Balai Pelaksana Penyediaan Perumahan</div>
+          <div class="ba-ttd-input-row"><input id="ba-balai-1-nama" placeholder="Nama"><input id="ba-balai-1-telp" placeholder="No. Telp"><input id="ba-balai-1-jabatan" placeholder="Jabatan"></div>
+          <div class="ba-ttd-input-row"><input id="ba-balai-2-nama" placeholder="Nama"><input id="ba-balai-2-telp" placeholder="No. Telp"><input id="ba-balai-2-jabatan" placeholder="Jabatan"></div>
+          <div class="ba-ttd-input-row"><input id="ba-balai-3-nama" placeholder="Nama"><input id="ba-balai-3-telp" placeholder="No. Telp"><input id="ba-balai-3-jabatan" placeholder="Jabatan"></div>
+        </div>
+        <div class="ba-ttd-group">
+          <div class="ba-ttd-group-title">Perwakilan Tim Pemantauan dan Evaluasi</div>
+          <div class="ba-ttd-input-row"><input id="ba-tim-1-nama" placeholder="Nama"><input id="ba-tim-1-telp" placeholder="No. Telp"><input id="ba-tim-1-jabatan" placeholder="Jabatan"></div>
+          <div class="ba-ttd-input-row"><input id="ba-tim-2-nama" placeholder="Nama"><input id="ba-tim-2-telp" placeholder="No. Telp"><input id="ba-tim-2-jabatan" placeholder="Jabatan"></div>
+          <div class="ba-ttd-input-row"><input id="ba-tim-3-nama" placeholder="Nama"><input id="ba-tim-3-telp" placeholder="No. Telp"><input id="ba-tim-3-jabatan" placeholder="Jabatan"></div>
+        </div>
+      </div>
+
+      <button class="ba-gen-btn" onclick="generateBeritaAcara()" id="ba-gen-btn">
+        📄 Generate Berita Acara (.docx)
+      </button>
+      <div style="font-size:10px;color:var(--g400);text-align:center;margin-top:6px">File Word siap cetak dan tanda tangan</div>
+    </div>
+
+    <!-- PREVIEW -->
+    <div class="ba-preview">
+      <div class="ba-preview-toolbar">
+        <span>👁️ Pratinjau Berita Acara</span>
+        <button class="report-btn print" onclick="printBA()" style="font-size:10px;padding:5px 12px">🖨️ Cetak Pratinjau</button>
+      </div>
+      <div class="ba-preview-content" id="ba-preview-content">
+        <div class="ba-no-data">
+          Pilih perumahan dan isi form di kiri, lalu klik "Generate" untuk pratinjau dan download Berita Acara.
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1331,6 +1522,7 @@ function initFilters() {
 
 function refreshAllViews() {
   initFilters();
+  initBAFilter();
   renderOverview();
   renderPerumahan();
   renderVerifikasi();
@@ -1347,6 +1539,635 @@ function showPage(id, btn) {
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
   if (btn) btn.classList.add('active');
+}
+
+// ══════════════════════════════════════════════════════
+// BERITA ACARA
+// ══════════════════════════════════════════════════════
+
+const BULAN_ID = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+const HARI_ID  = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+
+const DOK_BA = [
+  {tahap:'Tahap Perencanaan', items:['Gambar Site Plan Perumahan','DED (Detailed Engineering Design) Perumahan','Rencana Kerja dan Syarat-syarat (RKS)','Brosur Pemasaran (spesifikasi rumah/floor plan)']},
+  {tahap:'Tahap Perizinan', items:['Persetujuan Lingkungan (AMDAL/UKL-UPL/SPPL atau dokumen lain sesuai ketentuan)','Izin Mendirikan Bangunan (IMB)/Persetujuan Bangunan Gedung (PBG)']},
+  {tahap:'Tahap Pelaksanaan', items:['As Built Drawing']},
+  {tahap:'Tahap Pasca Konstruksi', items:['Sertifikat Laik Fungsi (SLF)','Surat Keterangan Kelaikan Fungsi Bangunan Rumah oleh Pengawas Konstruksi/Manajemen Konstruksi']},
+];
+
+const PSU_BA = ['Jaringan Jalan','Drainase','Penyediaan Air Bersih','Persampahan','Penerangan Jalan','PSU Lainnya'];
+const SALUR_BA = ['Pondasi','Sloof','Kolom','Ring Balok','Rangka Atap','Penutup Atap & Plafon','Lantai','Dinding','Ketentuan Rumah Layak Huni','Jaringan Utilitas Bangunan (Mechanical Electrical Plumbing)'];
+const PASCA_BA_FISIK = ['Atap','Lantai','Dinding','Jaringan Utilitas Bangunan (Mechanical Electrical Plumbing)','Ketentuan Rumah Layak Huni'];
+const PASCA_BA_HUNI  = ['Status Penghunian','Fungsi Bangunan'];
+
+const TTD_GROUPS = [
+  {id:'pemda',  label:'Perwakilan Pemerintah Daerah .........'},
+  {id:'tapera', label:'Perwakilan BP Tapera .........'},
+  {id:'dev',    label:'Perwakilan Pengembang Perumahan .........'},
+  {id:'bank',   label:'Perwakilan Bank Penyalur KPR FLPP .........'},
+  {id:'balai',  label:'Perwakilan Balai Pelaksana Penyediaan Perumahan .........'},
+  {id:'tim',    label:'Perwakilan Tim Pemantauan dan Evaluasi'},
+];
+
+function baOnPerumahanChange() {
+  const sel = document.getElementById('ba-sel-perumahan');
+  const idx = parseInt(sel.value);
+  if (isNaN(idx)) return;
+  const obj = DB.objek[idx];
+  if (!obj) return;
+
+  // Auto-fill identitas
+  document.getElementById('ba-nama-perumahan').value = obj.t1_nama_perumahan || '';
+  document.getElementById('ba-nama-pt').value = obj.t1_nama_pt || '';
+  document.getElementById('ba-alamat').value = obj.t1_alamat || '';
+  const parts = (obj.t1_alamat||'').split(',').map(s=>s.trim());
+  document.getElementById('ba-prov').value = parts[0] || '';
+  document.getElementById('ba-kab').value  = parts[1] || '';
+  document.getElementById('ba-koordinat').value = obj.t1_koordinat || '';
+
+  // PSU catatan
+  const psuRow = DB.psu.find(r=>r.p1_id_sikumbang===obj.t1_id_sikumbang||r.p1_nama_perumahan===obj.t1_nama_perumahan);
+  if (psuRow) {
+    const ketPSU = [psuRow.ket_psu_rth_psu_rth_hijau, psuRow.ket_psu_rth_psu_rth_nonhijau, psuRow.ket_psu_rth_psu_rth_biru].filter(Boolean).join('; ');
+    document.getElementById('ba-ket-psu').value = ketPSU || '';
+  }
+  // Salur catatan
+  const salurRow = DB.salur.find(r=>r.p2_id_sikumbang===obj.t1_id_sikumbang||r.p2_nama_perumahan===obj.t1_nama_perumahan);
+  if (salurRow) {
+    const ketSalur = salurRow.catatan_tambahan_py_1_0 || '';
+    document.getElementById('ba-ket-salur').value = ketSalur;
+  }
+  // Pasca catatan
+  const pascaRows = DB.pasca.filter(r=>r.p3_id_sikumbang===obj.t1_id_sikumbang||r.p3_nama_perumahan===obj.t1_nama_perumahan);
+  if (pascaRows.length) {
+    const ketPasca = pascaRows.map(r=>r.catatan_tambahan_pf_4_0||r.catatan_tambahan_pf_5_0||r.catatan_tambahan_pf_6_0||'').filter(Boolean)[0] || '';
+    document.getElementById('ba-ket-pasca').value = ketPasca;
+    document.getElementById('ba-unit-pasca').value = `${pascaRows.length}`;
+  }
+  // Verifikasi catatan dokumen
+  const vfyRow = DB.verifikasi.find(r=>r.t1_id_sikumbang===obj.t1_id_sikumbang||r.t1_nama_perumahan===obj.t1_nama_perumahan);
+  if (vfyRow) {
+    document.getElementById('ba-ket-dok').value = vfyRow.catatan_status_sikumbang || '';
+  }
+
+  // Auto tanggal & hari hari ini
+  const today = new Date();
+  document.getElementById('ba-tanggal').value = today.toISOString().split('T')[0];
+  document.getElementById('ba-tanggal-ttd').value = today.toISOString().split('T')[0];
+  document.getElementById('ba-hari').value = HARI_ID[today.getDay()];
+  document.getElementById('ba-bulan').value = BULAN_ID[today.getMonth()];
+  document.getElementById('ba-tahun').value = today.getFullYear();
+  document.getElementById('ba-kota-ttd').value = 'Jakarta';
+
+  baRenderPreview();
+}
+
+function baGetFormData() {
+  const g = id => (document.getElementById(id)||{}).value || '';
+  return {
+    hari: g('ba-hari'), tanggal: g('ba-tanggal'), bulan: g('ba-bulan'), tahun: g('ba-tahun'),
+    kota_ttd: g('ba-kota-ttd'), tanggal_ttd: g('ba-tanggal-ttd'),
+    nama: g('ba-nama-perumahan'), pt: g('ba-nama-pt'),
+    alamat: g('ba-alamat'), kab: g('ba-kab'), prov: g('ba-prov'), koordinat: g('ba-koordinat'),
+    ket_dok: g('ba-ket-dok'), ket_psu: g('ba-ket-psu'),
+    unit_salur: g('ba-unit-salur'), ket_salur: g('ba-ket-salur'),
+    unit_pasca: g('ba-unit-pasca'), ket_pasca: g('ba-ket-pasca'),
+    rek: [1,2,3,4,5,6].map(i => g('ba-rek-'+i)).filter(Boolean),
+    ttd: TTD_GROUPS.map(grp => ({
+      label: grp.label,
+      rows: [1,2,3].map(n => ({
+        nama: g(`ba-${grp.id}-${n}-nama`),
+        telp: g(`ba-${grp.id}-${n}-telp`),
+        jabatan: g(`ba-${grp.id}-${n}-jabatan`),
+      })).filter(r => r.nama)
+    })),
+  };
+}
+
+// ── look up doc kondisi from DB ──
+function baGetDokCondisi(perIdx) {
+  if (perIdx == null || isNaN(perIdx)) return {};
+  const obj = DB.objek[perIdx];
+  if (!obj) return {};
+  const vfy = DB.verifikasi.find(r=>r.t1_id_sikumbang===obj.t1_id_sikumbang||r.t1_nama_perumahan===obj.t1_nama_perumahan);
+  const psu = DB.psu.find(r=>r.p1_id_sikumbang===obj.t1_id_sikumbang||r.p1_nama_perumahan===obj.t1_nama_perumahan);
+  const sal = DB.salur.find(r=>r.p2_id_sikumbang===obj.t1_id_sikumbang||r.p2_nama_perumahan===obj.t1_nama_perumahan);
+  const pas = DB.pasca.filter(r=>r.p3_id_sikumbang===obj.t1_id_sikumbang||r.p3_nama_perumahan===obj.t1_nama_perumahan);
+
+  // Dokumen ada/kondisi
+  const dokKet = {};
+  if (vfy) {
+    DOK_BA.forEach((grp,gi) => {
+      let offset = 0; DOK_BA.slice(0,gi).forEach(g2=>offset+=g2.items.length);
+      grp.items.forEach((item,ii) => {
+        const idx = offset+ii;
+        const ada = vfy[`dok_ada_${idx}`]||'';
+        const sesuai = vfy[`dok_sesuai_${idx}`]||'';
+        dokKet[item] = ada && sesuai ? `${ada}, ${sesuai}` : (ada||sesuai||'');
+      });
+    });
+  }
+
+  // PSU kondisi
+  const psuKet = {};
+  if (psu) {
+    psuKet['Jaringan Jalan']     = psu.psu_k_0_0 || '';
+    psuKet['Drainase']           = psu.psu_k_1_0 || '';
+    psuKet['Penyediaan Air Bersih'] = psu.psu_k_2_0 || '';
+    psuKet['Persampahan']        = psu.psu_k_4_0 || '';
+    psuKet['Penerangan Jalan']   = psu.psu_k_6_0 || '';
+    psuKet['PSU Lainnya']        = '';
+  }
+
+  // Salur kondisi
+  const salKet = {};
+  if (sal) {
+    const sesuaiCount = f => (sal[f]==='Sesuai'?'Sesuai':'Tidak Sesuai');
+    salKet['Pondasi']          = `${sal.py_pondasi_jenis||''} — Mortar: ${sesuaiCount('py_pondasi_mortar')}`;
+    salKet['Sloof']            = `Mortar: ${sesuaiCount('py_sloofb_mortar')}, Tulangan: ${sesuaiCount('py_sloofb_tulangan')}`;
+    salKet['Kolom']            = `Mortar: ${sesuaiCount('py_kolomb_mortar')}, Dimensi: ${sesuaiCount('py_kolomb_dimensi')}`;
+    salKet['Ring Balok']       = `Mortar: ${sesuaiCount('py_ringbalok_mortar')}, Koneksi: ${sesuaiCount('py_ringbalok_koneksi')}`;
+    salKet['Rangka Atap']      = sal.py_rangka_jenis||'';
+    salKet['Penutup Atap & Plafon'] = `${sal.py_atap_penutup||''} / ${sal.py_atap_plafon||''}`;
+    salKet['Lantai']           = sal.py_lantai_tipe||'';
+    salKet['Dinding']          = sal.py_dinding_tipe||'';
+    salKet['Ketentuan Rumah Layak Huni'] = sal.py_rlh_luas==='Memenuhi'?'Memenuhi':'Perlu perhatian';
+    salKet['Jaringan Utilitas Bangunan (Mechanical Electrical Plumbing)'] =
+      `Air:${sal.py_util_air||'-'}, Listrik:${sal.py_util_listrik||'-'}, Sanitasi:${sal.py_util_sanitasi||'-'}`;
+  }
+
+  // Pasca kondisi (rata-rata dari semua unit)
+  const pasKet = {};
+  if (pas.length) {
+    const kondisiMaj = field => {
+      const c = {}; pas.forEach(r=>{ const v=r[field]||''; if(v) c[v]=(c[v]||0)+1; });
+      return Object.entries(c).sort((a,b)=>b[1]-a[1])[0]?.[0] || '';
+    };
+    pasKet['Atap']    = kondisiMaj('pf_atap_kondisi');
+    pasKet['Lantai']  = kondisiMaj('pf_lantai_kondisi');
+    pasKet['Dinding'] = kondisiMaj('pf_dinding_kondisi');
+    pasKet['Jaringan Utilitas Bangunan (Mechanical Electrical Plumbing)'] =
+      `Air:${pas.filter(r=>/tersedia/i.test(r.pf_util_air||'')).length}/${pas.length} tersedia`;
+    pasKet['Ketentuan Rumah Layak Huni'] = pas.filter(r=>/memenuhi/i.test(r.pf_rlh_luas||'')).length+'/'+pas.length+' memenuhi luas';
+    pasKet['Status Penghunian'] = pas.filter(r=>r.status_huni==='Dihuni Sendiri').length+'/'+pas.length+' dihuni sendiri';
+    pasKet['Fungsi Bangunan']   = pas.filter(r=>r.fungsi==='Ya').length > 0 ? 'Terdapat alih fungsi' : 'Tidak ada alih fungsi';
+  }
+
+  return { dokKet, psuKet, salKet, pasKet };
+}
+
+function baRenderPreview() {
+  const d = baGetFormData();
+  const perIdx = parseInt(document.getElementById('ba-sel-perumahan')?.value);
+  const cond = baGetDokCondisi(perIdx);
+
+  const tglTTD = d.tanggal_ttd ? (() => {
+    const dt = new Date(d.tanggal_ttd);
+    return `${dt.getDate()} ${BULAN_ID[dt.getMonth()]} ${dt.getFullYear()}`;
+  })() : '___________';
+
+  let html = `
+  <div class="ba-doc-header">
+    <div class="ba-logo">🏛️</div>
+    <div class="ba-header-text">
+      <div class="h1">KEMENTERIAN PERUMAHAN DAN KAWASAN PERMUKIMAN REPUBLIK INDONESIA</div>
+      <div class="h2">DIREKTORAT JENDERAL PERUMAHAN PERDESAAN</div>
+      <div class="h3">DIREKTORAT PEMBIAYAAN PERUMAHAN PERDESAAN</div>
+      <div class="h4">Jalan Prof. Dr. Soepomo Nomor 197, Menteng Dalam, Tebet, Jakarta Selatan 12870</div>
+    </div>
+  </div>
+
+  <div class="ba-center">
+    <div class="judul"><strong>BERITA ACARA</strong></div>
+    <div class="sub"><strong>HASIL TINJAUAN LAPANGAN PEMANTAUAN DAN EVALUASI PELAKSANAAN PENYALURAN KREDIT PEMILIKAN RUMAH<br>(KPR) FASILITAS LIKUIDITAS PEMBIAYAAN PERUMAHAN (FLPP)</strong></div>
+    <div class="lokasi"><strong>DI LINGKUNGAN DIREKTORAT JENDERAL PERUMAHAN PERDESAAN</strong></div>
+  </div>
+
+  <div class="ba-opening">
+    <p>Pada hari ini <strong>${d.hari||'______'}</strong> tanggal <strong>${d.tanggal ? new Date(d.tanggal).getDate() : '______'}</strong> bulan <strong>${d.bulan||'______'}</strong> tahun <strong>${d.tahun||'______'}</strong>, telah dilaksanakan kegiatan tinjauan lapangan pemantauan dan evaluasi terhadap pelaksanaan penyaluran KPR FLPP di lingkungan Ditjen Perumahan Perdesaan pada:</p>
+    <ul>
+      <li><span class="no">1.</span><span class="label">Nama Perumahan</span><span>: ${d.nama||'_______________________'}</span></li>
+      <li><span class="no">2.</span><span class="label">Nama Pengembang</span><span>: ${d.pt||'_______________________'}</span></li>
+      <li><span class="no">3.</span><span class="label">Alamat Perumahan</span><span>: ${d.alamat||'_______________________'}</span></li>
+      <li><span class="no">4.</span><span class="label">Kabupaten/Kota</span><span>: ${d.kab||'_______________________'}</span></li>
+      <li><span class="no">5.</span><span class="label">Provinsi</span><span>: ${d.prov||'_______________________'}</span></li>
+      <li><span class="no">6.</span><span class="label">Koordinat Lokasi</span><span>: ${d.koordinat||'_______________________'}</span></li>
+    </ul>
+    <p>Berdasarkan hasil tinjauan lapangan yang dilakukan terhadap lokasi perumahan dan unit rumah penerima KPR FLPP, diperoleh hasil sebagai berikut:</p>
+  </div>
+
+  <!-- 1. DOKUMEN -->
+  <div class="ba-section-title">1. Data Dukung/Dokumen Perumahan</div>
+  <p style="font-size:11px;margin-bottom:6px">Secara umum kondisi dokumen data dukung perumahan adalah sebagai berikut:</p>
+  <table class="ba-tbl">
+    <tr><th style="width:55%">Data Dukung/Dokumen</th><th>Keterangan Kondisi</th></tr>
+    ${DOK_BA.map(grp => `
+      <tr class="hdr-row"><td colspan="2">${grp.tahap}</td></tr>
+      ${grp.items.map(item => `<tr><td>${item}</td><td>${cond.dokKet?.[item]||''}</td></tr>`).join('')}
+    `).join('')}
+  </table>
+  <div class="ba-catatan">
+    <div style="font-size:11px;margin-bottom:4px">Catatan/Temuan:</div>
+    ${d.ket_dok ? `<div style="font-size:11px">${d.ket_dok}</div>` : '<div class="line"></div><div class="line"></div><div class="line"></div>'}
+  </div>
+
+  <!-- 2. PSU -->
+  <div class="ba-section-title">2. Kondisi Prasarana, Sarana, dan Utilitas Umum (PSU) Perumahan</div>
+  <p style="font-size:11px;margin-bottom:6px">Secara umum kondisi prasarana, sarana, dan utilitas umum adalah sebagai berikut:</p>
+  <table class="ba-tbl">
+    <tr><th style="width:40%">Komponen PSU</th><th>Keterangan Kondisi</th></tr>
+    ${PSU_BA.map(item => `<tr><td>${item}</td><td>${cond.psuKet?.[item]||''}</td></tr>`).join('')}
+  </table>
+  <div class="ba-catatan">
+    <div style="font-size:11px;margin-bottom:4px">Catatan/Temuan:</div>
+    ${d.ket_psu ? `<div style="font-size:11px">${d.ket_psu}</div>` : '<div class="line"></div><div class="line"></div><div class="line"></div>'}
+  </div>
+
+  <!-- 3. PENYALURAN -->
+  <div class="ba-section-title">3. Kondisi Fisik Bangunan Rumah (Tahap Penyaluran)</div>
+  <p style="font-size:11px;margin-bottom:6px">Dalam kegiatan tinjauan lapangan ini dilakukan pemeriksaan terhadap <strong>${d.unit_salur||'______ (__)' }</strong> unit rumah penerima KPR FLPP untuk mengetahui kondisi pasca penyaluran.</p>
+  <p style="font-size:11px;margin-bottom:6px">Secara umum kondisi fisik bangunan rumah yang dicek pada Tahap Penyaluran adalah sebagai berikut:</p>
+  <table class="ba-tbl">
+    <tr><th style="width:40%">Komponen Fisik Bangunan Rumah</th><th>Keterangan Kondisi</th></tr>
+    ${SALUR_BA.map(item => `<tr><td>${item}</td><td>${cond.salKet?.[item]||''}</td></tr>`).join('')}
+  </table>
+  <div class="ba-catatan">
+    <div style="font-size:11px;margin-bottom:4px">Catatan/Temuan:</div>
+    ${d.ket_salur ? `<div style="font-size:11px">${d.ket_salur}</div>` : '<div class="line"></div><div class="line"></div><div class="line"></div>'}
+  </div>
+
+  <!-- 4. PASCA -->
+  <div class="ba-section-title">4. Kondisi Fisik Bangunan dan Pemanfaatan/Penghunian Rumah (Tahap Pasca Penyaluran)</div>
+  <p style="font-size:11px;margin-bottom:6px">Dalam kegiatan tinjauan lapangan ini dilakukan pemeriksaan terhadap <strong>${d.unit_pasca||'______ (__)'}</strong> unit rumah penerima KPR FLPP untuk mengetahui kondisi pasca penyaluran.</p>
+  <p style="font-size:11px;margin-bottom:6px">Secara umum kondisi fisik bangunan dan pemanfaatan/penghunian rumah yang dicek pada Tahap Pasca Penyaluran adalah sebagai berikut:</p>
+  <table class="ba-tbl">
+    <tr><th style="width:40%">Komponen Fisik Bangunan Rumah</th><th>Keterangan Kondisi</th></tr>
+    <tr class="hdr-row"><td colspan="2">Kondisi Fisik Bangunan Rumah</td></tr>
+    ${PASCA_BA_FISIK.map(item => `<tr><td>${item}</td><td>${cond.pasKet?.[item]||''}</td></tr>`).join('')}
+    <tr class="hdr-row"><td colspan="2">Kondisi Pemanfaatan/Penghunian Rumah</td></tr>
+    ${PASCA_BA_HUNI.map(item => `<tr><td>${item}</td><td>${cond.pasKet?.[item]||''}</td></tr>`).join('')}
+  </table>
+  <div class="ba-catatan">
+    <div style="font-size:11px;margin-bottom:4px">Catatan/Temuan:</div>
+    ${d.ket_pasca ? `<div style="font-size:11px">${d.ket_pasca}</div>` : '<div class="line"></div><div class="line"></div><div class="line"></div>'}
+  </div>
+
+  <!-- REKOMENDASI -->
+  <div class="ba-opening" style="margin-top:14px">
+    <p>Berdasarkan hasil tinjauan lapangan dengan kondisi tersebut di atas, diperoleh beberapa catatan dan/atau rekomendasi sebagai berikut:</p>
+    <div class="ba-rekomendasi">
+      <ol>${[1,2,3,4,5,6].map(n => `<li>${d.rek[n-1]||''}</li>`).join('')}</ol>
+    </div>
+    <p>Catatan tersebut akan dilaporkan kepada Pimpinan untuk menjadi bahan evaluasi lebih lanjut sesuai ketentuan yang berlaku.</p>
+    <hr style="border:none;border-top:1px solid #555;margin:10px 0">
+    <p>Demikian Berita Acara ini dibuat untuk digunakan sebagaimana mestinya.</p>
+  </div>
+
+  <!-- TTD -->
+  <div class="ba-ttd-area"><strong>${d.kota_ttd||'__________'}, tanggal ${tglTTD}</strong></div>
+  <table class="ba-ttd-tbl">
+    <tr><th style="width:5%">No</th><th style="width:25%">Nama</th><th style="width:20%">No. Telepon</th><th style="width:25%">Jabatan</th><th style="width:25%">Tanda Tangan</th></tr>
+    ${d.ttd.map(grp => `
+      <tr class="grp-row"><td colspan="5">${grp.label}</td></tr>
+      ${grp.rows.length ? grp.rows.map((r,i)=>`<tr>
+        <td style="text-align:center">${i+1}.</td>
+        <td>${r.nama}</td><td>${r.telp}</td><td>${r.jabatan}</td>
+        <td style="min-height:50px">&nbsp;</td>
+      </tr>`).join('') : [1,2,3].map(n=>`<tr>
+        <td style="text-align:center">${n}.</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td style="min-height:50px">&nbsp;</td>
+      </tr>`).join('')}
+    `).join('')}
+  </table>`;
+
+  document.getElementById('ba-preview-content').innerHTML = html;
+}
+
+// ── Auto-update preview on form change ──
+document.addEventListener('input', function(e) {
+  if (e.target && e.target.closest('#page-beritaacara')) {
+    clearTimeout(window._baPreviewTimer);
+    window._baPreviewTimer = setTimeout(baRenderPreview, 300);
+  }
+});
+
+// ── Generate .docx ──
+async function generateBeritaAcara() {
+  const btn = document.getElementById('ba-gen-btn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Membuat dokumen...';
+
+  try {
+    // Load docx library dynamically
+    if (!window.docx) {
+      await new Promise((res, rej) => {
+        const s = document.createElement('script');
+        s.src = 'https://cdnjs.cloudflare.com/ajax/libs/docx/7.8.2/docx.umd.min.js';
+        s.onload = res; s.onerror = rej;
+        document.head.appendChild(s);
+      });
+    }
+
+    const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell,
+            AlignmentType, WidthType, BorderStyle, ShadingType,
+            VerticalAlign, HeadingLevel } = window.docx;
+
+    const d = baGetFormData();
+    const perIdx = parseInt(document.getElementById('ba-sel-perumahan')?.value);
+    const cond = baGetDokCondisi(perIdx);
+
+    const tglTTD = d.tanggal_ttd ? (() => {
+      const dt = new Date(d.tanggal_ttd);
+      return `${dt.getDate()} ${BULAN_ID[dt.getMonth()]} ${dt.getFullYear()}`;
+    })() : '___________';
+    const tglNum = d.tanggal ? new Date(d.tanggal).getDate() : '______';
+
+    const W = 9350; // content width DXA (A4, 2.5cm margins)
+    const brd = { style: BorderStyle.SINGLE, size: 4, color: '555555' };
+    const borders = { top:brd, bottom:brd, left:brd, right:brd };
+    const hdrFill = { fill:'1A4D6E', type:ShadingType.CLEAR };
+    const hdrFill2 = { fill:'DDE8EF', type:ShadingType.CLEAR };
+    const cellMargin = { top:60, bottom:60, left:100, right:100 };
+
+    const txt = (t, opts={}) => new TextRun({ text: String(t||''), font:'Times New Roman', size:22, ...opts });
+    const par = (children, opts={}) => new Paragraph({ children: Array.isArray(children)?children:[children], ...opts });
+    const hdr = (t, bold=true) => par([txt(t, {bold, size:22})]);
+    const emptyLine = () => par([txt('')]);
+
+    function tableCell(text, opts={}) {
+      return new TableCell({
+        borders,
+        shading: opts.shade ? hdrFill : opts.shade2 ? hdrFill2 : undefined,
+        verticalAlign: VerticalAlign.CENTER,
+        margins: cellMargin,
+        width: opts.width ? { size: opts.width, type: WidthType.DXA } : undefined,
+        columnSpan: opts.colspan,
+        children: [par([txt(text||'', {
+          bold: opts.bold || opts.shade || opts.shade2,
+          color: opts.shade ? 'FFFFFF' : '000000',
+          size: opts.size||22
+        })], { alignment: opts.center ? AlignmentType.CENTER : AlignmentType.LEFT })],
+      });
+    }
+
+    function dokTable() {
+      const rows = [
+        new TableRow({ children: [
+          tableCell('Data Dukung/Dokumen', { bold:true, shade:true, width:Math.round(W*0.55) }),
+          tableCell('Keterangan Kondisi', { bold:true, shade:true, width:Math.round(W*0.45) }),
+        ]}),
+        ...DOK_BA.flatMap(grp => [
+          new TableRow({ children: [
+            tableCell(grp.tahap, { shade2:true, bold:true, colspan:2, width:W }),
+          ]}),
+          ...grp.items.map(item => new TableRow({ children: [
+            tableCell(item, { width:Math.round(W*0.55) }),
+            tableCell(cond.dokKet?.[item]||'', { width:Math.round(W*0.45) }),
+          ]})),
+        ]),
+      ];
+      return new Table({ width:{size:W,type:WidthType.DXA}, columnWidths:[Math.round(W*0.55),Math.round(W*0.45)], rows });
+    }
+
+    function psuTable() {
+      const rows = [
+        new TableRow({ children:[
+          tableCell('Komponen PSU', {bold:true, shade:true, width:Math.round(W*0.4)}),
+          tableCell('Keterangan Kondisi', {bold:true, shade:true, width:Math.round(W*0.6)}),
+        ]}),
+        ...PSU_BA.map(item => new TableRow({ children:[
+          tableCell(item, {width:Math.round(W*0.4)}),
+          tableCell(cond.psuKet?.[item]||'', {width:Math.round(W*0.6)}),
+        ]})),
+      ];
+      return new Table({ width:{size:W,type:WidthType.DXA}, columnWidths:[Math.round(W*0.4),Math.round(W*0.6)], rows });
+    }
+
+    function kompTable(items, ketObj) {
+      const rows = [
+        new TableRow({ children:[
+          tableCell('Komponen Fisik Bangunan Rumah', {bold:true, shade:true, width:Math.round(W*0.4)}),
+          tableCell('Keterangan Kondisi', {bold:true, shade:true, width:Math.round(W*0.6)}),
+        ]}),
+        ...items.map(item => new TableRow({ children:[
+          tableCell(item, {width:Math.round(W*0.4)}),
+          tableCell(ketObj?.[item]||'', {width:Math.round(W*0.6)}),
+        ]})),
+      ];
+      return new Table({ width:{size:W,type:WidthType.DXA}, columnWidths:[Math.round(W*0.4),Math.round(W*0.6)], rows });
+    }
+
+    function pascaTable() {
+      const rows = [
+        new TableRow({ children:[
+          tableCell('Komponen Fisik Bangunan Rumah', {bold:true, shade:true, width:Math.round(W*0.4)}),
+          tableCell('Keterangan Kondisi', {bold:true, shade:true, width:Math.round(W*0.6)}),
+        ]}),
+        new TableRow({ children:[tableCell('Kondisi Fisik Bangunan Rumah', {shade2:true, bold:true, colspan:2, width:W})] }),
+        ...PASCA_BA_FISIK.map(item => new TableRow({ children:[
+          tableCell(item, {width:Math.round(W*0.4)}),
+          tableCell(cond.pasKet?.[item]||'', {width:Math.round(W*0.6)}),
+        ]})),
+        new TableRow({ children:[tableCell('Kondisi Pemanfaatan/Penghunian Rumah', {shade2:true, bold:true, colspan:2, width:W})] }),
+        ...PASCA_BA_HUNI.map(item => new TableRow({ children:[
+          tableCell(item, {width:Math.round(W*0.4)}),
+          tableCell(cond.pasKet?.[item]||'', {width:Math.round(W*0.6)}),
+        ]})),
+      ];
+      return new Table({ width:{size:W,type:WidthType.DXA}, columnWidths:[Math.round(W*0.4),Math.round(W*0.6)], rows });
+    }
+
+    function ttdTable() {
+      const colW = [Math.round(W*0.05), Math.round(W*0.25), Math.round(W*0.20), Math.round(W*0.25), Math.round(W*0.25)];
+      const rows = [
+        new TableRow({ children:[
+          tableCell('No', {bold:true, shade:true, center:true, width:colW[0]}),
+          tableCell('Nama', {bold:true, shade:true, width:colW[1]}),
+          tableCell('No. Telepon', {bold:true, shade:true, width:colW[2]}),
+          tableCell('Jabatan', {bold:true, shade:true, width:colW[3]}),
+          tableCell('Tanda Tangan', {bold:true, shade:true, center:true, width:colW[4]}),
+        ]}),
+        ...d.ttd.flatMap(grp => {
+          const filled = grp.rows.length ? grp.rows : [{nama:'',telp:'',jabatan:''}];
+          const dataRows = (grp.rows.length ? grp.rows : [{},{},{}]).map((r,i)=>
+            new TableRow({ height:{value:800,rule:'atLeast'}, children:[
+              tableCell(String(i+1)+'.', {center:true, width:colW[0]}),
+              tableCell(r?.nama||'', {width:colW[1]}),
+              tableCell(r?.telp||'', {width:colW[2]}),
+              tableCell(r?.jabatan||'', {width:colW[3]}),
+              tableCell('', {width:colW[4]}),
+            ]})
+          );
+          return [
+            new TableRow({ children:[
+              new TableCell({ borders, shading:hdrFill2, columnSpan:5, margins:cellMargin,
+                children:[par([txt(grp.label, {bold:true, size:20})])],
+              })
+            ]}),
+            ...dataRows,
+          ];
+        }),
+      ];
+      return new Table({ width:{size:W,type:WidthType.DXA}, columnWidths:colW, rows });
+    }
+
+    const spacingNormal = { before:100, after:100 };
+    const spacingSection = { before:200, after:100 };
+
+    const doc = new Document({
+      sections:[{
+        properties:{
+          page:{
+            size:{ width:11906, height:16838 },
+            margin:{ top:1134, right:850, bottom:1134, left:1134 }, // ~2cm margins
+          }
+        },
+        children:[
+          // ── HEADER ──
+          par([txt('KEMENTERIAN PERUMAHAN DAN KAWASAN PERMUKIMAN REPUBLIK INDONESIA',{bold:false,size:18,font:'Times New Roman'})],
+            {alignment:AlignmentType.CENTER, spacing:{before:0,after:0}}),
+          par([txt('DIREKTORAT JENDERAL PERUMAHAN PERDESAAN',{bold:true,size:24,font:'Times New Roman'})],
+            {alignment:AlignmentType.CENTER, spacing:{before:0,after:0}}),
+          par([txt('DIREKTORAT PEMBIAYAAN PERUMAHAN PERDESAAN',{bold:true,size:22,font:'Times New Roman'})],
+            {alignment:AlignmentType.CENTER, spacing:{before:0,after:0}}),
+          par([txt('Jalan Prof. Dr. Soepomo Nomor 197, Menteng Dalam, Tebet, Jakarta Selatan 12870',{size:18})],
+            {alignment:AlignmentType.CENTER, spacing:{before:0,after:60},
+             border:{bottom:{style:BorderStyle.THICK,size:12,color:'000000',space:4}}}),
+          emptyLine(),
+
+          // ── JUDUL ──
+          par([txt('BERITA ACARA',{bold:true,size:26})],{alignment:AlignmentType.CENTER,spacing:{before:120,after:60}}),
+          par([txt('HASIL TINJAUAN LAPANGAN PEMANTAUAN DAN EVALUASI PELAKSANAAN PENYALURAN KREDIT PEMILIKAN RUMAH',{bold:true,size:22})],
+            {alignment:AlignmentType.CENTER,spacing:{before:0,after:0}}),
+          par([txt('(KPR) FASILITAS LIKUIDITAS PEMBIAYAAN PERUMAHAN (FLPP)',{bold:true,size:22})],
+            {alignment:AlignmentType.CENTER,spacing:{before:0,after:60}}),
+          par([txt('DI LINGKUNGAN DIREKTORAT JENDERAL PERUMAHAN PERDESAAN',{bold:true,size:22})],
+            {alignment:AlignmentType.CENTER,spacing:{before:0,after:180}}),
+
+          // ── PEMBUKAAN ──
+          par([
+            txt('Pada hari ini '),txt(d.hari||'______',{bold:true}),txt(' tanggal '),txt(String(tglNum),{bold:true}),
+            txt(' bulan '),txt(d.bulan||'______',{bold:true}),txt(' tahun '),txt(d.tahun||'______',{bold:true}),
+            txt(', telah dilaksanakan kegiatan tinjauan lapangan pemantauan dan evaluasi terhadap pelaksanaan penyaluran KPR FLPP di lingkungan Ditjen Perumahan Perdesaan pada:'),
+          ],{alignment:AlignmentType.JUSTIFIED, spacing:spacingNormal}),
+
+          ...[
+            ['1.','Nama Perumahan',d.nama],['2.','Nama Pengembang',d.pt],
+            ['3.','Alamat Perumahan',d.alamat],['4.','Kabupaten/Kota',d.kab],
+            ['5.','Provinsi',d.prov],['6.','Koordinat Lokasi',d.koordinat],
+          ].map(([no,label,val]) => par([
+            txt(`${no}  `,{bold:false}),txt(`${label}`,{bold:false}),txt('  :  '),txt(val||'',{bold:false}),
+          ],{indent:{left:360}, spacing:{before:40,after:40}})),
+
+          par([txt('Berdasarkan hasil tinjauan lapangan yang dilakukan terhadap lokasi perumahan dan unit rumah penerima KPR FLPP, diperoleh hasil sebagai berikut:')],
+            {alignment:AlignmentType.JUSTIFIED, spacing:{before:160,after:80}}),
+
+          // ── 1. DOKUMEN ──
+          par([txt('1. Data Dukung/Dokumen Perumahan',{bold:true})],{spacing:spacingSection}),
+          par([txt('Secara umum kondisi dokumen data dukung perumahan adalah sebagai berikut:')],{spacing:{before:60,after:80}}),
+          dokTable(),
+          par([txt('Catatan/Temuan:')],{spacing:{before:120,after:40}}),
+          par([txt(d.ket_dok||'')],{spacing:{before:40,after:80},
+            border:{bottom:{style:BorderStyle.SINGLE,size:4,color:'AAAAAA'}}}),
+          par([txt('')],{spacing:{before:60,after:60},border:{bottom:{style:BorderStyle.SINGLE,size:4,color:'AAAAAA'}}}),
+
+          // ── 2. PSU ──
+          par([txt('2. Kondisi Prasarana, Sarana, dan Utilitas Umum (PSU) Perumahan',{bold:true})],{spacing:spacingSection}),
+          par([txt('Secara umum kondisi prasarana, sarana, dan utilitas umum adalah sebagai berikut:')],{spacing:{before:60,after:80}}),
+          psuTable(),
+          par([txt('Catatan/Temuan:')],{spacing:{before:120,after:40}}),
+          par([txt(d.ket_psu||'')],{spacing:{before:40,after:80},
+            border:{bottom:{style:BorderStyle.SINGLE,size:4,color:'AAAAAA'}}}),
+          par([txt('')],{spacing:{before:60,after:60},border:{bottom:{style:BorderStyle.SINGLE,size:4,color:'AAAAAA'}}}),
+
+          // ── 3. PENYALURAN ──
+          par([txt('3. Kondisi Fisik Bangunan Rumah (Tahap Penyaluran)',{bold:true})],{spacing:spacingSection}),
+          par([
+            txt('Dalam kegiatan tinjauan lapangan ini dilakukan pemeriksaan terhadap '),
+            txt(d.unit_salur||'________ (__)',{bold:true}),
+            txt(' unit rumah penerima KPR FLPP untuk mengetahui kondisi pasca penyaluran.'),
+          ],{alignment:AlignmentType.JUSTIFIED,spacing:{before:60,after:40}}),
+          par([txt('Secara umum kondisi fisik bangunan rumah yang dicek pada Tahap Penyaluran adalah sebagai berikut:')],{spacing:{before:40,after:80}}),
+          kompTable(SALUR_BA, cond.salKet),
+          par([txt('Catatan/Temuan:')],{spacing:{before:120,after:40}}),
+          par([txt(d.ket_salur||'')],{spacing:{before:40,after:80},
+            border:{bottom:{style:BorderStyle.SINGLE,size:4,color:'AAAAAA'}}}),
+          par([txt('')],{spacing:{before:60,after:60},border:{bottom:{style:BorderStyle.SINGLE,size:4,color:'AAAAAA'}}}),
+
+          // ── 4. PASCA ──
+          par([txt('4. Kondisi Fisik Bangunan dan Pemanfaatan/Penghunian Rumah (Tahap Pasca Penyaluran)',{bold:true})],{spacing:spacingSection}),
+          par([
+            txt('Dalam kegiatan tinjauan lapangan ini dilakukan pemeriksaan terhadap '),
+            txt(d.unit_pasca||'________ (__)',{bold:true}),
+            txt(' unit rumah penerima KPR FLPP untuk mengetahui kondisi pasca penyaluran.'),
+          ],{alignment:AlignmentType.JUSTIFIED,spacing:{before:60,after:40}}),
+          par([txt('Secara umum kondisi fisik bangunan dan pemanfaatan/penghunian rumah yang dicek pada Tahap Pasca Penyaluran adalah sebagai berikut:')],{spacing:{before:40,after:80}}),
+          pascaTable(),
+          par([txt('Catatan/Temuan:')],{spacing:{before:120,after:40}}),
+          par([txt(d.ket_pasca||'')],{spacing:{before:40,after:80},
+            border:{bottom:{style:BorderStyle.SINGLE,size:4,color:'AAAAAA'}}}),
+          par([txt('')],{spacing:{before:60,after:60},border:{bottom:{style:BorderStyle.SINGLE,size:4,color:'AAAAAA'}}}),
+
+          // ── REKOMENDASI ──
+          par([txt('Berdasarkan hasil tinjauan lapangan dengan kondisi tersebut di atas, diperoleh beberapa catatan dan/atau rekomendasi sebagai berikut:')],
+            {alignment:AlignmentType.JUSTIFIED,spacing:{before:140,after:80}}),
+          ...[1,2,3,4,5,6].map((n,i) => par([
+            txt(`${n}.  `),txt(d.rek[i]||''),
+          ],{indent:{left:360},spacing:{before:40,after:60},
+            border:{bottom:{style:BorderStyle.SINGLE,size:4,color:'AAAAAA'}}})),
+
+          par([txt('Catatan tersebut akan dilaporkan kepada Pimpinan untuk menjadi bahan evaluasi lebih lanjut sesuai ketentuan yang berlaku.')],
+            {alignment:AlignmentType.JUSTIFIED,spacing:{before:120,after:60},
+             border:{bottom:{style:BorderStyle.SINGLE,size:6,color:'000000'}}}),
+          emptyLine(),
+          par([txt('Demikian Berita Acara ini dibuat untuk digunakan sebagaimana mestinya.')],
+            {alignment:AlignmentType.JUSTIFIED,spacing:{before:60,after:180}}),
+
+          // ── TTD ──
+          par([txt(`${d.kota_ttd||'__________'}, tanggal ${tglTTD}`)],
+            {alignment:AlignmentType.RIGHT,spacing:{before:60,after:160}}),
+          ttdTable(),
+        ]
+      }]
+    });
+
+    const buf = await window.docx.Packer.toBlob(doc);
+    const url = URL.createObjectURL(buf);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Berita_Acara_${(d.nama||'FLPP').replace(/\s+/g,'_')}_${d.tanggal||new Date().toISOString().split('T')[0]}.docx`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+  } catch(err) {
+    console.error(err);
+    alert('Gagal membuat dokumen: ' + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '📄 Generate Berita Acara (.docx)';
+  }
+}
+
+function printBA() {
+  const w = window.open('','_blank');
+  const content = document.getElementById('ba-preview-content').innerHTML;
+  const styles = [...document.querySelectorAll('style')].map(s=>s.outerHTML).join('');
+  w.document.write(`<html><head><title>Berita Acara</title>${styles}<style>body{font-family:'Times New Roman',serif;padding:32px;max-width:800px;margin:0 auto}</style></head><body>${content}</body></html>`);
+  w.document.close();
+  w.print();
+}
+
+function initBAFilter() {
+  const sel = document.getElementById('ba-sel-perumahan');
+  if (!sel) return;
+  sel.innerHTML = '<option value="">-- Pilih dari data --</option>';
+  DB.objek.forEach((r, i) => {
+    const o = document.createElement('option');
+    o.value = i;
+    o.textContent = `${r.t1_nama_perumahan || r.t1_id_sikumbang || 'Perumahan '+(i+1)}`;
+    sel.appendChild(o);
+  });
 }
 
 // ══════════════════════════════════════════════════════
