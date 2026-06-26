@@ -250,7 +250,97 @@ tr:hover td{background:var(--g50)}
   .report-sheet{box-shadow:none;max-width:100%;padding:20px 28px}
   .report-toolbar{display:none}
 }
-@media(max-width:600px){.kpi-strip{grid-template-columns:1fr 1fr}.main{padding:14px 12px 80px}}
+/* ══════════════════════════════════════════════
+   MOBILE OPTIMIZATION  ≤ 768 px
+═══════════════════════════════════════════════ */
+@media(max-width:768px){
+
+  /* ── Header ── */
+  .app-header{padding:0 14px;height:auto;flex-wrap:wrap;gap:8px;padding-top:10px;padding-bottom:10px}
+  .header-brand{flex:1;min-width:0}
+  .app-header h1{font-size:12px}
+  .app-header .sub{display:none}
+  .header-actions{width:100%;justify-content:flex-end;gap:6px;padding-bottom:2px}
+  .btn-header{padding:6px 10px;font-size:10px}
+  .badge-live{font-size:9px;padding:2px 8px}
+
+  /* ── Nav bar ── */
+  .nav-bar{padding:0 8px}
+  .nav-btn{padding:10px 10px;font-size:10px;letter-spacing:.04em}
+
+  /* ── Status bar ── */
+  .data-status-bar{padding:5px 14px;font-size:10px}
+
+  /* ── Main content ── */
+  .main{padding:12px 10px 90px}
+
+  /* ── KPI strip ── */
+  .kpi-strip{grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+  .kpi{padding:14px 12px}
+  .kpi-val{font-size:22px}
+  .kpi-label{font-size:9px}
+  .kpi-sub{font-size:10px}
+
+  /* ── Cards ── */
+  .card{padding:16px 14px}
+  .card-title{font-size:12px}
+
+  /* ── Grid layouts ── */
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr;gap:12px}
+
+  /* ── Bar chart ── */
+  .bar-label{min-width:90px;font-size:10px}
+  .bar-val{min-width:44px;font-size:10px}
+  .bar-track{height:11px}
+
+  /* ── Table ── */
+  .tbl-wrap{-webkit-overflow-scrolling:touch}
+  table{font-size:11px}
+  th{padding:7px 8px;font-size:9px}
+  td{padding:7px 8px}
+
+  /* ── Filter bar ── */
+  .filter-bar{gap:6px}
+  .filter-select{font-size:11px;padding:6px 11px}
+
+  /* ── Perumahan cards ── */
+  .p-cards{grid-template-columns:1fr;gap:10px}
+  .p-card{padding:14px}
+
+  /* ── Unit card grid ── */
+  .unit-grid{grid-template-columns:1fr 1fr}
+
+  /* ── Berita Acara layout ── */
+  .ba-layout{grid-template-columns:1fr;gap:14px}
+  .ba-sidebar{position:static}
+  .ba-ttd-input-row{grid-template-columns:1fr}
+  .ba-field-row{grid-template-columns:1fr}
+  .ba-preview-content{padding:16px 14px;font-size:12px}
+
+  /* ── Report modal ── */
+  .report-sheet{padding:20px 16px}
+  .report-toolbar{padding:10px 14px;flex-wrap:wrap;gap:6px;margin:-20px -16px 18px}
+  .report-grid{grid-template-columns:1fr}
+
+  /* ── Section divider ── */
+  .section-divider{margin:16px 0 10px}
+
+  /* ── Lock / Logout modal ── */
+  .lock-card{padding:28px 20px}
+  .logout-card{padding:24px 18px;margin:0 12px}
+  .logout-actions{flex-direction:column;gap:8px}
+  .logout-btn-cancel,.logout-btn-confirm{width:100%;padding:11px}
+}
+
+/* ══ Layar sangat kecil ≤ 400px ══ */
+@media(max-width:400px){
+  .kpi-val{font-size:19px}
+  .header-actions{gap:4px}
+  .btn-header{padding:5px 8px;font-size:9px}
+  .app-header h1{font-size:11px}
+  .nav-btn{padding:9px 8px;font-size:9px}
+  .unit-grid{grid-template-columns:1fr}
+}
 
 /* ══ GERBANG PASSWORD ══ */
 .lock-screen{position:fixed;inset:0;background:linear-gradient(135deg,var(--navy),var(--navy2));
