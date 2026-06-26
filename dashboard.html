@@ -1329,9 +1329,9 @@ function showReport(idx) {
       ${fld('Kondisi Buruk', `${kb} (${(kb/units.length*100).toFixed(0)}%)`)}
     </div>
     <table class="report-mini-table">
-      <thead><tr><th>#</th><th>Status Huni</th><th>Pekerjaan</th><th>Penghasilan</th><th>Lantai</th><th>Dinding</th><th>Atap</th><th>SLF</th><th>Tahun Huni</th></tr></thead>
+      <thead><tr><th>#</th><th>Nomor Rumah</th><th>Status Huni</th><th>Pekerjaan</th><th>Penghasilan</th><th>Lantai</th><th>Dinding</th><th>Atap</th><th>SLF</th><th>Tahun Huni</th></tr></thead>
       <tbody>${units.map((r,i)=>`<tr>
-        <td>${i+1}</td><td>${v(r.status_huni)}</td><td>${v(r.kerja_penghuni)}</td>
+        <td>${i+1}</td><td>${v(r.p3_nomor_rumah)}</td><td>${v(r.status_huni)}</td><td>${v(r.kerja_penghuni)}</td>
         <td>${v(r.gaji_penghuni)}</td><td>${v(r.pf_lantai_kondisi)}</td>
         <td>${v(r.pf_dinding_kondisi)}</td><td>${v(r.pf_atap_kondisi)}</td>
         <td>${v(r.slf)}</td><td>${v(r.tahun_huni)}</td>
