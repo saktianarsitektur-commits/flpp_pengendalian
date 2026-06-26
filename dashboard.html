@@ -618,49 +618,6 @@ tr:hover td{background:var(--g50)}
         <div class="ba-field"><label>Rekomendasi 6</label><input type="text" id="ba-rek-6"></div>
       </div>
 
-      <!-- Peserta TTD -->
-      <div class="ba-form-section">
-        <h4>✍️ Peserta Penandatangan</h4>
-        <p style="font-size:10px;color:var(--g400);margin-bottom:10px">Isi nama, no. telepon, jabatan untuk setiap perwakilan (maks. 3 per kelompok)</p>
-
-        <div class="ba-ttd-group">
-          <div class="ba-ttd-group-title">Perwakilan Pemerintah Daerah</div>
-          <div class="ba-ttd-input-row"><input id="ba-pemda-1-nama" placeholder="Nama"><input id="ba-pemda-1-telp" placeholder="No. Telp"><input id="ba-pemda-1-jabatan" placeholder="Jabatan"></div>
-          <div class="ba-ttd-input-row"><input id="ba-pemda-2-nama" placeholder="Nama"><input id="ba-pemda-2-telp" placeholder="No. Telp"><input id="ba-pemda-2-jabatan" placeholder="Jabatan"></div>
-          <div class="ba-ttd-input-row"><input id="ba-pemda-3-nama" placeholder="Nama"><input id="ba-pemda-3-telp" placeholder="No. Telp"><input id="ba-pemda-3-jabatan" placeholder="Jabatan"></div>
-        </div>
-        <div class="ba-ttd-group">
-          <div class="ba-ttd-group-title">Perwakilan BP Tapera</div>
-          <div class="ba-ttd-input-row"><input id="ba-tapera-1-nama" placeholder="Nama"><input id="ba-tapera-1-telp" placeholder="No. Telp"><input id="ba-tapera-1-jabatan" placeholder="Jabatan"></div>
-          <div class="ba-ttd-input-row"><input id="ba-tapera-2-nama" placeholder="Nama"><input id="ba-tapera-2-telp" placeholder="No. Telp"><input id="ba-tapera-2-jabatan" placeholder="Jabatan"></div>
-          <div class="ba-ttd-input-row"><input id="ba-tapera-3-nama" placeholder="Nama"><input id="ba-tapera-3-telp" placeholder="No. Telp"><input id="ba-tapera-3-jabatan" placeholder="Jabatan"></div>
-        </div>
-        <div class="ba-ttd-group">
-          <div class="ba-ttd-group-title">Perwakilan Pengembang Perumahan</div>
-          <div class="ba-ttd-input-row"><input id="ba-dev-1-nama" placeholder="Nama"><input id="ba-dev-1-telp" placeholder="No. Telp"><input id="ba-dev-1-jabatan" placeholder="Jabatan"></div>
-          <div class="ba-ttd-input-row"><input id="ba-dev-2-nama" placeholder="Nama"><input id="ba-dev-2-telp" placeholder="No. Telp"><input id="ba-dev-2-jabatan" placeholder="Jabatan"></div>
-          <div class="ba-ttd-input-row"><input id="ba-dev-3-nama" placeholder="Nama"><input id="ba-dev-3-telp" placeholder="No. Telp"><input id="ba-dev-3-jabatan" placeholder="Jabatan"></div>
-        </div>
-        <div class="ba-ttd-group">
-          <div class="ba-ttd-group-title">Perwakilan Bank Penyalur KPR FLPP</div>
-          <div class="ba-ttd-input-row"><input id="ba-bank-1-nama" placeholder="Nama"><input id="ba-bank-1-telp" placeholder="No. Telp"><input id="ba-bank-1-jabatan" placeholder="Jabatan"></div>
-          <div class="ba-ttd-input-row"><input id="ba-bank-2-nama" placeholder="Nama"><input id="ba-bank-2-telp" placeholder="No. Telp"><input id="ba-bank-2-jabatan" placeholder="Jabatan"></div>
-          <div class="ba-ttd-input-row"><input id="ba-bank-3-nama" placeholder="Nama"><input id="ba-bank-3-telp" placeholder="No. Telp"><input id="ba-bank-3-jabatan" placeholder="Jabatan"></div>
-        </div>
-        <div class="ba-ttd-group">
-          <div class="ba-ttd-group-title">Perwakilan Balai Pelaksana Penyediaan Perumahan</div>
-          <div class="ba-ttd-input-row"><input id="ba-balai-1-nama" placeholder="Nama"><input id="ba-balai-1-telp" placeholder="No. Telp"><input id="ba-balai-1-jabatan" placeholder="Jabatan"></div>
-          <div class="ba-ttd-input-row"><input id="ba-balai-2-nama" placeholder="Nama"><input id="ba-balai-2-telp" placeholder="No. Telp"><input id="ba-balai-2-jabatan" placeholder="Jabatan"></div>
-          <div class="ba-ttd-input-row"><input id="ba-balai-3-nama" placeholder="Nama"><input id="ba-balai-3-telp" placeholder="No. Telp"><input id="ba-balai-3-jabatan" placeholder="Jabatan"></div>
-        </div>
-        <div class="ba-ttd-group">
-          <div class="ba-ttd-group-title">Perwakilan Tim Pemantauan dan Evaluasi</div>
-          <div class="ba-ttd-input-row"><input id="ba-tim-1-nama" placeholder="Nama"><input id="ba-tim-1-telp" placeholder="No. Telp"><input id="ba-tim-1-jabatan" placeholder="Jabatan"></div>
-          <div class="ba-ttd-input-row"><input id="ba-tim-2-nama" placeholder="Nama"><input id="ba-tim-2-telp" placeholder="No. Telp"><input id="ba-tim-2-jabatan" placeholder="Jabatan"></div>
-          <div class="ba-ttd-input-row"><input id="ba-tim-3-nama" placeholder="Nama"><input id="ba-tim-3-telp" placeholder="No. Telp"><input id="ba-tim-3-jabatan" placeholder="Jabatan"></div>
-        </div>
-      </div>
-
       <button class="ba-gen-btn" onclick="generateBeritaAcara()" id="ba-gen-btn">
         📄 Generate Berita Acara (.docx)
       </button>
@@ -1560,15 +1517,6 @@ const SALUR_BA = ['Pondasi','Sloof','Kolom','Ring Balok','Rangka Atap','Penutup 
 const PASCA_BA_FISIK = ['Atap','Lantai','Dinding','Jaringan Utilitas Bangunan (Mechanical Electrical Plumbing)','Ketentuan Rumah Layak Huni'];
 const PASCA_BA_HUNI  = ['Status Penghunian','Fungsi Bangunan'];
 
-const TTD_GROUPS = [
-  {id:'pemda',  label:'Perwakilan Pemerintah Daerah .........'},
-  {id:'tapera', label:'Perwakilan BP Tapera .........'},
-  {id:'dev',    label:'Perwakilan Pengembang Perumahan .........'},
-  {id:'bank',   label:'Perwakilan Bank Penyalur KPR FLPP .........'},
-  {id:'balai',  label:'Perwakilan Balai Pelaksana Penyediaan Perumahan .........'},
-  {id:'tim',    label:'Perwakilan Tim Pemantauan dan Evaluasi'},
-];
-
 function baOnPerumahanChange() {
   const sel = document.getElementById('ba-sel-perumahan');
   const idx = parseInt(sel.value);
@@ -1633,14 +1581,6 @@ function baGetFormData() {
     unit_salur: g('ba-unit-salur'), ket_salur: g('ba-ket-salur'),
     unit_pasca: g('ba-unit-pasca'), ket_pasca: g('ba-ket-pasca'),
     rek: [1,2,3,4,5,6].map(i => g('ba-rek-'+i)).filter(Boolean),
-    ttd: TTD_GROUPS.map(grp => ({
-      label: grp.label,
-      rows: [1,2,3].map(n => ({
-        nama: g(`ba-${grp.id}-${n}-nama`),
-        telp: g(`ba-${grp.id}-${n}-telp`),
-        jabatan: g(`ba-${grp.id}-${n}-jabatan`),
-      })).filter(r => r.nama)
-    })),
   };
 }
 
@@ -1824,20 +1764,7 @@ function baRenderPreview() {
   </div>
 
   <!-- TTD -->
-  <div class="ba-ttd-area"><strong>${d.kota_ttd||'__________'}, tanggal ${tglTTD}</strong></div>
-  <table class="ba-ttd-tbl">
-    <tr><th style="width:5%">No</th><th style="width:25%">Nama</th><th style="width:20%">No. Telepon</th><th style="width:25%">Jabatan</th><th style="width:25%">Tanda Tangan</th></tr>
-    ${d.ttd.map(grp => `
-      <tr class="grp-row"><td colspan="5">${grp.label}</td></tr>
-      ${grp.rows.length ? grp.rows.map((r,i)=>`<tr>
-        <td style="text-align:center">${i+1}.</td>
-        <td>${r.nama}</td><td>${r.telp}</td><td>${r.jabatan}</td>
-        <td style="min-height:50px">&nbsp;</td>
-      </tr>`).join('') : [1,2,3].map(n=>`<tr>
-        <td style="text-align:center">${n}.</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td style="min-height:50px">&nbsp;</td>
-      </tr>`).join('')}
-    `).join('')}
-  </table>`;
+  <div class="ba-ttd-area"><strong>${d.kota_ttd||'__________'}, tanggal ${tglTTD}</strong></div>`;
 
   document.getElementById('ba-preview-content').innerHTML = html;
 }
@@ -1976,40 +1903,6 @@ async function generateBeritaAcara() {
       return new Table({ width:{size:W,type:WidthType.DXA}, columnWidths:[Math.round(W*0.4),Math.round(W*0.6)], rows });
     }
 
-    function ttdTable() {
-      const colW = [Math.round(W*0.05), Math.round(W*0.25), Math.round(W*0.20), Math.round(W*0.25), Math.round(W*0.25)];
-      const rows = [
-        new TableRow({ children:[
-          tableCell('No', {bold:true, shade:true, center:true, width:colW[0]}),
-          tableCell('Nama', {bold:true, shade:true, width:colW[1]}),
-          tableCell('No. Telepon', {bold:true, shade:true, width:colW[2]}),
-          tableCell('Jabatan', {bold:true, shade:true, width:colW[3]}),
-          tableCell('Tanda Tangan', {bold:true, shade:true, center:true, width:colW[4]}),
-        ]}),
-        ...d.ttd.flatMap(grp => {
-          const filled = grp.rows.length ? grp.rows : [{nama:'',telp:'',jabatan:''}];
-          const dataRows = (grp.rows.length ? grp.rows : [{},{},{}]).map((r,i)=>
-            new TableRow({ height:{value:800,rule:'atLeast'}, children:[
-              tableCell(String(i+1)+'.', {center:true, width:colW[0]}),
-              tableCell(r?.nama||'', {width:colW[1]}),
-              tableCell(r?.telp||'', {width:colW[2]}),
-              tableCell(r?.jabatan||'', {width:colW[3]}),
-              tableCell('', {width:colW[4]}),
-            ]})
-          );
-          return [
-            new TableRow({ children:[
-              new TableCell({ borders, shading:hdrFill2, columnSpan:5, margins:cellMargin,
-                children:[par([txt(grp.label, {bold:true, size:20})])],
-              })
-            ]}),
-            ...dataRows,
-          ];
-        }),
-      ];
-      return new Table({ width:{size:W,type:WidthType.DXA}, columnWidths:colW, rows });
-    }
-
     const spacingNormal = { before:100, after:100 };
     const spacingSection = { before:200, after:100 };
 
@@ -2125,7 +2018,6 @@ async function generateBeritaAcara() {
           // ── TTD ──
           par([txt(`${d.kota_ttd||'__________'}, tanggal ${tglTTD}`)],
             {alignment:AlignmentType.RIGHT,spacing:{before:60,after:160}}),
-          ttdTable(),
         ]
       }]
     });
@@ -2185,6 +2077,14 @@ ${styles}
      kosong saat dicetak karena popup tidak punya elemen .report-overlay */
   @media print{
     body, body * { visibility: visible !important; }
+  }
+  /* Paksa browser mencetak warna/background tabel (header biru, baris abu-abu, dsb).
+     Tanpa ini browser akan menghapus semua warna background saat cetak/PDF kecuali
+     pengguna mencentang opsi "Print backgrounds" secara manual. */
+  *{
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
   }
 </style>
 </head>
