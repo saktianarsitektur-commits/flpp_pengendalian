@@ -273,9 +273,11 @@ body.is-locked > *:not(#lock-screen){display:none !important}
 <script>
   // Cek lebih dulu sebelum konten lain dirender, supaya tidak "kelihatan sekilas"
   // kalau sebelumnya sudah pernah login di tab/sesi browser yang sama.
-  if (sessionStorage.getItem('flpp_admin_unlocked') === 'yes') {
-    document.body.classList.remove('is-locked');
-  }
+  try {
+    if (sessionStorage.getItem('flpp_admin_unlocked') === 'yes') {
+      document.body.classList.remove('is-locked');
+    }
+  } catch (e) {}
 </script>
 
 <!-- REPORT MODAL -->
@@ -716,9 +718,13 @@ function checkLockPassword() {
   const input = document.getElementById('lock-password');
   const errBox = document.getElementById('lock-error');
   if (input.value === ADMIN_PASSWORD) {
-    sessionStorage.setItem('flpp_admin_unlocked', 'yes');
     document.body.classList.remove('is-locked');
     errBox.textContent = '';
+    // Simpan status login ke sessionStorage hanya sebagai bonus (supaya tidak perlu
+    // login ulang tiap pindah tab dalam sesi yang sama). Dibungkus try/catch karena
+    // beberapa browser/ekstensi memblokir Web Storage -- tapi proses MASUK tidak
+    // boleh gagal hanya karena ini.
+    try { sessionStorage.setItem('flpp_admin_unlocked', 'yes'); } catch (e) {}
   } else {
     errBox.textContent = 'Password salah. Coba lagi.';
     input.value = '';
