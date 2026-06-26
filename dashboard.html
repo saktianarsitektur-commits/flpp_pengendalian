@@ -194,13 +194,6 @@ tr:hover td{background:var(--g50)}
 .ba-preview-toolbar{background:var(--g50);padding:12px 18px;border-bottom:1px solid var(--g100);display:flex;align-items:center;justify-content:space-between}
 .ba-preview-toolbar span{font-size:12px;font-weight:700;color:var(--navy)}
 .ba-preview-content{padding:28px 32px;font-size:12px;line-height:1.7;color:#222;min-height:400px;font-family:'Times New Roman',serif}
-.ba-doc-header{display:flex;align-items:flex-start;gap:16px;margin-bottom:10px;padding-bottom:12px;border-bottom:2.5px solid #000}
-.ba-logo{width:70px;height:70px;background:#1a4d6e;display:flex;align-items:center;justify-content:center;font-size:28px;border-radius:4px;flex-shrink:0;color:#fff}
-.ba-header-text{flex:1;text-align:center}
-.ba-header-text .h1{font-size:10px;font-weight:400;font-family:'Times New Roman',serif;text-transform:uppercase;letter-spacing:.03em}
-.ba-header-text .h2{font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:.01em;margin:2px 0}
-.ba-header-text .h3{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.01em}
-.ba-header-text .h4{font-size:10px;font-weight:400;margin-top:4px}
 .ba-center{text-align:center;margin:14px 0;font-weight:700}
 .ba-center .judul{font-size:13px;text-transform:uppercase}
 .ba-center .sub{font-size:12px;text-transform:uppercase}
@@ -1667,16 +1660,6 @@ function baRenderPreview() {
   })() : '___________';
 
   let html = `
-  <div class="ba-doc-header">
-    <div class="ba-logo">🏛️</div>
-    <div class="ba-header-text">
-      <div class="h1">KEMENTERIAN PERUMAHAN DAN KAWASAN PERMUKIMAN REPUBLIK INDONESIA</div>
-      <div class="h2">DIREKTORAT JENDERAL PERUMAHAN PERDESAAN</div>
-      <div class="h3">DIREKTORAT PEMBIAYAAN PERUMAHAN PERDESAAN</div>
-      <div class="h4">Jalan Prof. Dr. Soepomo Nomor 197, Menteng Dalam, Tebet, Jakarta Selatan 12870</div>
-    </div>
-  </div>
-
   <div class="ba-center">
     <div class="judul"><strong>BERITA ACARA</strong></div>
     <div class="sub"><strong>HASIL TINJAUAN LAPANGAN PEMANTAUAN DAN EVALUASI PELAKSANAAN PENYALURAN KREDIT PEMILIKAN RUMAH<br>(KPR) FASILITAS LIKUIDITAS PEMBIAYAAN PERUMAHAN (FLPP)</strong></div>
@@ -1915,18 +1898,6 @@ async function generateBeritaAcara() {
           }
         },
         children:[
-          // ── HEADER ──
-          par([txt('KEMENTERIAN PERUMAHAN DAN KAWASAN PERMUKIMAN REPUBLIK INDONESIA',{bold:false,size:18,font:'Times New Roman'})],
-            {alignment:AlignmentType.CENTER, spacing:{before:0,after:0}}),
-          par([txt('DIREKTORAT JENDERAL PERUMAHAN PERDESAAN',{bold:true,size:24,font:'Times New Roman'})],
-            {alignment:AlignmentType.CENTER, spacing:{before:0,after:0}}),
-          par([txt('DIREKTORAT PEMBIAYAAN PERUMAHAN PERDESAAN',{bold:true,size:22,font:'Times New Roman'})],
-            {alignment:AlignmentType.CENTER, spacing:{before:0,after:0}}),
-          par([txt('Jalan Prof. Dr. Soepomo Nomor 197, Menteng Dalam, Tebet, Jakarta Selatan 12870',{size:18})],
-            {alignment:AlignmentType.CENTER, spacing:{before:0,after:60},
-             border:{bottom:{style:BorderStyle.THICK,size:12,color:'000000',space:4}}}),
-          emptyLine(),
-
           // ── JUDUL ──
           par([txt('BERITA ACARA',{bold:true,size:26})],{alignment:AlignmentType.CENTER,spacing:{before:120,after:60}}),
           par([txt('HASIL TINJAUAN LAPANGAN PEMANTAUAN DAN EVALUASI PELAKSANAAN PENYALURAN KREDIT PEMILIKAN RUMAH',{bold:true,size:22})],
@@ -2070,7 +2041,7 @@ function printBA() {
 ${styles}
 <style>
   @page { size: A4; margin: 18mm 15mm; }
-  body{font-family:'Times New Roman',serif;padding:32px;max-width:800px;margin:0 auto;background:#fff}
+  body{margin:0;background:#fff}
   .ba-preview-toolbar, .report-btn, .btn-header, .nav-bar, .app-header { display:none !important; }
   /* Netralisir rule "@media print{ body *{visibility:hidden} }" milik fitur Report
      lain yang ikut ter-copy dari halaman utama -- tanpa ini, isi popup BA jadi
@@ -2086,9 +2057,14 @@ ${styles}
     print-color-adjust: exact !important;
     color-adjust: exact !important;
   }
+  /* Margin halaman fisik sudah diatur lewat @page di atas, jadi padding internal
+     .ba-preview-content (yang dipakai juga di preview web) di-nol-kan di sini agar
+     tidak dobel -- tapi font-size/line-height/font-family-nya tetap dipakai apa
+     adanya supaya hasil cetak identik dengan yang terlihat di preview web. */
+  .ba-preview-content{ padding:0 !important; max-width:800px; margin:0 auto; min-height:0 !important; }
 </style>
 </head>
-<body>${content}</body>
+<body><div class="ba-preview-content">${content}</div></body>
 </html>`);
   w.document.close();
 
