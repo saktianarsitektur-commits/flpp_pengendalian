@@ -39,6 +39,21 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cream);color:va
 .btn-upload{background:var(--gold);color:var(--navy)}
 .btn-upload:hover{background:var(--gold-lt)}
 .badge-live{background:var(--teal);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px;letter-spacing:.06em;text-transform:uppercase}
+.btn-logout{background:rgba(220,38,38,.15);color:#ffaaaa;border:1px solid rgba(220,38,38,.35)}
+.btn-logout:hover{background:rgba(220,38,38,.3);color:#fff}
+
+/* LOGOUT CONFIRM MODAL */
+.logout-overlay{display:none;position:fixed;inset:0;background:rgba(11,61,82,.6);z-index:9998;align-items:center;justify-content:center}
+.logout-overlay.active{display:flex}
+.logout-card{background:#fff;border-radius:16px;padding:32px 28px;max-width:340px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.logout-icon{font-size:40px;margin-bottom:10px}
+.logout-card h3{font-size:15px;font-weight:800;color:var(--navy);margin-bottom:6px}
+.logout-card p{font-size:12px;color:var(--g400);line-height:1.6;margin-bottom:22px}
+.logout-actions{display:flex;gap:10px;justify-content:center}
+.logout-btn-cancel{padding:9px 20px;border:1.5px solid var(--g200);border-radius:99px;background:#fff;font-family:inherit;font-size:12px;font-weight:700;color:var(--g600);cursor:pointer;transition:all .15s}
+.logout-btn-cancel:hover{border-color:var(--g400);color:var(--g800)}
+.logout-btn-confirm{padding:9px 22px;border:none;border-radius:99px;background:var(--red);font-family:inherit;font-size:12px;font-weight:700;color:#fff;cursor:pointer;transition:all .15s;letter-spacing:.02em}
+.logout-btn-confirm:hover{background:#b91c1c;transform:translateY(-1px);box-shadow:0 4px 14px rgba(220,38,38,.35)}
 
 /* NAV */
 .nav-bar{background:var(--navy2);display:flex;overflow-x:auto;scrollbar-width:none;padding:0 24px;border-bottom:1px solid rgba(255,255,255,.08)}
@@ -281,6 +296,19 @@ body.is-locked > *:not(#lock-screen){display:none !important}
   } catch (e) {}
 </script>
 
+<!-- LOGOUT CONFIRM MODAL -->
+<div class="logout-overlay" id="logout-overlay">
+  <div class="logout-card">
+    <div class="logout-icon">🔒</div>
+    <h3>Keluar dari Dashboard?</h3>
+    <p>Sesi Anda akan diakhiri dan dashboard akan dikunci kembali. Anda perlu memasukkan password untuk mengakses kembali.</p>
+    <div class="logout-actions">
+      <button class="logout-btn-cancel" onclick="cancelLogout()">Batal</button>
+      <button class="logout-btn-confirm" onclick="doLogout()">Ya, Keluar</button>
+    </div>
+  </div>
+</div>
+
 <!-- REPORT MODAL -->
 <div class="report-overlay" id="report-overlay">
   <div class="report-sheet">
@@ -306,6 +334,7 @@ body.is-locked > *:not(#lock-screen){display:none !important}
     <button class="btn-header btn-upload" onclick="document.getElementById('file-input').click()">📤 Upload Excel</button>
     <input type="file" id="file-input" accept=".xlsx,.xls" style="display:none" onchange="handleExcelUpload(event)">
     <span class="badge-live" id="live-badge">Demo</span>
+    <button class="btn-header btn-logout" onclick="confirmLogout()">🔒 Keluar</button>
   </div>
 </header>
 
@@ -2174,6 +2203,33 @@ function initBAFilter() {
     sel.appendChild(o);
   });
 }
+
+// ══════════════════════════════════════════════════════
+// LOGOUT
+// ══════════════════════════════════════════════════════
+function confirmLogout() {
+  document.getElementById('logout-overlay').classList.add('active');
+}
+function cancelLogout() {
+  document.getElementById('logout-overlay').classList.remove('active');
+}
+function doLogout() {
+  try { sessionStorage.removeItem('flpp_admin_unlocked'); } catch(e) {}
+  document.getElementById('logout-overlay').classList.remove('active');
+  // Kunci kembali dashboard
+  document.body.classList.add('is-locked');
+  document.getElementById('lock-screen').classList.remove('hidden');
+  // Reset field password agar bersih
+  const pwInput = document.getElementById('lock-password');
+  if (pwInput) { pwInput.value = ''; setTimeout(() => pwInput.focus(), 100); }
+  const errEl = document.getElementById('lock-error');
+  if (errEl) errEl.textContent = '';
+}
+// Tutup modal logout jika klik di luar card
+document.addEventListener('click', function(e) {
+  const overlay = document.getElementById('logout-overlay');
+  if (overlay && e.target === overlay) cancelLogout();
+});
 
 // ══════════════════════════════════════════════════════
 // BOOT
