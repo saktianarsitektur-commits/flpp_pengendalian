@@ -1495,13 +1495,7 @@ function showPage(id, btn) {
 }
 
 function goHome() {
-  // Tutup modal Laporan Per Perumahan jika sedang terbuka
-  const overlay = document.getElementById('report-overlay');
-  if (overlay && overlay.classList.contains('active')) closeReport();
-
-  const homeBtn = document.querySelector('.nav-btn[data-page="overview"]');
-  showPage('overview', homeBtn);
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.location.href = 'index.html';
 }
 
 // ══════════════════════════════════════════════════════
