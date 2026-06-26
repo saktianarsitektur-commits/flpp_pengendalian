@@ -2150,12 +2150,62 @@ async function generateBeritaAcara() {
 }
 
 function printBA() {
-  const w = window.open('','_blank');
-  const content = document.getElementById('ba-preview-content').innerHTML;
-  const styles = [...document.querySelectorAll('style')].map(s=>s.outerHTML).join('');
-  w.document.write(`<html><head><title>Berita Acara</title>${styles}<style>body{font-family:'Times New Roman',serif;padding:32px;max-width:800px;margin:0 auto}</style></head><body>${content}</body></html>`);
+  const previewEl = document.getElementById('ba-preview-content');
+
+  // Pastikan Berita Acara sudah di-generate (bukan placeholder kosong)
+  if (!previewEl || previewEl.querySelector('.ba-no-data')) {
+    alert('Silakan pilih perumahan dan klik "Generate" terlebih dahulu sebelum mencetak pratinjau.');
+    return;
+  }
+
+  const content = previewEl.innerHTML;
+  const styles = [...document.querySelectorAll('style')].map(s => s.outerHTML).join('');
+
+  const w = window.open('', '_blank');
+
+  // Popup diblokir oleh browser
+  if (!w) {
+    alert('Popup diblokir oleh browser. Mohon izinkan popup untuk situs ini, lalu coba lagi.');
+    return;
+  }
+
+  w.document.open();
+  w.document.write(`<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Berita Acara</title>
+${styles}
+<style>
+  @page { size: A4; margin: 18mm 15mm; }
+  body{font-family:'Times New Roman',serif;padding:32px;max-width:800px;margin:0 auto;background:#fff}
+  .ba-preview-toolbar, .report-btn, .btn-header, .nav-bar, .app-header { display:none !important; }
+</style>
+</head>
+<body>${content}</body>
+</html>`);
   w.document.close();
-  w.print();
+
+  // Tunggu hingga konten & font benar-benar selesai dirender sebelum memanggil print,
+  // jika tidak, dialog cetak/PDF akan menampilkan halaman kosong.
+  const triggerPrint = () => {
+    w.focus();
+    w.print();
+  };
+
+  if (w.document.readyState === 'complete') {
+    setTimeout(triggerPrint, 400);
+  } else {
+    w.addEventListener('load', () => setTimeout(triggerPrint, 400));
+  }
+
+  // Fallback pengaman jika event load tidak terpicu di beberapa browser
+  setTimeout(() => {
+    if (!w.closed) triggerPrint();
+  }, 1000);
+
+  // Tutup tab pratinjau otomatis setelah selesai/dibatalkan cetak (jika didukung browser)
+  w.addEventListener('afterprint', () => w.close());
 }
 
 function initBAFilter() {
