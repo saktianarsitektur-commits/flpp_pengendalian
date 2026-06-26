@@ -193,7 +193,7 @@ tr:hover td{background:var(--g50)}
 .ba-preview{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
 .ba-preview-toolbar{background:var(--g50);padding:12px 18px;border-bottom:1px solid var(--g100);display:flex;align-items:center;justify-content:space-between}
 .ba-preview-toolbar span{font-size:12px;font-weight:700;color:var(--navy)}
-.ba-preview-content{padding:28px 32px;font-size:12px;line-height:1.7;color:#222;min-height:400px;font-family:'Times New Roman',serif}
+.ba-preview-content{padding:28px 32px;font-size:13px;line-height:1.5;color:#222;min-height:400px;font-family:'Calibri','Carlito',sans-serif}
 .ba-center{text-align:center;margin:14px 0;font-weight:700}
 .ba-center .judul{font-size:13px;text-transform:uppercase}
 .ba-center .sub{font-size:12px;text-transform:uppercase}
@@ -1791,16 +1791,16 @@ async function generateBeritaAcara() {
     })() : '___________';
     const tglNum = d.tanggal ? new Date(d.tanggal).getDate() : '______';
 
-    const W = 9350; // content width DXA (A4, 2.5cm margins)
+    const W = 9746; // content width DXA (A4, margin kiri/kanan 1080 dxa, sama dengan file referensi)
     const brd = { style: BorderStyle.SINGLE, size: 4, color: '555555' };
     const borders = { top:brd, bottom:brd, left:brd, right:brd };
     const hdrFill = { fill:'1A4D6E', type:ShadingType.CLEAR };
     const hdrFill2 = { fill:'DDE8EF', type:ShadingType.CLEAR };
-    const cellMargin = { top:60, bottom:60, left:100, right:100 };
+    const cellMargin = { top:0, bottom:0, left:108, right:108 }; // sama dengan default tabel di file referensi
 
-    const txt = (t, opts={}) => new TextRun({ text: String(t||''), font:'Times New Roman', size:22, ...opts });
+    const txt = (t, opts={}) => new TextRun({ text: String(t||''), font:'Calibri', size:20, ...opts });
     const par = (children, opts={}) => new Paragraph({ children: Array.isArray(children)?children:[children], ...opts });
-    const hdr = (t, bold=true) => par([txt(t, {bold, size:22})]);
+    const hdr = (t, bold=true) => par([txt(t, {bold, size:20})]);
     const emptyLine = () => par([txt('')]);
 
     function tableCell(text, opts={}) {
@@ -1814,7 +1814,7 @@ async function generateBeritaAcara() {
         children: [par([txt(text||'', {
           bold: opts.bold || opts.shade || opts.shade2,
           color: opts.shade ? 'FFFFFF' : '000000',
-          size: opts.size||22
+          size: opts.size||20
         })], { alignment: opts.center ? AlignmentType.CENTER : AlignmentType.LEFT })],
       });
     }
@@ -1894,17 +1894,17 @@ async function generateBeritaAcara() {
         properties:{
           page:{
             size:{ width:11906, height:16838 },
-            margin:{ top:1134, right:850, bottom:1134, left:1134 }, // ~2cm margins
+            margin:{ top:1008, right:1080, bottom:1080, left:1080 }, // sama dengan file referensi
           }
         },
         children:[
           // ── JUDUL ──
-          par([txt('BERITA ACARA',{bold:true,size:26})],{alignment:AlignmentType.CENTER,spacing:{before:120,after:60}}),
-          par([txt('HASIL TINJAUAN LAPANGAN PEMANTAUAN DAN EVALUASI PELAKSANAAN PENYALURAN KREDIT PEMILIKAN RUMAH',{bold:true,size:22})],
+          par([txt('BERITA ACARA',{bold:true,size:22})],{alignment:AlignmentType.CENTER,spacing:{before:240,after:120}}),
+          par([txt('HASIL TINJAUAN LAPANGAN PEMANTAUAN DAN EVALUASI PELAKSANAAN PENYALURAN KREDIT PEMILIKAN RUMAH',{bold:true,size:20})],
             {alignment:AlignmentType.CENTER,spacing:{before:0,after:0}}),
-          par([txt('(KPR) FASILITAS LIKUIDITAS PEMBIAYAAN PERUMAHAN (FLPP)',{bold:true,size:22})],
+          par([txt('(KPR) FASILITAS LIKUIDITAS PEMBIAYAAN PERUMAHAN (FLPP)',{bold:true,size:20})],
             {alignment:AlignmentType.CENTER,spacing:{before:0,after:60}}),
-          par([txt('DI LINGKUNGAN DIREKTORAT JENDERAL PERUMAHAN PERDESAAN',{bold:true,size:22})],
+          par([txt('DI LINGKUNGAN DIREKTORAT JENDERAL PERUMAHAN PERDESAAN',{bold:true,size:20})],
             {alignment:AlignmentType.CENTER,spacing:{before:0,after:180}}),
 
           // ── PEMBUKAAN ──
