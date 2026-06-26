@@ -2328,9 +2328,10 @@ function syncNavTop() {
   const header = document.querySelector('.app-header');
   const statusBar = document.querySelector('.data-status-bar');
   const nav = document.querySelector('.nav-bar');
-  if (!header || !nav) return;
-  const h = header.offsetHeight + (statusBar ? statusBar.offsetHeight : 0);
-  nav.style.top = h + 'px';
+  if (!header) return;
+  const headerH = header.offsetHeight;
+  if (statusBar) statusBar.style.top = headerH + 'px';
+  if (nav) nav.style.top = headerH + (statusBar ? statusBar.offsetHeight : 0) + 'px';
 }
 window.addEventListener('load', syncNavTop);
 window.addEventListener('resize', syncNavTop);
