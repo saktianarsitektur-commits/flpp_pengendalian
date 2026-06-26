@@ -34,6 +34,8 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cream);color:va
 .btn-header{border:none;padding:7px 14px;border-radius:99px;font-family:inherit;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:.03em;transition:all .15s}
 .btn-sync{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2)}
 .btn-sync:hover{background:rgba(255,255,255,.2)}
+.btn-home{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2)}
+.btn-home:hover{background:rgba(255,255,255,.2)}
 .btn-upload{background:var(--gold);color:var(--navy)}
 .btn-upload:hover{background:var(--gold-lt)}
 .badge-live{background:var(--teal);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px;letter-spacing:.06em;text-transform:uppercase}
@@ -258,6 +260,7 @@ tr:hover td{background:var(--g50)}
     </div>
   </div>
   <div class="header-actions">
+    <button class="btn-header btn-home" onclick="goHome()">🏠 Home</button>
     <button class="btn-header btn-sync" onclick="syncFromGoogleSheets(true)">🔄 Sync</button>
     <button class="btn-header btn-upload" onclick="document.getElementById('file-input').click()">📤 Upload Excel</button>
     <input type="file" id="file-input" accept=".xlsx,.xls" style="display:none" onchange="handleExcelUpload(event)">
@@ -1489,6 +1492,16 @@ function showPage(id, btn) {
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
   if (btn) btn.classList.add('active');
+}
+
+function goHome() {
+  // Tutup modal Laporan Per Perumahan jika sedang terbuka
+  const overlay = document.getElementById('report-overlay');
+  if (overlay && overlay.classList.contains('active')) closeReport();
+
+  const homeBtn = document.querySelector('.nav-btn[data-page="overview"]');
+  showPage('overview', homeBtn);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // ══════════════════════════════════════════════════════
