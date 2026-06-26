@@ -2180,6 +2180,12 @@ ${styles}
   @page { size: A4; margin: 18mm 15mm; }
   body{font-family:'Times New Roman',serif;padding:32px;max-width:800px;margin:0 auto;background:#fff}
   .ba-preview-toolbar, .report-btn, .btn-header, .nav-bar, .app-header { display:none !important; }
+  /* Netralisir rule "@media print{ body *{visibility:hidden} }" milik fitur Report
+     lain yang ikut ter-copy dari halaman utama -- tanpa ini, isi popup BA jadi
+     kosong saat dicetak karena popup tidak punya elemen .report-overlay */
+  @media print{
+    body, body * { visibility: visible !important; }
+  }
 </style>
 </head>
 <body>${content}</body>
