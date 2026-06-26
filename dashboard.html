@@ -236,9 +236,47 @@ tr:hover td{background:var(--g50)}
   .report-toolbar{display:none}
 }
 @media(max-width:600px){.kpi-strip{grid-template-columns:1fr 1fr}.main{padding:14px 12px 80px}}
+
+/* ══ GERBANG PASSWORD ══ */
+.lock-screen{position:fixed;inset:0;background:linear-gradient(135deg,var(--navy),var(--navy2));
+  display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px}
+.lock-screen.hidden{display:none}
+.lock-card{background:#fff;border-radius:16px;padding:36px 32px;max-width:360px;width:100%;
+  text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.lock-logo{font-size:42px;margin-bottom:8px}
+.lock-card h2{font-size:16px;color:var(--navy);margin-bottom:6px;line-height:1.3}
+.lock-card p{font-size:12px;color:var(--g400);margin-bottom:20px;line-height:1.5}
+.lock-card input{width:100%;padding:11px 14px;border:1.5px solid #ddd;border-radius:8px;
+  font-size:13px;margin-bottom:12px;font-family:inherit;text-align:center}
+.lock-card input:focus{outline:none;border-color:var(--navy)}
+.lock-card button{width:100%;padding:11px;border:none;border-radius:8px;background:var(--navy);
+  color:#fff;font-weight:700;font-size:13px;cursor:pointer;letter-spacing:.02em;transition:background .15s}
+.lock-card button:hover{background:var(--navy2)}
+.lock-error{color:#c0392b;font-size:11.5px;margin-top:10px;min-height:14px;font-weight:600}
+body.is-locked > *:not(#lock-screen){display:none !important}
 </style>
 </head>
-<body>
+<body class="is-locked">
+
+<!-- ══ GERBANG PASSWORD ══ -->
+<div id="lock-screen" class="lock-screen">
+  <div class="lock-card">
+    <div class="lock-logo">🏘️</div>
+    <h2>Dashboard Pengendalian Perumahan FLPP</h2>
+    <p>Halaman ini terbatas untuk admin. Masukkan password untuk melanjutkan.</p>
+    <input type="password" id="lock-password" placeholder="Password" autocomplete="off" autofocus
+      onkeydown="if(event.key==='Enter') checkLockPassword()">
+    <button onclick="checkLockPassword()">🔓 Masuk</button>
+    <div id="lock-error" class="lock-error"></div>
+  </div>
+</div>
+<script>
+  // Cek lebih dulu sebelum konten lain dirender, supaya tidak "kelihatan sekilas"
+  // kalau sebelumnya sudah pernah login di tab/sesi browser yang sama.
+  if (sessionStorage.getItem('flpp_admin_unlocked') === 'yes') {
+    document.body.classList.remove('is-locked');
+  }
+</script>
 
 <!-- REPORT MODAL -->
 <div class="report-overlay" id="report-overlay">
@@ -668,6 +706,26 @@ const AUTO_SYNC_CONFIG = {
 // ══════════════════════════════════════════════════════
 // DATABASE (diisi dari upload Excel atau Google Sheets)
 // ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
+// GERBANG PASSWORD (proteksi sisi-klien sederhana -- BUKAN keamanan
+// sungguhan, karena ini static page. Lihat catatan di chat.)
+// ══════════════════════════════════════════════════════
+const ADMIN_PASSWORD = 'ubah-password-ini'; // ⚠️ GANTI sebelum dipakai!
+
+function checkLockPassword() {
+  const input = document.getElementById('lock-password');
+  const errBox = document.getElementById('lock-error');
+  if (input.value === ADMIN_PASSWORD) {
+    sessionStorage.setItem('flpp_admin_unlocked', 'yes');
+    document.body.classList.remove('is-locked');
+    errBox.textContent = '';
+  } else {
+    errBox.textContent = 'Password salah. Coba lagi.';
+    input.value = '';
+    input.focus();
+  }
+}
+
 let DB = { objek:[], verifikasi:[], psu:[], salur:[], pasca:[] };
 let syncTimer = null;
 
