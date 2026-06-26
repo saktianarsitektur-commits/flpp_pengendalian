@@ -25,7 +25,7 @@
 body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cream);color:var(--g800);min-height:100vh}
 
 /* HEADER */
-.app-header{background:var(--navy);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:62px;position:sticky;top:0;z-index:200;box-shadow:0 2px 16px rgba(0,0,0,.3)}
+.app-header{background:var(--navy);padding:0 28px;display:flex;align-items:center;justify-content:space-between;min-height:62px;position:sticky;top:0;z-index:200;box-shadow:0 2px 16px rgba(0,0,0,.3)}
 .header-brand{display:flex;align-items:center;gap:12px}
 .header-logo{width:36px;height:36px;background:var(--gold);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 .app-header h1{font-size:14px;font-weight:800;color:#fff;letter-spacing:.01em;line-height:1.2}
@@ -183,8 +183,8 @@ tr:hover td{background:var(--g50)}
 .report-footer{margin-top:20px;padding-top:12px;border-top:1px solid var(--g100);font-size:10px;color:var(--g400);text-align:center}
 
 /* STATUS DATA */
-.data-status-bar{background:var(--navy);padding:6px 28px;font-size:11px;color:rgba(255,255,255,.65);display:flex;align-items:center;gap:8px;position:sticky;top:62px;z-index:195}
-.data-status-bar .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);flex-shrink:0;animation:pulse 2s infinite}
+.header-status{display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,255,255,.6);font-weight:500;margin-top:3px}
+.header-status .dot{width:6px;height:6px;border-radius:50%;background:var(--teal);flex-shrink:0;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
 /* EMPTY STATE */
@@ -269,7 +269,6 @@ tr:hover td{background:var(--g50)}
   .nav-btn{padding:10px 10px;font-size:10px;letter-spacing:.04em}
 
   /* ── Status bar ── */
-  .data-status-bar{padding:5px 14px;font-size:10px}
 
   /* ── Main content ── */
   .main{padding:12px 10px 90px}
@@ -415,7 +414,10 @@ body.is-locked > *:not(#lock-screen){display:none !important}
     <div class="header-logo">🏘️</div>
     <div>
       <h1>Dashboard Pengendalian Perumahan FLPP</h1>
-      <div class="sub" id="data-status">Sistem Monitoring & Evaluasi · Upload Excel atau hubungkan Google Sheets</div>
+      <div class="header-status" id="data-status">
+        <div class="dot"></div>
+        <span id="status-bar-text">Upload file Excel (.xlsx) atau konfigurasikan link Google Sheets CSV untuk memuat data nyata.</span>
+      </div>
     </div>
   </div>
   <div class="header-actions">
@@ -428,10 +430,6 @@ body.is-locked > *:not(#lock-screen){display:none !important}
   </div>
 </header>
 
-<div class="data-status-bar">
-  <div class="dot"></div>
-  <span id="status-bar-text">Upload file Excel (.xlsx) atau konfigurasikan link Google Sheets CSV untuk memuat data nyata.</span>
-</div>
 
 <nav class="nav-bar">
   <button class="nav-btn active" data-page="overview" onclick="showPage('overview',this)">📊 Ringkasan</button>
@@ -2326,12 +2324,9 @@ document.addEventListener('click', function(e) {
 // ══════════════════════════════════════════════════════
 function syncNavTop() {
   const header = document.querySelector('.app-header');
-  const statusBar = document.querySelector('.data-status-bar');
   const nav = document.querySelector('.nav-bar');
-  if (!header) return;
-  const headerH = header.offsetHeight;
-  if (statusBar) statusBar.style.top = headerH + 'px';
-  if (nav) nav.style.top = headerH + (statusBar ? statusBar.offsetHeight : 0) + 'px';
+  if (!header || !nav) return;
+  nav.style.top = header.offsetHeight + 'px';
 }
 window.addEventListener('load', syncNavTop);
 window.addEventListener('resize', syncNavTop);
