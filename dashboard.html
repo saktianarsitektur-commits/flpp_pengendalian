@@ -56,7 +56,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cream);color:va
 .logout-btn-confirm:hover{background:#b91c1c;transform:translateY(-1px);box-shadow:0 4px 14px rgba(220,38,38,.35)}
 
 /* NAV */
-.nav-bar{background:var(--navy2);display:flex;overflow-x:auto;scrollbar-width:none;padding:0 24px;border-bottom:1px solid rgba(255,255,255,.08)}
+.nav-bar{background:var(--navy2);display:flex;overflow-x:auto;scrollbar-width:none;padding:0 24px;border-bottom:1px solid rgba(255,255,255,.08);position:sticky;top:62px;z-index:190;box-shadow:0 2px 8px rgba(0,0,0,.15)}
 .nav-bar::-webkit-scrollbar{display:none}
 .nav-btn{padding:12px 16px;border:none;background:none;color:rgba(255,255,255,.55);font-family:inherit;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:all .2s}
 .nav-btn:hover{color:#fff}
@@ -183,7 +183,7 @@ tr:hover td{background:var(--g50)}
 .report-footer{margin-top:20px;padding-top:12px;border-top:1px solid var(--g100);font-size:10px;color:var(--g400);text-align:center}
 
 /* STATUS DATA */
-.data-status-bar{background:var(--navy);padding:6px 28px;font-size:11px;color:rgba(255,255,255,.65);display:flex;align-items:center;gap:8px}
+.data-status-bar{background:var(--navy);padding:6px 28px;font-size:11px;color:rgba(255,255,255,.65);display:flex;align-items:center;gap:8px;position:sticky;top:62px;z-index:195}
 .data-status-bar .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);flex-shrink:0;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
@@ -2320,6 +2320,21 @@ document.addEventListener('click', function(e) {
   const overlay = document.getElementById('logout-overlay');
   if (overlay && e.target === overlay) cancelLogout();
 });
+
+// ══════════════════════════════════════════════════════
+// STICKY NAV — sesuaikan posisi top secara dinamis
+// ══════════════════════════════════════════════════════
+function syncNavTop() {
+  const header = document.querySelector('.app-header');
+  const statusBar = document.querySelector('.data-status-bar');
+  const nav = document.querySelector('.nav-bar');
+  if (!header || !nav) return;
+  const h = header.offsetHeight + (statusBar ? statusBar.offsetHeight : 0);
+  nav.style.top = h + 'px';
+}
+window.addEventListener('load', syncNavTop);
+window.addEventListener('resize', syncNavTop);
+setTimeout(syncNavTop, 100);
 
 // ══════════════════════════════════════════════════════
 // BOOT
