@@ -276,6 +276,7 @@ body.is-locked > *:not(#lock-screen){display:none !important}
   try {
     if (sessionStorage.getItem('flpp_admin_unlocked') === 'yes') {
       document.body.classList.remove('is-locked');
+      document.getElementById('lock-screen').classList.add('hidden');
     }
   } catch (e) {}
 </script>
@@ -719,6 +720,7 @@ function checkLockPassword() {
   const errBox = document.getElementById('lock-error');
   if (input.value === ADMIN_PASSWORD) {
     document.body.classList.remove('is-locked');
+    document.getElementById('lock-screen').classList.add('hidden'); // sembunyikan layar password-nya sendiri
     errBox.textContent = '';
     // Simpan status login ke sessionStorage hanya sebagai bonus (supaya tidak perlu
     // login ulang tiap pindah tab dalam sesi yang sama). Dibungkus try/catch karena
