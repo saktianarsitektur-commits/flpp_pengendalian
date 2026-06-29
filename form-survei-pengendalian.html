@@ -542,7 +542,7 @@
             <label><input type="radio" name="proses_bank" value="Kurang Cepat"> Kurang Cepat</label>
             <label><input type="radio" name="proses_bank" value="Tidak Cepat"> Tidak Cepat</label>
           </div></div>
-          <div class="field"><label>Masukan, Kritik, dan Saran</label><textarea placeholder="Tuliskan masukan atau saran..."></textarea></div>
+          <div class="field"><label>Masukan, Kritik, dan Saran</label><textarea id="masukan_saran" name="masukan_saran" placeholder="Tuliskan masukan atau saran..."></textarea></div>
         </div>
       </div>
       <div class="send-area">
@@ -1215,7 +1215,7 @@ window.addEventListener('load', function() {
         var kGrpEl=el('div',{cls:'kondisi-group'});
         kondisiOpts.forEach(function(k,ki){ var rid='psu_k_'+si+'_'+ssi+'_'+ki; var inp=el('input'); inp.type='radio'; inp.name='psu_k_'+si+'_'+ssi; inp.id=rid; inp.value=k.label; var dot=el('span',{cls:'dot'}); var lbl=el('label'); lbl.setAttribute('for',rid); lbl.appendChild(dot); lbl.appendChild(document.createTextNode(k.label)); var opt=el('div',{cls:'kondisi-opt '+k.cls},[inp,lbl]); kGrpEl.appendChild(opt); });
         sub_el.appendChild(makeField('Kondisi',kGrpEl));
-        sub_el.appendChild(makeField('Keterangan',el('textarea',{placeholder:'Keterangan (deskripsi kondisi dilapangan)...'})));
+        var psuKetTa=el('textarea',{placeholder:'Keterangan (deskripsi kondisi dilapangan)...'}); psuKetTa.id='ket_psu_'+si+'_'+ssi; psuKetTa.name='ket_psu_'+si+'_'+ssi; sub_el.appendChild(makeField('Keterangan',psuKetTa));
         if(sub.hasFoto){
           var fs=makeFotoUpload('PSU_Fas_'+si+'_'+ssi+'_'+sub.label); var fsf=el('div',{cls:'field'}); fsf.appendChild(el('label',{text:'Upload Foto'})); fsf.appendChild(fs.wrap[0]); fsf.appendChild(fs.wrap[1]); sub_el.appendChild(fsf);
         }
