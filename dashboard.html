@@ -830,7 +830,7 @@ body.is-locked > *:not(#lock-screen){display:none !important}
       <option value="">Semua Provinsi</option>
     </select>
     <button class="btn-header btn-upload" style="margin-left:auto;padding:8px 16px;border-radius:99px;font-size:12px;font-weight:700;cursor:pointer;background:var(--navy);color:#fff;border:none"
-      onclick="exportCHVWord()" id="btn-chv-export">📄 Export Word (.docx)</button>
+      onclick="exportCHVWord()" id="btn-chv-export">📄 Export Word (.doc)</button>
     <button class="btn-header" style="padding:8px 16px;border-radius:99px;font-size:12px;font-weight:700;cursor:pointer;background:var(--green);color:#fff;border:none"
       onclick="exportCHVExcel()" id="btn-chv-export-xlsx">📊 Export Excel (.xlsx)</button>
     <button class="btn-header btn-sync" style="padding:8px 16px;border-radius:99px;font-size:12px;font-weight:700;cursor:pointer;background:var(--teal);color:#fff;border:none"
@@ -856,7 +856,6 @@ const SHEET_MAP = {
   psu:        'Kondisi PSU',
   salur:      'Tahap Penyaluran',
   pasca:      'Pasca Penyaluran',
-  chv:        'CHV_Tahap Penyaluran',
 };
 
 // ══════════════════════════════════════════════════════
@@ -872,7 +871,6 @@ const AUTO_SYNC_CONFIG = {
     psu:        'https://docs.google.com/spreadsheets/d/e/2PACX-1vQaAPKfiOHGQ5QXzbarnO1y5ps63nykoThTRhAjFFAxKEIDtJYcY5Vr2a-WXj6mUhO_1iK2h4aTZvkt/pub?gid=1804361723&single=true&output=csv',
     salur:      'https://docs.google.com/spreadsheets/d/e/2PACX-1vQaAPKfiOHGQ5QXzbarnO1y5ps63nykoThTRhAjFFAxKEIDtJYcY5Vr2a-WXj6mUhO_1iK2h4aTZvkt/pub?gid=1829572400&single=true&output=csv',
     pasca:      'https://docs.google.com/spreadsheets/d/e/2PACX-1vQaAPKfiOHGQ5QXzbarnO1y5ps63nykoThTRhAjFFAxKEIDtJYcY5Vr2a-WXj6mUhO_1iK2h4aTZvkt/pub?gid=1083351569&single=true&output=csv',
-    chv:        'PASTE_CHV_CSV_URL_HERE',
   }
 };
 
@@ -904,7 +902,7 @@ function checkLockPassword() {
   }
 }
 
-let DB = { objek:[], verifikasi:[], psu:[], salur:[], pasca:[], chv:[] };
+let DB = { objek:[], verifikasi:[], psu:[], salur:[], pasca:[] };
 let syncTimer = null;
 
 // ══════════════════════════════════════════════════════
@@ -1594,37 +1592,54 @@ function isAutoSyncConfigured() {
   return Object.values(AUTO_SYNC_CONFIG.urls).every(u => u && !u.startsWith('PASTE_'));
 }
 
+// Helper: deteksi network/progress event lintas-browser (Chrome, Safari, Firefox, dll.)
+// Menggunakan nama konstruktor agar menangkap ProgressEvent DAN
+// XMLHttpRequestProgressEvent (Safari/WebKit) tanpa bergantung pada instanceof.
+function isNetworkEvent(err) {
+  if (!err) return false;
+  const name = (err.constructor && err.constructor.name) ? err.constructor.name : '';
+  return name === 'ProgressEvent' || name === 'XMLHttpRequestProgressEvent'
+    || (typeof ProgressEvent !== 'undefined' && err instanceof ProgressEvent);
+}
+
+// Ekstrak pesan error dengan aman dari Error, ProgressEvent, string, atau objek lain
+function safeErrMsg(err, fallback) {
+  if (err instanceof Error) return err.message;
+  if (isNetworkEvent(err)) return fallback || 'Gagal mengunduh — periksa koneksi internet atau pastikan Google Sheets sudah dipublikasikan ke web (CSV)';
+  if (typeof err === 'string') return err;
+  try { return JSON.stringify(err); } catch(_) { return String(err); }
+}
+
 function fetchSheetCSV(url) {
   return new Promise((resolve, reject) => {
     Papa.parse(url, {
       download: true, header: true, dynamicTyping: true, skipEmptyLines: true,
       complete: res => resolve(res.data),
-      error: err => reject(err),
+      error: (err) => {
+        reject(new Error(safeErrMsg(err)));
+      },
     });
   });
 }
 
 async function syncFromGoogleSheets(isManual) {
-  const badge = document.getElementById('live-badge');
+  const badge     = document.getElementById('live-badge');
   const statusBar = document.getElementById('status-bar-text');
   if (!isAutoSyncConfigured()) {
-    badge.textContent = 'Demo';
-    badge.style.background = 'var(--g400)';
+    if (badge) { badge.textContent = 'Demo'; badge.style.background = 'var(--g400)'; }
     return;
   }
-  if (isManual) statusBar.textContent = 'Menyinkronkan data dari Google Sheets...';
-  badge.textContent = 'Sync'; badge.style.background = 'var(--amber)';
+  if (isManual && statusBar) statusBar.textContent = 'Menyinkronkan data dari Google Sheets...';
+  if (badge) { badge.textContent = 'Sync'; badge.style.background = 'var(--amber)'; }
   try {
-    const chvUrl = AUTO_SYNC_CONFIG.urls.chv;
-    const [objek, verifikasi, psu, salur, pasca, chv] = await Promise.all([
+    const [objek, verifikasi, psu, salur, pasca] = await Promise.all([
       fetchSheetCSV(AUTO_SYNC_CONFIG.urls.objek),
       fetchSheetCSV(AUTO_SYNC_CONFIG.urls.verifikasi),
       fetchSheetCSV(AUTO_SYNC_CONFIG.urls.psu),
       fetchSheetCSV(AUTO_SYNC_CONFIG.urls.salur),
       fetchSheetCSV(AUTO_SYNC_CONFIG.urls.pasca),
-      chvUrl && !chvUrl.startsWith('PASTE_') ? fetchSheetCSV(chvUrl) : Promise.resolve([]),
     ]);
-    DB = { objek, verifikasi, psu, salur, pasca, chv };
+    DB = { objek, verifikasi, psu, salur, pasca };
     refreshAllViews();
     const now = new Date();
     document.getElementById('data-status-text')?.remove();
@@ -1633,12 +1648,18 @@ async function syncFromGoogleSheets(isManual) {
     autoTxt.style.cssText = 'font-size:10px;color:rgba(255,255,255,.5);margin-left:4px';
     autoTxt.textContent = `Auto-sync · ${now.toLocaleTimeString('id-ID')} · ${DB.objek.length} perumahan · ${DB.pasca.length} unit pasca`;
     document.getElementById('data-status')?.appendChild(autoTxt);
-    statusBar.textContent = `Data live dari Google Sheets. Sync terakhir: ${now.toLocaleString('id-ID')}`;
-    badge.textContent = 'Live'; badge.style.background = 'var(--teal)';
+    if (statusBar) statusBar.textContent = `Data live dari Google Sheets. Sync terakhir: ${now.toLocaleString('id-ID')}`;
+    if (badge) { badge.textContent = 'Live'; badge.style.background = 'var(--teal)'; }
   } catch (err) {
-    console.error(err);
-    badge.textContent = 'Error'; badge.style.background = 'var(--red)';
-    statusBar.textContent = 'Gagal sync dari Google Sheets. Periksa konfigurasi URL CSV di AUTO_SYNC_CONFIG.';
+    const errMsg = safeErrMsg(err, 'Gagal mengambil data dari Google Sheets');
+    console.warn('Auto-sync gagal:', errMsg);
+    if (badge) { badge.textContent = 'Offline'; badge.style.background = 'var(--g400)'; }
+    // Hanya tampilkan alert kalau user memicu manual (tombol Sync)
+    if (isManual) {
+      alert('Gagal mengambil data dari Google Sheets.\n\n' + errMsg + '\n\nPastikan Google Sheets sudah dipublikasikan ke web (File → Bagikan → Publikasikan ke web → CSV).');
+      if (statusBar) statusBar.textContent = 'Gagal sync — data yang tampil mungkin belum terbaru.';
+    }
+    // Auto-sync yang gagal: diam saja, biarkan dashboard tetap berjalan dengan data terakhir
   }
 }
 
@@ -1668,7 +1689,6 @@ function handleExcelUpload(event) {
       Object.entries(SHEET_MAP).forEach(([key, sheetName]) => {
         const ws = wb.Sheets[sheetName];
         if (!ws) {
-          if (key === 'chv') { newDB[key] = []; return; } // CHV optional
           missing.push(sheetName); return;
         }
         newDB[key] = XLSX.utils.sheet_to_json(ws, { defval: null, raw: true });
@@ -2562,35 +2582,25 @@ function loadCHVRek(rekId) {
 }
 
 function initCHVFilters() {
-  // Kumpulkan semua perumahan dari semua sumber data
-  const allNames = [
-    ...DB.objek.map(r => r.t1_nama_perumahan),
-    ...DB.chv.map(r => r['Nama Perumahan'] || r.t1_nama_perumahan),
-  ].filter(Boolean);
-  const allProv = [
-    ...DB.objek.map(r => (r.t1_alamat||'').split(',')[0].trim()),
-  ].filter(Boolean);
+  const allNames = DB.objek.map(r => r.t1_nama_perumahan).filter(Boolean);
+  const allProv  = DB.objek.map(r => (r.t1_alamat||'').split(',')[0].trim()).filter(Boolean);
   populateSelect('chv-filter-perumahan', [...new Set(allNames)], 'Semua Perumahan');
   populateSelect('chv-filter-prov', [...new Set(allProv)], 'Semua Provinsi');
 }
 
 function renderCHV() {
-  const filterP = document.getElementById('chv-filter-perumahan')?.value || '';
+  const filterP    = document.getElementById('chv-filter-perumahan')?.value || '';
   const filterProv = document.getElementById('chv-filter-prov')?.value || '';
 
-  // Tentukan daftar perumahan yang mau ditampilkan
   let objList = DB.objek;
-  if (filterP) objList = objList.filter(r => r.t1_nama_perumahan === filterP);
+  if (filterP)    objList = objList.filter(r => r.t1_nama_perumahan === filterP);
   if (filterProv) objList = objList.filter(r => (r.t1_alamat||'').includes(filterProv));
 
-  if (!objList.length && !DB.chv.length) {
+  if (!objList.length) {
     document.getElementById('chv-content').innerHTML =
-      '<div class="empty-state"><div class="ico">📋</div><p>Belum ada data. Upload Excel atau tambahkan URL Google Sheets sheet CHV_Tahap Penyaluran.</p></div>';
+      '<div class="empty-state"><div class="ico">📋</div><p>Belum ada data. Upload file Excel atau aktifkan Auto-Sync Google Sheets.</p></div>';
     return;
   }
-
-  // Jika tidak ada objek tapi ada CHV, tampilkan semua dari CHV
-  if (!objList.length) objList = DB.objek;
 
   const html = objList.map(obj => buildCHVCard(obj)).join('');
   document.getElementById('chv-content').innerHTML = html || '<div class="empty-state"><div class="ico">🔍</div><p>Tidak ada data sesuai filter.</p></div>';
@@ -3031,297 +3041,199 @@ function printCHV() {
   w.addEventListener('afterprint', () => w.close());
 }
 
-async function exportCHVWord() {
+function exportCHVWord() {
   const btn = document.getElementById('btn-chv-export');
   if (btn) { btn.disabled = true; btn.textContent = '⏳ Membuat...'; }
   try {
-    // docx dimuat via <script> di <head>; kalau gagal (blokir CDN), beri pesan jelas
-    if (!window.docx) {
-      throw new Error('Library docx.js belum termuat. Pastikan koneksi internet aktif dan reload halaman ini, kemudian coba lagi.');
-    }
-    const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell,
-            AlignmentType, WidthType, BorderStyle, ShadingType, VerticalAlign } = window.docx;
-
-    const W = 12240; // A3 landscape content width approx (landscape A3 = 16838 width, margins 1440 each side)
-    const brd = { style: BorderStyle.SINGLE, size: 4, color: '555555' };
-    const borders = { top:brd, bottom:brd, left:brd, right:brd };
-    const hdrShade = { fill:'0E5B73', type:ShadingType.CLEAR };
-    const grpShade = { fill:'DDE8EF', type:ShadingType.CLEAR };
-    const cellM = { top:0, bottom:0, left:108, right:108 };
-
-    const txt = (t, opts={}) => new TextRun({ text: String(t||''), font:'Times New Roman', size:20, ...opts });
-    const par = (children, opts={}) => new Paragraph({ children: Array.isArray(children)?children:[children], spacing:{before:60,after:60}, ...opts });
-    const cell = (text, opts={}) => new TableCell({
-      borders,
-      shading: opts.hdr ? hdrShade : opts.grp ? grpShade : undefined,
-      verticalAlign: VerticalAlign.CENTER,
-      margins: cellM,
-      columnSpan: opts.span,
-      width: opts.w ? {size:opts.w, type:WidthType.DXA} : undefined,
-      children: [par([txt(text||'', {bold:!!opts.hdr||!!opts.grp||!!opts.bold, color:opts.hdr?'FFFFFF':'000000', size:opts.sz||20})],
-        {alignment: opts.center ? AlignmentType.CENTER : AlignmentType.LEFT})],
-    });
-
     const filterP = document.getElementById('chv-filter-perumahan')?.value || '';
     let objList = DB.objek;
     if (filterP) objList = objList.filter(r => r.t1_nama_perumahan === filterP);
+    if (!objList.length) { alert('Tidak ada data untuk diexport.'); return; }
 
-    const allSections = [];
+    // ── helper ──────────────────────────────────────────
+    const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const th  = (t, extra='') => `<th style="background:#0E5B73;color:#fff;padding:6px 8px;border:1px solid #555;font-size:10pt;text-align:left;${extra}">${esc(t)}</th>`;
+    const td  = (t, extra='') => `<td style="padding:5px 8px;border:1px solid #aaa;font-size:10pt;vertical-align:top;${extra}">${esc(t)}</td>`;
+    const tdc = (t, extra='') => td(t, 'text-align:center;'+extra);
+    const grpTr = (t, cols) => `<tr><td colspan="${cols}" style="background:#DDE8EF;font-weight:bold;padding:5px 8px;border:1px solid #aaa;font-size:10pt;">${esc(t)}</td></tr>`;
+    const tblStyle = 'border-collapse:collapse;width:100%;margin-bottom:16pt;font-family:Times New Roman;';
+    const secTitle = t => `<h3 style="font-family:Times New Roman;font-size:11pt;margin:16pt 0 6pt 0;">${esc(t)}</h3>`;
+
+    let pages = '';
 
     objList.forEach((obj, oi) => {
       const nama = obj.t1_nama_perumahan || '-';
       const id   = obj.t1_id_sikumbang || '-';
-      const vfy  = DB.verifikasi.find(r => r.t1_id_sikumbang === id || r.t1_nama_perumahan === nama);
-      const psuR = DB.psu.find(r => r.p1_id_sikumbang === id || r.p1_nama_perumahan === nama);
-      const salur= DB.salur.find(r => r.p2_id_sikumbang === id || r.p2_nama_perumahan === nama);
-      const pasca= DB.pasca.filter(r => r.p3_id_sikumbang === id || r.p3_nama_perumahan === nama);
+      const vfy  = DB.verifikasi.find(r => r.t1_id_sikumbang===id || r.t1_nama_perumahan===nama);
+      const psuR = DB.psu.find(r => r.p1_id_sikumbang===id || r.p1_nama_perumahan===nama);
+      const salur= DB.salur.find(r => r.p2_id_sikumbang===id || r.p2_nama_perumahan===nama);
+      const pasca= DB.pasca.filter(r => r.p3_id_sikumbang===id || r.p3_nama_perumahan===nama);
       const alamatParts = (obj.t1_alamat||'').split(',').map(s=>s.trim());
       const prov = alamatParts[0]||'-', kab = alamatParts[1]||'-';
       const totalUnit = (Number(obj.t1_subsidi_unit_1)||0)+(Number(obj.t1_subsidi_unit_2)||0)+(Number(obj.t1_subsidi_unit_3)||0);
 
-      if (oi > 0) allSections.push(par([txt('')], {pageBreakBefore:true}));
+      if (oi > 0) pages += `<div style="page-break-before:always;"></div>`;
 
       // Judul
-      allSections.push(par([txt('CATATAN HASIL REVIEW', {bold:true, size:24})], {alignment:AlignmentType.CENTER, spacing:{before:0,after:40}}));
-      allSections.push(par([txt('TINJAUAN LAPANGAN PEMANTAUAN DAN EVALUASI PENYALURAN KPR FLPP', {bold:true, size:20})], {alignment:AlignmentType.CENTER, spacing:{before:0,after:200}}));
+      pages += `
+        <h2 style="text-align:center;font-family:Times New Roman;font-size:14pt;margin:0 0 4pt 0;">CATATAN HASIL REVIEW</h2>
+        <p style="text-align:center;font-family:Times New Roman;font-size:11pt;margin:0 0 18pt 0;">TINJAUAN LAPANGAN PEMANTAUAN DAN EVALUASI PENYALURAN KPR FLPP</p>`;
 
       // A. Data Perumahan
-      allSections.push(par([txt('A. DATA PERUMAHAN', {bold:true})], {spacing:{before:120,after:60}}));
-      allSections.push(new Table({ width:{size:W,type:WidthType.DXA}, rows:[
-        new TableRow({children:[
-          cell('Nama Perumahan', {bold:true, w:Math.round(W*0.15)}), cell(nama, {w:Math.round(W*0.2)}),
-          cell('Alamat Perumahan', {bold:true, w:Math.round(W*0.15)}), cell(obj.t1_alamat||'-', {w:Math.round(W*0.2)}),
-          cell('Luas Perumahan', {bold:true, w:Math.round(W*0.15)}), cell(obj.t1_luas_perumahan ? obj.t1_luas_perumahan+' m²' : '-', {w:Math.round(W*0.15)}),
-        ]}),
-        new TableRow({children:[
-          cell('Nama PT/Pengembang', {bold:true}), cell(obj.t1_nama_pt||'-'),
-          cell('Kabupaten/Kota', {bold:true}), cell(kab),
-          cell('Total Unit FLPP', {bold:true}), cell(String(totalUnit)),
-        ]}),
-        new TableRow({children:[
-          cell('ID (SIKUMBANG)', {bold:true}), cell(id),
-          cell('Provinsi', {bold:true}), cell(prov),
-          cell('Asosiasi', {bold:true}), cell(obj.t1_asosiasi||'-'),
-        ]}),
-        new TableRow({children:[
-          cell('Koordinat', {bold:true}), cell(obj.t1_koordinat||'-', {span:5}),
-        ]}),
-      ]}));
+      pages += secTitle('A. DATA PERUMAHAN');
+      pages += `<table style="${tblStyle}">
+        <tr>${th('Nama Perumahan')}${td(nama)}${th('Alamat Perumahan')}${td(obj.t1_alamat||'-')}${th('Luas Perumahan')}${td(obj.t1_luas_perumahan ? obj.t1_luas_perumahan+' m²' : '-')}</tr>
+        <tr>${th('Nama PT/Pengembang')}${td(obj.t1_nama_pt||'-')}${th('Kabupaten/Kota')}${td(kab)}${th('Total Unit FLPP')}${td(totalUnit)}</tr>
+        <tr>${th('ID (SIKUMBANG)')}${td(id)}${th('Provinsi')}${td(prov)}${th('Asosiasi')}${td(obj.t1_asosiasi||'-')}</tr>
+        <tr>${th('Koordinat')}<td colspan="5" style="padding:5px 8px;border:1px solid #aaa;font-size:10pt;">${esc(obj.t1_koordinat||'-')}</td></tr>
+      </table>`;
 
-      // B. Data Objek (Dokumen)
-      allSections.push(par([txt('B. DATA OBJEK PERUMAHAN', {bold:true})], {spacing:{before:160,after:60}}));
+      // B. Data Objek
+      pages += secTitle('B. DATA OBJEK PERUMAHAN');
+      pages += `<table style="${tblStyle}"><tr>${th('No','width:32px;text-align:center;')}${th('Aspek yang Dinilai')}${th('Status Dokumen','width:110pt;')}${th('Status Kesesuaian','width:110pt;')}${th('Catatan Hasil Review')}</tr>`;
       const flatItems = CHV_DOK.flatMap(g => g.items);
-      const dokBRows = [
-        new TableRow({children:[
-          cell('No',{hdr:true,w:360,center:true}), cell('Aspek yang Dinilai',{hdr:true,w:Math.round(W*0.35)}),
-          cell('Status Dokumen',{hdr:true,w:Math.round(W*0.12),center:true}),
-          cell('Status Kesesuaian',{hdr:true,w:Math.round(W*0.12),center:true}),
-          cell('Catatan Hasil Review',{hdr:true}),
-        ]})
-      ];
       let bNo = 0;
       CHV_DOK.forEach(grp => {
-        dokBRows.push(new TableRow({children:[cell(grp.tahap,{grp:true,span:5})]}));
+        pages += grpTr(grp.tahap, 5);
         grp.items.forEach(item => {
           bNo++;
           const idx = flatItems.indexOf(item);
           const ada = (vfy&&vfy[`dok_ada_${idx}`]) || '';
           const ses = (vfy&&vfy[`dok_sesuai_${idx}`]) || '';
           const cat = (vfy&&vfy[`catatan_dok_sesuai_${idx}`]) || '';
-          dokBRows.push(new TableRow({children:[
-            cell(String(bNo),{center:true}), cell(item),
-            cell(ada,{center:true}), cell(ses,{center:true}), cell(cat),
-          ]}));
+          pages += `<tr>${tdc(bNo)}${td(item)}${tdc(ada)}${tdc(ses)}${td(cat)}</tr>`;
         });
       });
-      allSections.push(new Table({width:{size:W,type:WidthType.DXA}, rows:dokBRows}));
+      pages += `</table>`;
 
-      // C. PSU
-      allSections.push(par([txt('C. KONDISI PSU (PRASARANA, SARANA & UTILITAS)', {bold:true})], {spacing:{before:160,after:60}}));
-      const psuRows = [
-        new TableRow({children:[
-          cell('No',{hdr:true,w:360,center:true}), cell('Aspek yang Dinilai',{hdr:true,w:Math.round(W*0.25)}),
-          cell('Jenis/Material',{hdr:true,w:Math.round(W*0.15)}), cell('Kondisi',{hdr:true,w:Math.round(W*0.12),center:true}),
-          cell('Catatan',{hdr:true}), cell('Bukti Dukung',{hdr:true,w:Math.round(W*0.1)}),
-          cell('Rekomendasi',{hdr:true}),
-        ]})
-      ];
+      // C. Kondisi PSU
+      pages += secTitle('C. KONDISI PSU (PRASARANA, SARANA & UTILITAS)');
+      pages += `<table style="${tblStyle}"><tr>${th('No','width:28px;text-align:center;')}${th('Aspek yang Dinilai')}${th('Jenis/Material')}${th('Kondisi','width:100pt;')}${th('Catatan')}${th('Bukti Dukung','width:70pt;')}${th('Rekomendasi')}</tr>`;
       CHV_PSU.forEach((item, idx) => {
-        let kondisi = '', materialTxt = '', kondisiDetail = '';
+        let kondisi='', materialTxt='', kondisiDetail='';
         if (psuR) {
           if (item.isRTH) {
-            let prefix = '', labels = [];
-            if (item.field === 'psu_k_8_0') { prefix = 'psu_rth_hijau_0';    labels = RTH_HIJAU; }
-            if (item.field === 'psu_k_8_1') { prefix = 'psu_rth_nonhijau_1'; labels = RTH_NONHIJAU; }
-            if (item.field === 'psu_k_8_2') { prefix = 'psu_rth_biru_2';     labels = RTH_BIRU; }
-            const presentItems = [];
-            const detailLines = [];
-            labels.forEach((lbl, i) => {
-              const ada  = (psuR[`${prefix}_${i}_ada`] || '').toLowerCase();
-              const kond = psuR[`${prefix}_${i}_kondisi`] || '';
-              if (ada.includes('ada') && !ada.includes('tidak')) {
-                presentItems.push(lbl);
-                detailLines.push(`${lbl}: ${kond}`);
-              }
+            let prefix='', labels=[];
+            if (item.field==='psu_k_8_0'){prefix='psu_rth_hijau_0';   labels=RTH_HIJAU;}
+            if (item.field==='psu_k_8_1'){prefix='psu_rth_nonhijau_1';labels=RTH_NONHIJAU;}
+            if (item.field==='psu_k_8_2'){prefix='psu_rth_biru_2';    labels=RTH_BIRU;}
+            const pItems=[]; const dLines=[];
+            labels.forEach((lbl,i)=>{
+              const ada=(psuR[`${prefix}_${i}_ada`]||'').toLowerCase();
+              const kond=psuR[`${prefix}_${i}_kondisi`]||'';
+              if(ada.includes('ada')&&!ada.includes('tidak')){pItems.push(lbl);dLines.push(`${lbl}: ${kond}`);}
             });
-            materialTxt   = presentItems.join(', ');
-            kondisiDetail = detailLines.join('; ');
-            kondisi = psuR[item.field] || kondisiDetail || '';
-          } else if (item.field && item.field.startsWith('psu_k_7_')) {
-            kondisi     = psuR[item.field] || '';
-            materialTxt = (item.matField && psuR[item.matField]) ? psuR[item.matField] : '';
-            const ket   = (item.ketField && psuR[item.ketField]) ? psuR[item.ketField] : '';
-            kondisiDetail = ket || kondisi;
+            materialTxt=pItems.join(', '); kondisiDetail=dLines.join('; ');
+            kondisi=psuR[item.field]||kondisiDetail||'';
+          } else if (item.field&&item.field.startsWith('psu_k_7_')) {
+            kondisi=psuR[item.field]||'';
+            materialTxt=(item.matField&&psuR[item.matField])?psuR[item.matField]:'';
+            const ket=(item.ketField&&psuR[item.ketField])?psuR[item.ketField]:'';
+            kondisiDetail=ket||kondisi;
           } else {
-            kondisi     = psuR[item.field] || '';
-            materialTxt = (item.matField && psuR[item.matField]) ? psuR[item.matField] : '';
+            kondisi=psuR[item.field]||'';
+            materialTxt=(item.matField&&psuR[item.matField])?psuR[item.matField]:'';
           }
         }
-        const finalKondisi = kondisiDetail || kondisi;
-        psuRows.push(new TableRow({children:[
-          cell(String(idx+1),{center:true}), cell(item.label),
-          cell(materialTxt), cell(finalKondisi,{center:true}),
-          cell(''), cell(''), cell(''),
-        ]}));
+        const finalKondisi = kondisiDetail||kondisi;
+        pages += `<tr>${tdc(idx+1)}${td(item.label)}${td(materialTxt)}${tdc(finalKondisi)}${td('')}${td('')}${td('')}</tr>`;
       });
-      allSections.push(new Table({width:{size:W,type:WidthType.DXA}, rows:psuRows}));
+      pages += `</table>`;
 
       // D. Fisik Penyaluran
-      allSections.push(par([txt('D. KONDISI FISIK BANGUNAN TAHAP PENYALURAN', {bold:true})], {spacing:{before:160,after:60}}));
-      const fisikRows = [
-        new TableRow({children:[
-          cell('No',{hdr:true,w:360,center:true}), cell('Aspek',{hdr:true,w:Math.round(W*0.1)}),
-          cell('Sub-Aspek yang Dinilai',{hdr:true,w:Math.round(W*0.2)}),
-          cell('Acuan Penilaian',{hdr:true,w:Math.round(W*0.18)}),
-          cell('Hasil',{hdr:true,w:Math.round(W*0.1),center:true}),
-          cell('Catatan Hasil Review',{hdr:true}), cell('Rekomendasi/Tindak Lanjut',{hdr:true}),
-        ]})
-      ];
-      let dNo = 0;
+      pages += secTitle('D. KONDISI FISIK BANGUNAN TAHAP PENYALURAN');
+      pages += `<table style="${tblStyle}"><tr>${th('No','width:28px;text-align:center;')}${th('Aspek')}${th('Sub-Aspek yang Dinilai')}${th('Acuan Penilaian')}${th('Hasil','width:60pt;')}${th('Catatan Hasil Review')}${th('Rekomendasi/Tindak Lanjut')}</tr>`;
+      let dNo=0;
       CHV_FISIK_SALUR.forEach(grp => {
-        fisikRows.push(new TableRow({children:[cell(grp.aspek,{grp:true,span:7})]}));
+        pages += grpTr(grp.aspek, 7);
         grp.subs.forEach(sub => {
           dNo++;
-          const raw = salur ? (salur[sub.field] != null ? String(salur[sub.field]) : '') : '';
+          const raw = salur ? (salur[sub.field]!=null ? String(salur[sub.field]) : '') : '';
           const cat = salur
-            ? (grp.useTambahan
-              ? (salur[grp.tambahan] || '')
-              : (salur[`catatan_${sub.field}`] || salur[`catatan_ts_py_${sub.field}`] || ''))
+            ? (grp.useTambahan ? (salur[grp.tambahan]||'')
+              : (salur[`catatan_${sub.field}`]||salur[`catatan_ts_py_${sub.field}`]||''))
             : '';
-          fisikRows.push(new TableRow({children:[
-            cell(String(dNo),{center:true}), cell(grp.aspek), cell(sub.label),
-            cell(sub.acuan), cell(raw,{center:true}),
-            cell(cat), cell(''),
-          ]}));
+          pages += `<tr>${tdc(dNo)}${td(grp.aspek)}${td(sub.label)}${td(sub.acuan)}${tdc(raw)}${td(cat)}${td('')}</tr>`;
         });
       });
-      allSections.push(new Table({width:{size:W,type:WidthType.DXA}, rows:fisikRows}));
+      pages += `</table>`;
 
       // E. Pasca
-      allSections.push(par([txt('E. KONDISI PASCA PENYALURAN', {bold:true})], {spacing:{before:160,after:60}}));
+      pages += secTitle('E. KONDISI PASCA PENYALURAN');
 
-      // E1 Keterhunian
-      allSections.push(par([txt('E.1 Keterhunian Perumahan FLPP', {bold:true})], {spacing:{before:60,after:40}}));
-      const e1Rows = [new TableRow({children:[
-        cell('No',{hdr:true,w:360,center:true}), cell('No. Rumah',{hdr:true}),
-        cell('Tahun Akad',{hdr:true}), cell('Status Huni',{hdr:true}),
-        cell('Pekerjaan',{hdr:true}), cell('Penghasilan',{hdr:true}),
-        cell('Sticker KPR',{hdr:true}), cell('Sertifikat',{hdr:true}),
-        cell('Jml Penghuni',{hdr:true,center:true}), cell('Tahun Huni',{hdr:true}),
-        cell('Alih Fungsi',{hdr:true}),
-      ]})];
+      // E1
+      pages += `<p style="font-family:Times New Roman;font-size:11pt;font-weight:bold;margin:8pt 0 4pt 0;">E.1 Keterhunian Perumahan FLPP</p>`;
+      pages += `<table style="${tblStyle}"><tr>${th('No','width:28px;text-align:center;')}${th('No. Rumah')}${th('Tahun Akad')}${th('Status Huni')}${th('Pekerjaan')}${th('Penghasilan')}${th('Sticker KPR')}${th('Sertifikat')}${th('Jml Penghuni')}${th('Tahun Huni')}${th('Alih Fungsi')}</tr>`;
       if (pasca.length) {
-        pasca.forEach((r,i) => e1Rows.push(new TableRow({children:[
-          cell(String(i+1),{center:true}), cell(r.p3_nomor_rumah||'-'),
-          cell(r.tahun_akad||r.tahun_huni||'-'), cell(r.status_huni||'-'),
-          cell(r.kerja_penghuni||'-'), cell(r.gaji_penghuni||'-'),
-          cell(r.sticker||'-'), cell(r.sertif||'-'),
-          cell(r.penghuni||'-',{center:true}), cell(r.tahun_huni||'-'),
-          cell(r.fungsi||'-'),
-        ]})));
-      } else {
-        e1Rows.push(new TableRow({children:[cell('Belum ada data keterhunian',{span:11})]}));
-      }
-      allSections.push(new Table({width:{size:W,type:WidthType.DXA}, rows:e1Rows}));
+        pasca.forEach((r,i)=>{ pages+=`<tr>${tdc(i+1)}${td(r.p3_nomor_rumah||'-')}${td(r.tahun_akad||r.tahun_huni||'-')}${td(r.status_huni||'-')}${td(r.kerja_penghuni||'-')}${td(r.gaji_penghuni||'-')}${td(r.sticker||'-')}${td(r.sertif||'-')}${tdc(r.penghuni||'-')}${td(r.tahun_huni||'-')}${td(r.fungsi||'-')}</tr>`; });
+      } else { pages += `<tr><td colspan="11" style="padding:6px;border:1px solid #aaa;text-align:center;color:#888;font-style:italic;">Belum ada data keterhunian</td></tr>`; }
+      pages += `</table>`;
 
-      // E2 Komponen Fisik
-      allSections.push(par([txt('E.2 Komponen Fisik Bangunan per Unit', {bold:true})], {spacing:{before:120,after:40}}));
-      const e2Rows = [new TableRow({children:[
-        cell('No',{hdr:true,w:360,center:true}), cell('No. Rumah',{hdr:true}),
-        cell('Lantai',{hdr:true}), cell('Dinding',{hdr:true}),
-        cell('Atap',{hdr:true}), cell('Plafond',{hdr:true}),
-        cell('Utilitas',{hdr:true}), cell('Penghijauan',{hdr:true}),
-      ]})];
+      // E2
+      pages += `<p style="font-family:Times New Roman;font-size:11pt;font-weight:bold;margin:8pt 0 4pt 0;">E.2 Komponen Fisik Bangunan per Unit</p>`;
+      pages += `<table style="${tblStyle}"><tr>${th('No','width:28px;text-align:center;')}${th('No. Rumah')}${th('Lantai')}${th('Dinding')}${th('Atap')}${th('Plafond')}${th('Utilitas')}${th('Penghijauan')}</tr>`;
       if (pasca.length) {
-        pasca.forEach((r,i) => e2Rows.push(new TableRow({children:[
-          cell(String(i+1),{center:true}), cell(r.p3_nomor_rumah||'-'),
-          cell((r.pf_lantai_kondisi||'-')+' '+( r.pf_lantai_jenis||'')),
-          cell((r.pf_dinding_kondisi||'-')+' '+(r.pf_dinding_jenis||'')),
-          cell((r.pf_atap_kondisi||'-')+' '+(r.pf_atap_penutup||'')),
-          cell(r.pf_atap_plafon||'-'),
-          cell([
-            'Air Bersih: '+(r.pf_util_air||'-')+(r.pf_util_air&&!/tidak/i.test(r.pf_util_air||'') ? ' - '+(r.pf_util_air_kondisi||'-') : ''),
-            'Listrik: '+(r.pf_util_listrik||'-')+(r.pf_util_listrik&&!/tidak/i.test(r.pf_util_listrik||'') ? ' - '+(r.pf_util_listrik_kondisi||'-') : ''),
-            'Sanitasi: '+(r.pf_util_sanitasi||'-')+(r.pf_util_sanitasi&&!/tidak/i.test(r.pf_util_sanitasi||'') ? ' - '+(r.pf_util_sanitasi_kondisi||'-') : ''),
-            'Fiber Optik: '+(r.pf_util_fiber||'-')+(r.pf_util_fiber&&!/tidak/i.test(r.pf_util_fiber||'') ? ' - '+(r.pf_util_fiber_kondisi||'-') : ''),
-            'Proteksi Kebakaran: '+(r.pf_util_kebakaran||'-')+(r.pf_util_kebakaran&&!/tidak/i.test(r.pf_util_kebakaran||'') ? ' - '+(r.pf_util_kebakaran_kondisi||'-') : ''),
-            'Air Limbah: '+(r.pf_util_airlimbah||'-')+(r.pf_util_airlimbah&&!/tidak/i.test(r.pf_util_airlimbah||'') ? ' - '+(r.pf_util_airlimbah_kondisi||'-') : ''),
-          ].join('\n')),
-          cell(r.py_hijau_kavling||r.pf_hijau||'-'),
-        ]})));
-      } else {
-        e2Rows.push(new TableRow({children:[cell('Belum ada data komponen fisik',{span:8})]}));
-      }
-      allSections.push(new Table({width:{size:W,type:WidthType.DXA}, rows:e2Rows}));
+        pasca.forEach((r,i)=>{
+          const util=[
+            'Air Bersih: '+(r.pf_util_air||'-')+(r.pf_util_air&&!/tidak/i.test(r.pf_util_air||'')?'  – '+(r.pf_util_air_kondisi||'-'):''),
+            'Listrik: '+(r.pf_util_listrik||'-')+(r.pf_util_listrik&&!/tidak/i.test(r.pf_util_listrik||'')?'  – '+(r.pf_util_listrik_kondisi||'-'):''),
+            'Sanitasi: '+(r.pf_util_sanitasi||'-')+(r.pf_util_sanitasi&&!/tidak/i.test(r.pf_util_sanitasi||'')?'  – '+(r.pf_util_sanitasi_kondisi||'-'):''),
+            'Fiber Optik: '+(r.pf_util_fiber||'-')+(r.pf_util_fiber&&!/tidak/i.test(r.pf_util_fiber||'')?'  – '+(r.pf_util_fiber_kondisi||'-'):''),
+            'Proteksi Kebakaran: '+(r.pf_util_kebakaran||'-')+(r.pf_util_kebakaran&&!/tidak/i.test(r.pf_util_kebakaran||'')?'  – '+(r.pf_util_kebakaran_kondisi||'-'):''),
+            'Air Limbah: '+(r.pf_util_airlimbah||'-')+(r.pf_util_airlimbah&&!/tidak/i.test(r.pf_util_airlimbah||'')?'  – '+(r.pf_util_airlimbah_kondisi||'-'):''),
+          ].join('\n');
+          pages+=`<tr>${tdc(i+1)}${td(r.p3_nomor_rumah||'-')}${td((r.pf_lantai_kondisi||'-')+' '+(r.pf_lantai_jenis||''))}${td((r.pf_dinding_kondisi||'-')+' '+(r.pf_dinding_jenis||''))}${td((r.pf_atap_kondisi||'-')+' '+(r.pf_atap_penutup||''))}${td(r.pf_atap_plafon||'-')}${td(util)}${td(r.py_hijau_kavling||r.pf_hijau||'-')}</tr>`;
+        });
+      } else { pages += `<tr><td colspan="8" style="padding:6px;border:1px solid #aaa;text-align:center;color:#888;font-style:italic;">Belum ada data komponen fisik</td></tr>`; }
+      pages += `</table>`;
 
-      // E3 Penilaian
-      allSections.push(par([txt('E.3 Penilaian Penerima Manfaat', {bold:true})], {spacing:{before:120,after:40}}));
-      const e3Rows = [new TableRow({children:[
-        cell('No',{hdr:true,w:360,center:true}), cell('No. Rumah',{hdr:true}),
-        cell('Kemudahan Info KPR',{hdr:true}), cell('Mengetahui Prog. PKP',{hdr:true}),
-        cell('Kemudahan Syarat',{hdr:true}), cell('Kecepatan Proses',{hdr:true}),
-        cell('Masukan/Catatan',{hdr:true}),
-      ]})];
+      // E3
+      pages += `<p style="font-family:Times New Roman;font-size:11pt;font-weight:bold;margin:8pt 0 4pt 0;">E.3 Penilaian Penerima Manfaat</p>`;
+      pages += `<table style="${tblStyle}"><tr>${th('No','width:28px;text-align:center;')}${th('No. Rumah')}${th('Kemudahan Info KPR')}${th('Mengetahui Prog. PKP')}${th('Kemudahan Syarat')}${th('Kecepatan Proses')}${th('Masukan/Catatan')}</tr>`;
       if (pasca.length) {
-        pasca.forEach((r,i) => e3Rows.push(new TableRow({children:[
-          cell(String(i+1),{center:true}), cell(r.p3_nomor_rumah||'-'),
-          cell(r.info_kpr||'-'), cell(r.tahu_pkp||'-'),
-          cell(r.syarat_bank||'-'), cell(r.proses_bank||'-'),
-          cell(r.catatan_tambahan_pf_4_0||r.catatan_tambahan_pf_5_0||''),
-        ]})));
-      } else {
-        e3Rows.push(new TableRow({children:[cell('Belum ada data penilaian',{span:7})]}));
-      }
-      allSections.push(new Table({width:{size:W,type:WidthType.DXA}, rows:e3Rows}));
+        pasca.forEach((r,i)=>{ pages+=`<tr>${tdc(i+1)}${td(r.p3_nomor_rumah||'-')}${tdc(r.info_kpr||'-')}${tdc(r.tahu_pkp||'-')}${tdc(r.syarat_bank||'-')}${tdc(r.proses_bank||'-')}${td(r.catatan_tambahan_pf_4_0||r.catatan_tambahan_pf_5_0||'')}</tr>`; });
+      } else { pages += `<tr><td colspan="7" style="padding:6px;border:1px solid #aaa;text-align:center;color:#888;font-style:italic;">Belum ada data penilaian</td></tr>`; }
+      pages += `</table>`;
     });
 
-    const doc = new Document({
-      sections:[{
-        properties:{
-          page:{
-            size:{ width:23811, height:16838 }, // A3 landscape
-            margin:{ top:720, right:720, bottom:720, left:720 },
-          }
-        },
-        children: allSections,
-      }]
-    });
+    // ── Buat file .doc (HTML-as-Word, tanpa library eksternal) ───────────────
+    const wordHtml = `
+      <html xmlns:o="urn:schemas-microsoft-com:office:office"
+            xmlns:w="urn:schemas-microsoft-com:office:word"
+            xmlns="http://www.w3.org/TR/REC-html40">
+      <head><meta charset="UTF-8">
+      <xml><w:WordDocument>
+        <w:View>Print</w:View>
+        <w:Zoom>90</w:Zoom>
+        <w:DoNotOptimizeForBrowser/>
+      </w:WordDocument></xml>
+      <style>
+        @page { size: A3 landscape; margin: 1.5cm; }
+        body { font-family: "Times New Roman", serif; font-size: 11pt; }
+        table { border-collapse: collapse; width: 100%; }
+        td, th { border: 1px solid #aaa; padding: 5px 7px; font-size: 10pt; vertical-align: top; }
+        h2 { font-size: 14pt; text-align: center; }
+        h3 { font-size: 11pt; margin: 14pt 0 5pt 0; }
+        p  { font-size: 11pt; }
+      </style>
+      </head><body>${pages}</body></html>`;
 
-    const blob = await window.docx.Packer.toBlob(doc);
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const blob = new Blob(['\uFEFF', wordHtml], { type: 'application/msword;charset=utf-8' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
     a.href = url;
-    const d = new Date();
-    a.download = `CHV_FLPP_${d.toISOString().split('T')[0]}.docx`;
+    a.download = `CHV_FLPP_${new Date().toISOString().split('T')[0]}.doc`;
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
     URL.revokeObjectURL(url);
+
   } catch(err) {
     console.error(err);
-    alert('Gagal export: ' + err.message);
+    alert('Gagal export Word: ' + err.message);
   } finally {
-    if (btn) { btn.disabled = false; btn.textContent = '📄 Export Word (.docx)'; }
+    if (btn) { btn.disabled = false; btn.textContent = '📄 Export Word (.doc)'; }
   }
 }
+
 
 // ── Generate .xlsx ──
 function exportCHVExcel() {
