@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard Pengendalian Perumahan FLPP</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="xlsx.full.min.js"></script>
+<script src="exceljs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/7.8.2/docx.umd.min.js"></script>
 <style>
@@ -3236,7 +3237,7 @@ function exportCHVWord() {
 
 
 // ── Generate .xlsx ──
-function exportCHVExcel() {
+async function exportCHVExcel() {
   const btn = document.getElementById('btn-chv-export-xlsx');
   if (btn) { btn.disabled = true; btn.textContent = '⏳ Membuat...'; }
   try {
@@ -3246,8 +3247,82 @@ function exportCHVExcel() {
 
     if (!objList.length) { alert('Tidak ada data perumahan untuk diexport.'); return; }
 
-    const wb = XLSX.utils.book_new();
+    // ── Palet warna disamakan dengan CSS variabel di web ──
+    const COL = {
+      navy:  'FF0B3D52', // --navy
+      navy2: 'FF0E5B73', // --navy2
+      teal:  'FF1A8FA5', // --teal
+      gold:  'FFC8A84B', // --gold
+      goldLt:'FFF0DFA0', // --gold-lt
+      g50:   'FFF7F4EC', // --g50
+      g100:  'FFEDE8D8', // --g100
+      g200:  'FFD8D2BE', // --g200
+      white: 'FFFFFFFF',
+      navyTx:'FF0B3D52',
+    };
+    const thinBorder = { style:'thin', color:{argb:COL.g200} };
+    const allBorder = { top:thinBorder, bottom:thinBorder, left:thinBorder, right:thinBorder };
+
+    const wb = new ExcelJS.Workbook();
+    wb.creator = 'Dashboard Pengendalian Perumahan FLPP';
+    wb.created = new Date();
     const usedSheetNames = {};
+    const NCOL = 7; // jumlah kolom standar lembar CHV (A..G)
+
+    // ── Helper styling per tipe baris ──
+    function styleMainTitle(row) {
+      row.eachCell({ includeEmpty:true }, c => {
+        c.font = { bold:true, color:{argb:COL.white}, size:13, name:'Calibri' };
+        c.fill = { type:'pattern', pattern:'solid', fgColor:{argb:COL.navy} };
+        c.alignment = { horizontal:'center', vertical:'middle' };
+      });
+      row.height = 22;
+    }
+    function styleSecTitle(row) {
+      row.eachCell({ includeEmpty:true }, c => {
+        c.font = { bold:true, color:{argb:COL.navyTx}, size:11, name:'Calibri' };
+        c.fill = { type:'pattern', pattern:'solid', fgColor:{argb:COL.goldLt} };
+        c.alignment = { horizontal:'left', vertical:'middle' };
+        c.border = { left:{style:'medium', color:{argb:COL.teal}} };
+      });
+      row.height = 18;
+    }
+    function styleTableHead(row) {
+      row.eachCell({ includeEmpty:true }, c => {
+        c.font = { bold:true, color:{argb:COL.white}, size:10, name:'Calibri' };
+        c.fill = { type:'pattern', pattern:'solid', fgColor:{argb:COL.navy} };
+        c.alignment = { horizontal:'center', vertical:'middle', wrapText:true };
+        c.border = allBorder;
+      });
+      row.height = 26;
+    }
+    function styleGroupHead(row) {
+      row.eachCell({ includeEmpty:true }, c => {
+        c.font = { bold:true, color:{argb:COL.white}, size:10, name:'Calibri' };
+        c.fill = { type:'pattern', pattern:'solid', fgColor:{argb:COL.navy2} };
+        c.alignment = { horizontal:'left', vertical:'middle' };
+        c.border = allBorder;
+      });
+    }
+    function styleLabelCells(row, labelCols) {
+      row.eachCell({ includeEmpty:true }, (c, colNum) => {
+        c.border = allBorder;
+        c.alignment = { vertical:'middle', wrapText:true };
+        if (labelCols.includes(colNum)) {
+          c.font = { bold:true, color:{argb:COL.navyTx}, size:10, name:'Calibri' };
+          c.fill = { type:'pattern', pattern:'solid', fgColor:{argb:COL.g50} };
+        } else {
+          c.font = { size:10, name:'Calibri' };
+        }
+      });
+    }
+    function styleDataRow(row, centerCols = []) {
+      row.eachCell({ includeEmpty:true }, (c, colNum) => {
+        c.border = allBorder;
+        c.font = { size:10, name:'Calibri' };
+        c.alignment = { vertical:'middle', wrapText:true, horizontal: centerCols.includes(colNum) ? 'center' : 'left' };
+      });
+    }
 
     objList.forEach(obj => {
       const nama = obj.t1_nama_perumahan || '-';
@@ -3260,46 +3335,78 @@ function exportCHVExcel() {
       const prov = alamatParts[0]||'-', kab = alamatParts[1]||'-';
       const totalUnit = (Number(obj.t1_subsidi_unit_1)||0)+(Number(obj.t1_subsidi_unit_2)||0)+(Number(obj.t1_subsidi_unit_3)||0);
 
-      const rows = [];
-      const merges = [];
-      const pushMergedTitle = (text) => {
-        rows.push([text]);
-        merges.push({ s:{r:rows.length-1,c:0}, e:{r:rows.length-1,c:6} });
+      let sheetName = String(nama).replace(/[\\/?*\[\]:]/g, '-').substring(0, 31) || 'Perumahan';
+      if (usedSheetNames[sheetName] != null) {
+        usedSheetNames[sheetName]++;
+        const suffix = ' ('+usedSheetNames[sheetName]+')';
+        sheetName = sheetName.substring(0, 31 - suffix.length) + suffix;
+      } else {
+        usedSheetNames[sheetName] = 0;
+      }
+
+      const ws = wb.addWorksheet(sheetName, { views:[{ showGridLines:false }] });
+      ws.columns = [
+        {width:16},{width:26},{width:18},{width:20},{width:28},{width:20},{width:26}
+      ];
+
+      const addMainTitle = (text) => {
+        const row = ws.addRow([text]);
+        ws.mergeCells(row.number, 1, row.number, NCOL);
+        styleMainTitle(row);
       };
+      const addSecTitle = (text) => {
+        const row = ws.addRow([text]);
+        ws.mergeCells(row.number, 1, row.number, NCOL);
+        styleSecTitle(row);
+      };
+      const addBlank = () => { ws.addRow([]); };
 
-      pushMergedTitle('CATATAN HASIL REVIEW');
-      pushMergedTitle('TINJAUAN LAPANGAN PEMANTAUAN DAN EVALUASI PENYALURAN KPR FLPP');
-      rows.push([]);
+      addMainTitle('CATATAN HASIL REVIEW');
+      addMainTitle('TINJAUAN LAPANGAN PEMANTAUAN DAN EVALUASI PENYALURAN KPR FLPP');
+      addBlank();
 
-      // A. Data Perumahan
-      pushMergedTitle('A. DATA PERUMAHAN');
-      rows.push(['Nama Perumahan', nama, 'Alamat Perumahan', obj.t1_alamat||'-', 'Luas Perumahan', obj.t1_luas_perumahan ? obj.t1_luas_perumahan+' m²' : '-']);
-      rows.push(['Nama PT/Pengembang', obj.t1_nama_pt||'-', 'Kabupaten/Kota', kab, 'Total Unit FLPP', String(totalUnit)]);
-      rows.push(['ID (SIKUMBANG)', id, 'Provinsi', prov, 'Asosiasi', obj.t1_asosiasi||'-']);
-      rows.push(['Koordinat', obj.t1_koordinat||'-']);
-      rows.push([]);
+      // A. DATA PERUMAHAN
+      addSecTitle('A. DATA PERUMAHAN');
+      let r;
+      r = ws.addRow(['Nama Perumahan', nama, 'Alamat Perumahan', obj.t1_alamat||'-', 'Luas Perumahan', obj.t1_luas_perumahan ? obj.t1_luas_perumahan+' m²' : '-']);
+      styleLabelCells(r, [1,3,5]);
+      r = ws.addRow(['Nama PT/Pengembang', obj.t1_nama_pt||'-', 'Kabupaten/Kota', kab, 'Total Unit FLPP', String(totalUnit)]);
+      styleLabelCells(r, [1,3,5]);
+      r = ws.addRow(['ID (SIKUMBANG)', id, 'Provinsi', prov, 'Asosiasi', obj.t1_asosiasi||'-']);
+      styleLabelCells(r, [1,3,5]);
+      r = ws.addRow(['Koordinat', obj.t1_koordinat||'-']);
+      ws.mergeCells(r.number, 2, r.number, NCOL);
+      styleLabelCells(r, [1]);
+      addBlank();
 
-      // B. Data Objek (Dokumen)
-      pushMergedTitle('B. DATA OBJEK PERUMAHAN');
-      rows.push(['No','Aspek yang Dinilai','Status Dokumen','Status Kesesuaian','Catatan Hasil Review']);
+      // B. DATA OBJEK PERUMAHAN (Dokumen)
+      addSecTitle('B. DATA OBJEK PERUMAHAN');
+      r = ws.addRow(['No','Aspek yang Dinilai','Status Dokumen','Status Kesesuaian','Catatan Hasil Review']);
+      ws.mergeCells(r.number, 5, r.number, NCOL);
+      styleTableHead(r);
       const flatItems = CHV_DOK.flatMap(g => g.items);
       let bNo = 0;
       CHV_DOK.forEach(grp => {
-        rows.push([grp.tahap]);
+        r = ws.addRow([grp.tahap]);
+        ws.mergeCells(r.number, 1, r.number, NCOL);
+        styleGroupHead(r);
         grp.items.forEach(item => {
           bNo++;
           const idx = flatItems.indexOf(item);
           const ada = (vfy&&vfy[`dok_ada_${idx}`]) || '';
           const ses = (vfy&&vfy[`dok_sesuai_${idx}`]) || '';
           const cat = (vfy&&vfy[`catatan_dok_sesuai_${idx}`]) || '';
-          rows.push([bNo, item, ada, ses, cat]);
+          r = ws.addRow([bNo, item, ada, ses, cat]);
+          ws.mergeCells(r.number, 5, r.number, NCOL);
+          styleDataRow(r, [1,3,4]);
         });
       });
-      rows.push([]);
+      addBlank();
 
-      // C. PSU
-      pushMergedTitle('C. KONDISI PSU (PRASARANA, SARANA & UTILITAS)');
-      rows.push(['No','Aspek yang Dinilai','Jenis/Material','Kondisi','Catatan','Bukti Dukung','Rekomendasi']);
+      // C. KONDISI PSU
+      addSecTitle('C. KONDISI PSU (PRASARANA, SARANA & UTILITAS)');
+      r = ws.addRow(['No','Aspek yang Dinilai','Jenis/Material','Kondisi','Catatan','Bukti Dukung','Rekomendasi']);
+      styleTableHead(r);
       CHV_PSU.forEach((item, idx) => {
         let kondisi = '', materialTxt = '', kondisiDetail = '';
         if (psuR) {
@@ -3332,16 +3439,20 @@ function exportCHVExcel() {
           }
         }
         const finalKondisi = kondisiDetail || kondisi;
-        rows.push([idx+1, item.label, materialTxt, finalKondisi, '', '', '']);
+        r = ws.addRow([idx+1, item.label, materialTxt, finalKondisi, '', '', '']);
+        styleDataRow(r, [1,4]);
       });
-      rows.push([]);
+      addBlank();
 
-      // D. Fisik Penyaluran
-      pushMergedTitle('D. KONDISI FISIK BANGUNAN TAHAP PENYALURAN');
-      rows.push(['No','Aspek','Sub-Aspek yang Dinilai','Acuan Penilaian','Hasil','Catatan Hasil Review','Rekomendasi/Tindak Lanjut']);
+      // D. KONDISI FISIK BANGUNAN TAHAP PENYALURAN
+      addSecTitle('D. KONDISI FISIK BANGUNAN TAHAP PENYALURAN');
+      r = ws.addRow(['No','Aspek','Sub-Aspek yang Dinilai','Acuan Penilaian','Hasil','Catatan Hasil Review','Rekomendasi/Tindak Lanjut']);
+      styleTableHead(r);
       let dNo = 0;
       CHV_FISIK_SALUR.forEach(grp => {
-        rows.push([grp.aspek]);
+        r = ws.addRow([grp.aspek]);
+        ws.mergeCells(r.number, 1, r.number, NCOL);
+        styleGroupHead(r);
         grp.subs.forEach(sub => {
           dNo++;
           const raw = salur ? (salur[sub.field] != null ? String(salur[sub.field]) : '') : '';
@@ -3350,86 +3461,102 @@ function exportCHVExcel() {
               ? (salur[grp.tambahan] || '')
               : (salur[`catatan_${sub.field}`] || salur[`catatan_ts_py_${sub.field}`] || ''))
             : '';
-          rows.push([dNo, grp.aspek, sub.label, sub.acuan, raw, cat, '']);
+          r = ws.addRow([dNo, grp.aspek, sub.label, sub.acuan, raw, cat, '']);
+          styleDataRow(r, [1,5]);
         });
       });
-      rows.push([]);
+      addBlank();
 
-      // E. Pasca
-      pushMergedTitle('E. KONDISI PASCA PENYALURAN');
+      // E. KONDISI PASCA PENYALURAN
+      addSecTitle('E. KONDISI PASCA PENYALURAN');
 
       // E1 Keterhunian
-      rows.push(['E.1 Keterhunian Perumahan FLPP']);
-      rows.push(['No','No. Rumah','Tahun Akad','Status Huni','Pekerjaan','Penghasilan','Sticker KPR','Sertifikat','Jml Penghuni','Tahun Huni','Alih Fungsi']);
+      r = ws.addRow(['E.1 Keterhunian Perumahan FLPP']);
+      ws.mergeCells(r.number, 1, r.number, NCOL);
+      styleGroupHead(r);
+      r = ws.addRow(['No','No. Rumah','Tahun Akad','Status Huni','Pekerjaan','Penghasilan','Sticker KPR']);
+      styleTableHead(r);
       if (pasca.length) {
-        pasca.forEach((r,i) => rows.push([
-          i+1, r.p3_nomor_rumah||'-', r.tahun_akad||r.tahun_huni||'-', r.status_huni||'-',
-          r.kerja_penghuni||'-', r.gaji_penghuni||'-', r.sticker||'-', r.sertif||'-',
-          r.penghuni||'-', r.tahun_huni||'-', r.fungsi||'-',
-        ]));
+        pasca.forEach((p,i) => {
+          r = ws.addRow([
+            i+1, p.p3_nomor_rumah||'-', p.tahun_akad||p.tahun_huni||'-', p.status_huni||'-',
+            p.kerja_penghuni||'-', p.gaji_penghuni||'-', p.sticker||'-',
+          ]);
+          styleDataRow(r, [1,3,4]);
+        });
       } else {
-        rows.push(['Belum ada data keterhunian']);
+        r = ws.addRow(['Belum ada data keterhunian']);
+        ws.mergeCells(r.number, 1, r.number, NCOL);
+        styleDataRow(r, []);
       }
-      rows.push([]);
+      addBlank();
 
       // E2 Komponen Fisik
-      rows.push(['E.2 Komponen Fisik Bangunan per Unit']);
-      rows.push(['No','No. Rumah','Lantai','Dinding','Atap','Plafond','Utilitas','Penghijauan']);
+      r = ws.addRow(['E.2 Komponen Fisik Bangunan per Unit']);
+      ws.mergeCells(r.number, 1, r.number, NCOL);
+      styleGroupHead(r);
+      r = ws.addRow(['No','No. Rumah','Lantai','Dinding','Atap','Plafond','Utilitas / Penghijauan']);
+      styleTableHead(r);
       if (pasca.length) {
-        pasca.forEach((r,i) => rows.push([
-          i+1, r.p3_nomor_rumah||'-',
-          (r.pf_lantai_kondisi||'-')+' '+(r.pf_lantai_jenis||''),
-          (r.pf_dinding_kondisi||'-')+' '+(r.pf_dinding_jenis||''),
-          (r.pf_atap_kondisi||'-')+' '+(r.pf_atap_penutup||''),
-          r.pf_atap_plafon||'-',
-          [
-            'Air Bersih: '+(r.pf_util_air||'-')+(r.pf_util_air&&!/tidak/i.test(r.pf_util_air||'') ? ' - '+(r.pf_util_air_kondisi||'-') : ''),
-            'Listrik: '+(r.pf_util_listrik||'-')+(r.pf_util_listrik&&!/tidak/i.test(r.pf_util_listrik||'') ? ' - '+(r.pf_util_listrik_kondisi||'-') : ''),
-            'Sanitasi: '+(r.pf_util_sanitasi||'-')+(r.pf_util_sanitasi&&!/tidak/i.test(r.pf_util_sanitasi||'') ? ' - '+(r.pf_util_sanitasi_kondisi||'-') : ''),
-            'Fiber Optik: '+(r.pf_util_fiber||'-')+(r.pf_util_fiber&&!/tidak/i.test(r.pf_util_fiber||'') ? ' - '+(r.pf_util_fiber_kondisi||'-') : ''),
-            'Proteksi Kebakaran: '+(r.pf_util_kebakaran||'-')+(r.pf_util_kebakaran&&!/tidak/i.test(r.pf_util_kebakaran||'') ? ' - '+(r.pf_util_kebakaran_kondisi||'-') : ''),
-            'Air Limbah: '+(r.pf_util_airlimbah||'-')+(r.pf_util_airlimbah&&!/tidak/i.test(r.pf_util_airlimbah||'') ? ' - '+(r.pf_util_airlimbah_kondisi||'-') : ''),
-          ].join(' | '),
-          r.py_hijau_kavling||r.pf_hijau||'-',
-        ]));
+        pasca.forEach((p,i) => {
+          const util = [
+            'Air Bersih: '+(p.pf_util_air||'-')+(p.pf_util_air&&!/tidak/i.test(p.pf_util_air||'') ? ' - '+(p.pf_util_air_kondisi||'-') : ''),
+            'Listrik: '+(p.pf_util_listrik||'-')+(p.pf_util_listrik&&!/tidak/i.test(p.pf_util_listrik||'') ? ' - '+(p.pf_util_listrik_kondisi||'-') : ''),
+            'Sanitasi: '+(p.pf_util_sanitasi||'-')+(p.pf_util_sanitasi&&!/tidak/i.test(p.pf_util_sanitasi||'') ? ' - '+(p.pf_util_sanitasi_kondisi||'-') : ''),
+            'Fiber Optik: '+(p.pf_util_fiber||'-')+(p.pf_util_fiber&&!/tidak/i.test(p.pf_util_fiber||'') ? ' - '+(p.pf_util_fiber_kondisi||'-') : ''),
+            'Proteksi Kebakaran: '+(p.pf_util_kebakaran||'-')+(p.pf_util_kebakaran&&!/tidak/i.test(p.pf_util_kebakaran||'') ? ' - '+(p.pf_util_kebakaran_kondisi||'-') : ''),
+            'Air Limbah: '+(p.pf_util_airlimbah||'-')+(p.pf_util_airlimbah&&!/tidak/i.test(p.pf_util_airlimbah||'') ? ' - '+(p.pf_util_airlimbah_kondisi||'-') : ''),
+            'Penghijauan: '+(p.py_hijau_kavling||p.pf_hijau||'-'),
+          ].join('\n');
+          r = ws.addRow([
+            i+1, p.p3_nomor_rumah||'-',
+            (p.pf_lantai_kondisi||'-')+' '+(p.pf_lantai_jenis||''),
+            (p.pf_dinding_kondisi||'-')+' '+(p.pf_dinding_jenis||''),
+            (p.pf_atap_kondisi||'-')+' '+(p.pf_atap_penutup||''),
+            p.pf_atap_plafon||'-',
+            util,
+          ]);
+          styleDataRow(r, [1]);
+        });
       } else {
-        rows.push(['Belum ada data komponen fisik']);
+        r = ws.addRow(['Belum ada data komponen fisik']);
+        ws.mergeCells(r.number, 1, r.number, NCOL);
+        styleDataRow(r, []);
       }
-      rows.push([]);
+      addBlank();
 
       // E3 Penilaian
-      rows.push(['E.3 Penilaian Penerima Manfaat']);
-      rows.push(['No','No. Rumah','Kemudahan Info KPR','Mengetahui Prog. PKP','Kemudahan Syarat','Kecepatan Proses','Masukan/Catatan']);
+      r = ws.addRow(['E.3 Penilaian Penerima Manfaat']);
+      ws.mergeCells(r.number, 1, r.number, NCOL);
+      styleGroupHead(r);
+      r = ws.addRow(['No','No. Rumah','Kemudahan Info KPR','Mengetahui Prog. PKP','Kemudahan Syarat','Kecepatan Proses','Masukan/Catatan']);
+      styleTableHead(r);
       if (pasca.length) {
-        pasca.forEach((r,i) => rows.push([
-          i+1, r.p3_nomor_rumah||'-', r.info_kpr||'-', r.tahu_pkp||'-',
-          r.syarat_bank||'-', r.proses_bank||'-', r.catatan_tambahan_pf_4_0||r.catatan_tambahan_pf_5_0||'',
-        ]));
+        pasca.forEach((p,i) => {
+          r = ws.addRow([
+            i+1, p.p3_nomor_rumah||'-', p.info_kpr||'-', p.tahu_pkp||'-',
+            p.syarat_bank||'-', p.proses_bank||'-', p.catatan_tambahan_pf_4_0||p.catatan_tambahan_pf_5_0||'',
+          ]);
+          styleDataRow(r, [1]);
+        });
       } else {
-        rows.push(['Belum ada data penilaian']);
+        r = ws.addRow(['Belum ada data penilaian']);
+        ws.mergeCells(r.number, 1, r.number, NCOL);
+        styleDataRow(r, []);
       }
-
-      const ws = XLSX.utils.aoa_to_sheet(rows);
-      ws['!merges'] = merges;
-      ws['!cols'] = [
-        {wch:14},{wch:28},{wch:20},{wch:20},{wch:30},{wch:20},{wch:30},{wch:14},{wch:14},{wch:14},{wch:16}
-      ];
-
-      // Nama sheet maksimal 31 karakter & tanpa karakter terlarang Excel, dibuat unik
-      let sheetName = String(nama).replace(/[\\/?*\[\]:]/g, '-').substring(0, 31) || 'Perumahan';
-      if (usedSheetNames[sheetName] != null) {
-        usedSheetNames[sheetName]++;
-        const suffix = ' ('+usedSheetNames[sheetName]+')';
-        sheetName = sheetName.substring(0, 31 - suffix.length) + suffix;
-      } else {
-        usedSheetNames[sheetName] = 0;
-      }
-
-      XLSX.utils.book_append_sheet(wb, ws, sheetName);
     });
 
     const d = new Date();
-    XLSX.writeFile(wb, `CHV_FLPP_${d.toISOString().split('T')[0]}.xlsx`);
+    const buffer = await wb.xlsx.writeBuffer();
+    const blob = new Blob([buffer], { type: 'application/octet-stream' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `CHV_FLPP_${d.toISOString().split('T')[0]}.xlsx`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   } catch(err) {
     console.error(err);
     alert('Gagal export Excel: ' + err.message);
