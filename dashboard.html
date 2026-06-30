@@ -3403,12 +3403,14 @@ async function exportCHVExcel() {
       });
       addBlank();
 
-      // C. KONDISI PSU
+      // C. KONDISI PSU — disamakan dengan tampilan web: 6 kolom
+      // (No, Aspek, Jenis/Material, Kondisi, Catatan Hasil Review, Rekomendasi/Tindak Lanjut)
       addSecTitle('C. KONDISI PSU (PRASARANA, SARANA & UTILITAS)');
-      r = ws.addRow(['No','Aspek yang Dinilai','Jenis/Material','Kondisi','Catatan','Bukti Dukung','Rekomendasi']);
+      r = ws.addRow(['No','Aspek yang Dinilai','Jenis/Material','Kondisi','Catatan Hasil Review','Rekomendasi/Tindak Lanjut']);
+      ws.mergeCells(r.number, 6, r.number, NCOL);
       styleTableHead(r);
       CHV_PSU.forEach((item, idx) => {
-        let kondisi = '', materialTxt = '', kondisiDetail = '';
+        let kondisi = '', materialTxt = '', keterangan = '';
         if (psuR) {
           if (item.isRTH) {
             let prefix = '', labels = [];
@@ -3425,21 +3427,21 @@ async function exportCHVExcel() {
                 detailLines.push(`${lbl}: ${kond}`);
               }
             });
-            materialTxt   = presentItems.join(', ');
-            kondisiDetail = detailLines.join('; ');
-            kondisi = psuR[item.field] || kondisiDetail || '';
+            materialTxt = presentItems.join(', ');
+            kondisi     = psuR[item.field] || detailLines.join('; ') || '';
+            keterangan  = (item.ketField && psuR[item.ketField]) ? psuR[item.ketField] : '';
           } else if (item.field && item.field.startsWith('psu_k_7_')) {
             kondisi     = psuR[item.field] || '';
             materialTxt = (item.matField && psuR[item.matField]) ? psuR[item.matField] : '';
-            const ket   = (item.ketField && psuR[item.ketField]) ? psuR[item.ketField] : '';
-            kondisiDetail = ket || kondisi;
+            keterangan  = (item.ketField && psuR[item.ketField]) ? psuR[item.ketField] : '';
           } else {
             kondisi     = psuR[item.field] || '';
             materialTxt = (item.matField && psuR[item.matField]) ? psuR[item.matField] : '';
+            keterangan  = (item.ketField && psuR[item.ketField]) ? psuR[item.ketField] : '';
           }
         }
-        const finalKondisi = kondisiDetail || kondisi;
-        r = ws.addRow([idx+1, item.label, materialTxt, finalKondisi, '', '', '']);
+        r = ws.addRow([idx+1, item.label, materialTxt, kondisi, keterangan, '']);
+        ws.mergeCells(r.number, 6, r.number, NCOL);
         styleDataRow(r, [1,4]);
       });
       addBlank();
